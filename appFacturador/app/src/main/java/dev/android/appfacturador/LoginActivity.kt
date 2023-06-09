@@ -11,5 +11,4 @@ class LoginActivity : AppCompatActivity() {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_login)
     }
-    //prueba de git con la rama yadi
 }
