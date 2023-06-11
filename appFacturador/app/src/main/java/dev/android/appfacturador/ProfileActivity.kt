@@ -32,13 +32,11 @@ class ProfileActivity : AppCompatActivity() {
             loadImage.launch("image/*")
         }
 
-
         binding.btnCloses.setOnClickListener {
             val intent = Intent(this, MenuActivity::class.java).apply {
                 putExtra("option", "profile")
             }
             startActivity(intent)
-
         }
         val bundle: Bundle? = intent.extras
         val email: String? = intent.getStringExtra("email")
@@ -49,12 +47,9 @@ class ProfileActivity : AppCompatActivity() {
         preferencias.putString("email", email)
         preferencias.apply()
         logueado = true
-
-
     }
 
     fun cerrarSesion() {
-
         binding.btnLogout.setOnClickListener {
             val preferencias: SharedPreferences.Editor =
                 getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE).edit()
@@ -63,13 +58,11 @@ class ProfileActivity : AppCompatActivity() {
             FirebaseAuth.getInstance().signOut()
             logueado = false
             onBackPressed()
-
         }
     }
 
     override fun onBackPressed() {
         if (logueado) {
-
         } else {
             super.onBackPressed()
         }

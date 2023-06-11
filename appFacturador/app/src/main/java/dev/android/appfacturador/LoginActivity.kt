@@ -7,7 +7,13 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.google.firebase.auth.FirebaseAuth
 import android.content.Intent
+import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+import android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
+import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import dev.android.appfacturador.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
@@ -20,15 +26,31 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         iniciarSesion()
         sesion()
-
+        hiddeVisiblePassword()
     }
+
+    fun hiddeVisiblePassword() {
+        var passwordHidden = false
+        binding.btnHide.setOnClickListener {
+            if (passwordHidden) {
+                binding.txtPaassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                passwordHidden = false
+                binding.btnHide.setColorFilter(ContextCompat.getColor(this, R.color.gray))
+            } else {
+                binding.txtPaassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                passwordHidden = true
+                binding.btnHide.setColorFilter(ContextCompat.getColor(this, R.color.blues))
+            }
+        }
+    }
+
     fun iniciarSesion() {
         binding.btnNext.setOnClickListener {
-            if (binding.editTextTextPersonName.text.isNotEmpty() && binding.editTextTextPersonName2.text.isNotEmpty()) {
+            if (binding.editTextTextPersonName.text.isNotEmpty() && binding.txtPaassword.text.isNotEmpty()) {
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(
                     binding.editTextTextPersonName.text.toString(),
 
-                    binding.editTextTextPersonName2.text.toString()
+                    binding.txtPaassword.text.toString()
                 ).addOnCompleteListener {
                     if (it.isSuccessful) {
                         val email = binding.editTextTextPersonName.text.toString()

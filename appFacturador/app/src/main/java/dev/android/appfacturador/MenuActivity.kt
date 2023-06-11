@@ -27,7 +27,6 @@ class MenuActivity : AppCompatActivity() {
 
         val bundle = intent.extras
         val option = bundle?.getString("option")
-//        Toast.makeText(applicationContext, option.toString(), Toast.LENGTH_SHORT).show()
 
         if (option == "profile") {
             binding.btnProfile.setCardBackgroundColor(ContextCompat.getColor(this, R.color.blues))
