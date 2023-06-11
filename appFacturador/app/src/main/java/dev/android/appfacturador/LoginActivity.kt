@@ -59,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun mostrarVentanaNueva(email: String) {
         var intent = Intent(this, PruebaLogin::class.java).apply {
-            putExtra("email", binding.editTextTextPersonName.text)
+            putExtra("email", email)
         }
         startActivity(intent)
     }
