@@ -72,7 +72,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun mostrarVentanaNueva(email: String) {
-        var intent = Intent(this, ProfileActivity::class.java).apply {
+        var intent = Intent(this, ProductActivity::class.java).apply {
             putExtra("email", email)
         }
         startActivity(intent)

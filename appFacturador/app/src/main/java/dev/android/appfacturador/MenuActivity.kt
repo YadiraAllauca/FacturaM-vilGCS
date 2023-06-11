@@ -2,6 +2,7 @@ package dev.android.appfacturador
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -40,6 +41,26 @@ class MenuActivity : AppCompatActivity() {
         } else if (option == "product") {
             binding.btnProduct.setCardBackgroundColor(ContextCompat.getColor(this, R.color.blues))
             binding.btnProducts.setColorFilter(ContextCompat.getColor(this, R.color.white))
+        }
+
+        binding.btnProducts.setOnClickListener {
+            val intent = Intent(this, ProductActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnClients.setOnClickListener {
+            val intent = Intent(this, ProductActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnBills.setOnClickListener {
+            val intent = Intent(this, ProductActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnProfiles.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
         }
 
         val window = DisplayMetrics()
