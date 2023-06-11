@@ -84,7 +84,7 @@
             android:background="@drawable/texto"
             android:drawablePadding="10dp"
             android:fontFamily="@font/roboto_bold"
-            android:hint="Número de identificación"
+            android:hint="Correo electrónico"
             android:padding="15dp"
             android:paddingStart="25dp"
             android:textColor="#000000"
@@ -118,7 +118,7 @@
             app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btnNext"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
