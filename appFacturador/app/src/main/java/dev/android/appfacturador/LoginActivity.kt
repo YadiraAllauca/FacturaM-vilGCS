@@ -1,6 +1,8 @@
 package dev.android.appfacturador
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
@@ -25,6 +27,7 @@ class LoginActivity : AppCompatActivity() {
 //            startActivity(intent)
 //        }
         iniciarSesion()
+        sesion()
 
     }
 
@@ -36,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
                     binding.editTextTextPersonName2.text.toString()
                 ).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        mostrarVentanaNueva(binding.editTextTextPersonName?.toString() ?: "")
+                        mostrarVentanaNueva(binding.editTextTextPersonName.toString() ?: "")
                     } else {
                         mostrarAlertaLogin()
                     }
@@ -56,8 +59,16 @@ class LoginActivity : AppCompatActivity() {
 
     private fun mostrarVentanaNueva(email: String) {
         var intent = Intent(this, PruebaLogin::class.java).apply {
-            putExtra("Email", binding.editTextTextPersonName.text)
+            putExtra("email", binding.editTextTextPersonName.text)
         }
         startActivity(intent)
+    }
+
+    private fun sesion(){
+        val preferencias : SharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+        val email: String? = preferencias.getString("email", null)
+        if(email != null){
+            mostrarVentanaNueva(email)
+        }
     }
 }
