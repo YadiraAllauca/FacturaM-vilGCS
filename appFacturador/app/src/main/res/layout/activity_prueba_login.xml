@@ -6,4 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".PruebaLogin">
 
+    <TextView
+        android:id="@+id/txtViewSaludo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="16dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:text="Bienvenido"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnCerrarSesion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="50dp"
+        android:text="Salir"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtViewSaludo" />
 </androidx.constraintlayout.widget.ConstraintLayout>
