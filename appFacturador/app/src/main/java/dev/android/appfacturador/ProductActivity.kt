@@ -21,5 +21,10 @@ class ProductActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
+
+        binding.btnShop.setOnClickListener {
+            val intent = Intent(this, ShopActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
