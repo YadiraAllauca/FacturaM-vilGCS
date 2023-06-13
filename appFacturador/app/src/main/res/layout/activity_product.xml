@@ -119,4 +119,20 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2"
         app:spanCount="1"
         tools:listitem="@layout/item_product" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnAddProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
+        android:background="#FFFFFF"
+        android:clickable="true"
+        android:foregroundTint="#FFFFFF"
+        android:tint="#FFFFFF"
+        app:backgroundTint="@color/blues"
+        app:layout_constraintBottom_toBottomOf="@+id/rvHistory"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="#FFFFFF"
+        app:srcCompat="@drawable/ic_baseline_add_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>
