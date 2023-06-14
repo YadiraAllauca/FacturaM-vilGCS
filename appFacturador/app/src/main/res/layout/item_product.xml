@@ -28,7 +28,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView13"
+                    android:id="@+id/txtProduct"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -41,7 +41,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView38"
+                    android:id="@+id/txtIVA"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -72,7 +72,7 @@
                         android:layout_height="match_parent">
 
                         <ImageView
-                            android:id="@+id/imgProfile"
+                            android:id="@+id/imgProduct"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:scaleType="centerCrop"
@@ -85,8 +85,34 @@
 
                 </androidx.cardview.widget.CardView>
 
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/btnEditProduct"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="-10dp"
+                    app:cardBackgroundColor="#fff"
+                    app:cardCornerRadius="75dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/btnProfile"
+                    app:layout_constraintEnd_toEndOf="@+id/btnProfile">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+                <ImageView
+                    android:id="@+id/btnCamera"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/btnEditProduct"
+                    app:layout_constraintEnd_toEndOf="@+id/btnEditProduct"
+                    app:layout_constraintStart_toStartOf="@+id/btnEditProduct"
+                    app:layout_constraintTop_toTopOf="@+id/btnEditProduct"
+                    app:srcCompat="@drawable/ic_baseline_edit_24" />
+
                 <TextView
-                    android:id="@+id/btnMore"
+                    android:id="@+id/txtPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
@@ -99,7 +125,7 @@
                     app:layout_constraintEnd_toEndOf="parent" />
 
                 <ImageView
-                    android:id="@+id/imageView5"
+                    android:id="@+id/btnDeleteProduct"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_marginTop="10dp"

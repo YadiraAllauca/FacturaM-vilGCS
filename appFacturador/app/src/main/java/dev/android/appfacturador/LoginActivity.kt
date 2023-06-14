@@ -46,14 +46,14 @@ class LoginActivity : AppCompatActivity() {
 
     fun iniciarSesion() {
         binding.btnNext.setOnClickListener {
-            if (binding.editTextTextPersonName.text.isNotEmpty() && binding.txtPaassword.text.isNotEmpty()) {
+            if (binding.edtEmail.text.isNotEmpty() && binding.txtPaassword.text.isNotEmpty()) {
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(
-                    binding.editTextTextPersonName.text.toString(),
+                    binding.edtEmail.text.toString(),
 
                     binding.txtPaassword.text.toString()
                 ).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        val email = binding.editTextTextPersonName.text.toString()
+                        val email = binding.edtEmail.text.toString()
                         mostrarVentanaNueva(email ?: "")
                     } else {
                         mostrarAlertaLogin()

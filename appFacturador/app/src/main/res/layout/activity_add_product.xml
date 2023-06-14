@@ -7,7 +7,7 @@
     tools:context=".AddProductActivity">
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/txtTittleRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -24,13 +24,13 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView7"
+        app:layout_constraintBottom_toBottomOf="@+id/txtTittleRegister"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView7"
+        app:layout_constraintTop_toTopOf="@+id/txtTittleRegister"
         app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
 
     <Button
-        android:id="@+id/btnNext"
+        android:id="@+id/btnAdd"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -51,7 +51,7 @@
         android:layout_marginTop="52dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7">
+        app:layout_constraintTop_toBottomOf="@+id/txtTittleRegister">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/btnImageProduct"
@@ -120,9 +120,9 @@
         android:text="Producto"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/edtProduct"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toTopOf="@+id/edtProduct" />
 
     <TextView
         android:id="@+id/textView21"
@@ -160,9 +160,9 @@
         android:text="Precio"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName8"
+        app:layout_constraintBottom_toBottomOf="@+id/edtPrice"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName8" />
+        app:layout_constraintTop_toTopOf="@+id/edtPrice" />
 
     <View
         android:id="@+id/view4"
@@ -174,10 +174,10 @@
         android:background="#D3D3D3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName8" />
+        app:layout_constraintTop_toBottomOf="@+id/edtPrice" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/edtProduct"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
@@ -197,7 +197,7 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName10"
+        android:id="@+id/edtDiscount"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="200dp"
@@ -217,7 +217,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName8"
+        android:id="@+id/edtPrice"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
@@ -226,7 +226,7 @@
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
         android:hint="Valor $"
-        android:inputType="number|numberDecimal"
+        android:inputType="numberDecimal"
         android:padding="10dp"
         android:textColor="#787878"
         android:textColorHint="#B3B3B3"
@@ -234,15 +234,15 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView18"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/edtProduct" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/spnIVA"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="200dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName10"
+        app:layout_constraintBottom_toBottomOf="@+id/edtDiscount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView21" />

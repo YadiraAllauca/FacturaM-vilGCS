@@ -7,7 +7,7 @@
     tools:context=".ProductActivity">
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/txtTittleRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -24,9 +24,9 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView7"
+        app:layout_constraintBottom_toBottomOf="@+id/txtTittleRegister"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView7"
+        app:layout_constraintTop_toTopOf="@+id/txtTittleRegister"
         app:srcCompat="@drawable/ic_baseline_shopping_cart_24" />
 
     <EditText
@@ -52,7 +52,7 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        app:layout_constraintTop_toBottomOf="@+id/txtTittleRegister" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -105,7 +105,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvHistory"
+        android:id="@+id/rvProducts"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="25dp"
@@ -131,7 +131,7 @@
         android:foregroundTint="#FFFFFF"
         android:tint="#FFFFFF"
         app:backgroundTint="@color/blues"
-        app:layout_constraintBottom_toBottomOf="@+id/rvHistory"
+        app:layout_constraintBottom_toBottomOf="@+id/rvProducts"
         app:layout_constraintEnd_toEndOf="parent"
         app:rippleColor="#FFFFFF"
         app:srcCompat="@drawable/ic_baseline_add_24" />

@@ -75,7 +75,7 @@
             app:layout_constraintTop_toBottomOf="@+id/view" />
 
         <EditText
-            android:id="@+id/editTextTextPersonName"
+            android:id="@+id/edtEmail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
@@ -115,7 +115,7 @@
             app:backgroundTint="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+            app:layout_constraintTop_toBottomOf="@+id/edtEmail" />
 
         <Button
             android:id="@+id/btnNext"
