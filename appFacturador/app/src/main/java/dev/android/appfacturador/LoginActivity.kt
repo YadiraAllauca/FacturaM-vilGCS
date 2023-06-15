@@ -12,12 +12,20 @@ import android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import dev.android.appfacturador.databinding.ActivityLoginBinding
+import dev.android.appfacturador.model.EMPLEADO
+
 
 class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
+    private lateinit var database: FirebaseDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,9 +33,11 @@ class LoginActivity : AppCompatActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
+        hiddeVisiblePassword()
+        database = FirebaseDatabase.getInstance()
         login()
         session()
-        hiddeVisiblePassword()
+
     }
 
     fun hiddeVisiblePassword() {
@@ -76,14 +86,50 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun showNewActivity(email: String) {
+
+        val user = FirebaseAuth.getInstance().currentUser
+        val userId = user?.uid
+
+        val database = FirebaseDatabase.getInstance()
+        val usuariosRef = database.getReference("Empleado")
+
+        usuariosRef.child(userId!!).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val empleado = dataSnapshot.getValue(EMPLEADO::class.java)
+
+                    if (empleado != null && empleado.tipoEmpleado == "A") {
+                        Toast.makeText(this@LoginActivity, "ADMIN", Toast.LENGTH_SHORT).show()
+                    } else if (empleado != null && empleado.tipoEmpleado == "V") {
+                        Toast.makeText(this@LoginActivity, "VENDEDOR", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Tipo de empleado desconocido",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } else {
+                    Toast.makeText(this@LoginActivity, "Usuario no encontrado", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Toast.makeText(
+                    this@LoginActivity,
+                    "Error en la solicitud: " + databaseError.message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
         val preferences: SharedPreferences.Editor =
             getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE).edit()
         preferences.putString("email", email)
         preferences.apply()
-
         var intent = Intent(this, ProductActivity::class.java)
         startActivity(intent)
     }
+
 
     private fun session() {
         val preferences: SharedPreferences =
@@ -94,4 +140,5 @@ class LoginActivity : AppCompatActivity() {
 
         }
     }
+
 }

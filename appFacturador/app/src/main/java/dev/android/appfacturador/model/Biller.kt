@@ -1,6 +1,7 @@
 package dev.android.appfacturador.model
 
 import android.net.Uri
+import com.google.firebase.database.IgnoreExtraProperties
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.text.DecimalFormat
@@ -53,3 +54,28 @@ data class PRODUCTO(
     @SerializedName("imagen")
     var imagen: String
 ): Serializable // -> convierte al objeto en una secuencia de bites
+
+data class EMPLEADO(
+    @SerializedName("id")
+    var id:String,
+    @SerializedName("apellidoMaterno")
+    val apellidoMaterno:String,
+    @SerializedName("apellidoPaterno")
+    val apellidoPaterno:String,
+    @SerializedName("clave")
+    val clave:String,
+    @SerializedName("correoElectronico")
+    val correoElectronico:String,
+    @SerializedName("numeroDni")
+    val numeroDni:String,
+    @SerializedName("primerNombre")
+    var primerNombre: String,
+    @SerializedName("segundoNombre")
+    var segundoNombre: String,
+    @SerializedName("tipoDni")
+    var tipoDni: String,
+    @SerializedName("tipoEmpleado")
+    var tipoEmpleado: String
+): Serializable{
+    constructor() : this("", "", "", "", "", "", "", "", "", "")
+}
