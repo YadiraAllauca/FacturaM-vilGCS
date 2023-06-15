@@ -2,6 +2,7 @@ package dev.android.appfacturador
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -93,24 +94,31 @@ class AddProductActivity : AppCompatActivity() {
             if (product.isEmpty() || price.isEmpty() || iva.isEmpty() || discount.isEmpty() || qrCode.isEmpty() || image == null) {
                 Toast.makeText(this, "Campos vacíos", Toast.LENGTH_SHORT).show()
             } else {
-                var productData = PRODUCTO(id, product, price.toFloat(), discount.toInt(), iva, qrCode, "")
+                var productData =
+                    PRODUCTO(id, product, price.toFloat(), discount.toInt(), iva, qrCode, "")
                 if (productData.id.isEmpty()) {
 //                    productData = PRODUCTO(System.currentTimeMillis().toString(), product, price.toFloat(), discount.toInt(), iva, qrCode, "")
 //                    addProduct(productData)
                     uploadImage(image!!, productData)
-                    Toast.makeText(this, "¡Producto agregado exitosamente!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "¡Producto agregado exitosamente!", Toast.LENGTH_SHORT)
+                        .show()
                 } else {
 //                    updateProduct(productData)
                     uploadImage(image!!, productData)
-                    Toast.makeText(this, "¡Producto actualizado exitosamente!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "¡Producto actualizado exitosamente!", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 val intent = Intent(baseContext, ProductActivity::class.java)
                 startActivity(intent)
             }
         }
+
+        //obtener email usuario
+        val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+        val email = sharedPreferences.getString("email", "")
     }
 
-    private fun addProduct(producto: PRODUCTO){
+    private fun addProduct(producto: PRODUCTO) {
         val retrofitBuilder = Retrofit.Builder()
             .baseUrl("https://appfacturador-b516d-default-rtdb.firebaseio.com/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -122,6 +130,7 @@ class AddProductActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<PRODUCTO>, t: Throwable) {
                     message = "Error al guardar"
                 }
+
                 override fun onResponse(call: Call<PRODUCTO>, response: Response<PRODUCTO>) {
                     message = "Producto guardado con éxito"
                 }
@@ -129,7 +138,7 @@ class AddProductActivity : AppCompatActivity() {
         )
     }
 
-    private fun updateProduct(producto: PRODUCTO){
+    private fun updateProduct(producto: PRODUCTO) {
         val retrofitBuilder = Retrofit.Builder()
             .baseUrl("https://appfacturador-b516d-default-rtdb.firebaseio.com/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -142,6 +151,7 @@ class AddProductActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<PRODUCTO>, t: Throwable) {
                     message = "Error al guardar"
                 }
+
                 override fun onResponse(call: Call<PRODUCTO>, response: Response<PRODUCTO>) {
                     message = "Pasaje guardado con éxito"
                 }
@@ -150,7 +160,7 @@ class AddProductActivity : AppCompatActivity() {
     }
 
     @SuppressLint("ResourceType")
-    fun initialize(){
+    fun initialize() {
         val bundle = intent.extras
         bundle?.let {
             val product = bundle.getSerializable(Constants.KEY_PRODUCT) as PRODUCTO
@@ -162,7 +172,7 @@ class AddProductActivity : AppCompatActivity() {
 //            binding.spnIVA.setText(membresia.cedula)
             binding.edtDiscount.setText(product.max_descuento.toString())
             Picasso.get().load(product.imagen).error(R.drawable.load).into(binding.imgProduct)
-        }?: run {
+        } ?: run {
             binding.btnAdd.text = "AGREGAR"
             binding.edtProduct.setText("")
             binding.edtPrice.setText("")
@@ -180,7 +190,8 @@ class AddProductActivity : AppCompatActivity() {
         progressDialog?.show()
         var uriTask: Task<Uri>?
         var download_uri = ""
-        val rute_storage_photo: String = storage_path + " " + photo + System.currentTimeMillis().toString()
+        val rute_storage_photo: String =
+            storage_path + " " + photo + System.currentTimeMillis().toString()
         val reference: StorageReference = storageReference.child(rute_storage_photo)
         reference.putFile(image_url).addOnSuccessListener { taskSnapshot ->
             uriTask = taskSnapshot.storage.downloadUrl
@@ -194,7 +205,7 @@ class AddProductActivity : AppCompatActivity() {
 //                    // Agregar el downloadUrl a productData
 //                    progressDialog?.dismiss()
                 })
-                val storageRef = FirebaseStorage.getInstance().getReference(rute_storage_photo)
+            val storageRef = FirebaseStorage.getInstance().getReference(rute_storage_photo)
             storageRef.metadata.addOnSuccessListener { metadata ->
                 if (metadata != null && metadata.sizeBytes > 0) {
                     storageRef.downloadUrl.addOnSuccessListener { uri ->
@@ -209,7 +220,11 @@ class AddProductActivity : AppCompatActivity() {
                         }
                     }.addOnFailureListener { exception ->
                         // Manejar el caso en el que no se pudo obtener la URL de descarga
-                        Toast.makeText(this, "Error al obtener la URL de descarga", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            "Error al obtener la URL de descarga",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         progressDialog?.dismiss()
                     }
                 } else {
@@ -218,7 +233,7 @@ class AddProductActivity : AppCompatActivity() {
                     progressDialog?.dismiss()
                 }
             }
-            }.addOnFailureListener {
+        }.addOnFailureListener {
             Toast.makeText(
                 this,
                 "Error al cargar foto",

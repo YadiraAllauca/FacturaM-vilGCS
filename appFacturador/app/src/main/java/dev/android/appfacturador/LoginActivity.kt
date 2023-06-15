@@ -18,14 +18,15 @@ import dev.android.appfacturador.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
-        iniciarSesion()
-        sesion()
+        login()
+        session()
         hiddeVisiblePassword()
     }
 
@@ -33,18 +34,20 @@ class LoginActivity : AppCompatActivity() {
         var passwordHidden = false
         binding.btnHide.setOnClickListener {
             if (passwordHidden) {
-                binding.txtPaassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                binding.txtPaassword.transformationMethod =
+                    PasswordTransformationMethod.getInstance()
                 passwordHidden = false
                 binding.btnHide.setColorFilter(ContextCompat.getColor(this, R.color.gray))
             } else {
-                binding.txtPaassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                binding.txtPaassword.transformationMethod =
+                    HideReturnsTransformationMethod.getInstance()
                 passwordHidden = true
                 binding.btnHide.setColorFilter(ContextCompat.getColor(this, R.color.blues))
             }
         }
     }
 
-    fun iniciarSesion() {
+    fun login() {
         binding.btnNext.setOnClickListener {
             if (binding.edtEmail.text.isNotEmpty() && binding.txtPaassword.text.isNotEmpty()) {
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(
@@ -54,15 +57,16 @@ class LoginActivity : AppCompatActivity() {
                 ).addOnCompleteListener {
                     if (it.isSuccessful) {
                         val email = binding.edtEmail.text.toString()
-                        mostrarVentanaNueva(email ?: "")
+                        showNewActivity(email ?: "")
                     } else {
-                        mostrarAlertaLogin()
+                        showAlert()
                     }
                 }
             }
         }
     }
-    private fun mostrarAlertaLogin() {
+
+    private fun showAlert() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Error")
         builder.setMessage("Se ha producido un error al iniciar sesión")
@@ -71,19 +75,22 @@ class LoginActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun mostrarVentanaNueva(email: String) {
-        var intent = Intent(this, ProductActivity::class.java).apply {
-            putExtra("email", email)
-        }
+    private fun showNewActivity(email: String) {
+        val preferences: SharedPreferences.Editor =
+            getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE).edit()
+        preferences.putString("email", email)
+        preferences.apply()
+
+        var intent = Intent(this, ProductActivity::class.java)
         startActivity(intent)
     }
 
-    private fun sesion() {
-        val preferencias: SharedPreferences =
+    private fun session() {
+        val preferences: SharedPreferences =
             getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
-        val email: String? = preferencias.getString("email", null)
+        val email: String? = preferences.getString("email", null)
         if (email != null) {
-            mostrarVentanaNueva(email)
+            showNewActivity(email)
 
         }
     }

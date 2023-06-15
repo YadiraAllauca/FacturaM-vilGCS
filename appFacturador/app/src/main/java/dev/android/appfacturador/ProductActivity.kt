@@ -1,7 +1,9 @@
 package dev.android.appfacturador
 
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
@@ -15,6 +17,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import dev.android.appfacturador.database.ProductDao
 import dev.android.appfacturador.databinding.ActivityProductBinding
@@ -29,6 +32,7 @@ import java.util.concurrent.Executors
 
 
 class ProductActivity : AppCompatActivity() {
+    private lateinit var email: String
     lateinit var binding: ActivityProductBinding
     private var list: MutableList<PRODUCTO> = ArrayList()
     private val adapter: ProductAdapter by lazy {
@@ -39,6 +43,7 @@ class ProductActivity : AppCompatActivity() {
     private val dr = fb.getReference("Product")
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         binding = ActivityProductBinding.inflate(layoutInflater)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -67,14 +72,27 @@ class ProductActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true)
 
         loadData()
+
+        getEmail()
+
+
     }
+
+    private fun getEmail() {
+        val preferences: SharedPreferences =
+            getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+        email = preferences.getString("email", "") ?: ""
+        Toast.makeText(this, "Valor del email: $email", Toast.LENGTH_SHORT).show()
+
+    }
+
 
     fun loadData() {
         var listen = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 list.clear()
                 snapshot.children.forEach { child ->
-                    val product : PRODUCTO? =
+                    val product: PRODUCTO? =
                         child.key?.let {
                             PRODUCTO(
                                 child.key.toString(),
@@ -96,10 +114,11 @@ class ProductActivity : AppCompatActivity() {
                 }
 
                 adapter.setOnClickListenerProductEdit = {
-                    val bundle  =  Bundle().apply {
+                    val bundle = Bundle().apply {
                         putSerializable(Constants.KEY_PRODUCT, it)
                     }
-                    val intent = Intent(applicationContext, AddProductActivity::class.java).putExtras(bundle)
+                    val intent =
+                        Intent(applicationContext, AddProductActivity::class.java).putExtras(bundle)
                     startActivity(intent)
                 }
             }
@@ -126,15 +145,17 @@ class ProductActivity : AppCompatActivity() {
         builder.setPositiveButton("Aceptar", DialogInterface.OnClickListener { dialog, which ->
             Executors.newSingleThreadExecutor().execute {
                 val retrofit = retrofitBuilder.deleteProduct(producto.id)
-                retrofit.enqueue( object : Callback<PRODUCTO> {
+                retrofit.enqueue(object : Callback<PRODUCTO> {
                     override fun onResponse(call: Call<PRODUCTO>, response: Response<PRODUCTO>) {}
                     override fun onFailure(call: Call<PRODUCTO>, t: Throwable) {}
                 })
                 runOnUiThread {
-                    Toast.makeText(this,"Registro eliminado", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Registro eliminado", Toast.LENGTH_SHORT).show()
                 }
             }
         })
         builder.show()
     }
+
+
 }
