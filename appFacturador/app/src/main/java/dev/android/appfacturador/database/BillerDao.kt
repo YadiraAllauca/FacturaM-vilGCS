@@ -1,6 +1,7 @@
 package dev.android.appfacturador.database
 
 import dev.android.appfacturador.model.CLIENTE
+import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.model.PRODUCTO
 import retrofit2.Call
 import retrofit2.http.Body
@@ -9,6 +10,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ClientDao {
     @GET("Client.json")
@@ -31,3 +33,4 @@ interface ProductDao {
     @PUT("Product/{id}.json")
     fun updateProduct(@Path("id") id:String, @Body membership: PRODUCTO): Call<PRODUCTO>
 }
+

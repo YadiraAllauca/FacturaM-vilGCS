@@ -15,7 +15,7 @@ import dev.android.appfacturador.databinding.ActivityProfileBinding
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
-    var logueado = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
@@ -38,15 +38,11 @@ class ProfileActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
-        val bundle: Bundle? = intent.extras
-        val email: String? = intent.getStringExtra("email")
+        //obtener email de usuario
+        val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+        val email = sharedPreferences.getString("email", "")
         Toast.makeText(this, "Valor del email: $email", Toast.LENGTH_SHORT).show()
         cerrarSesion()
-        val preferencias: SharedPreferences.Editor =
-            getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE).edit()
-        preferencias.putString("email", email)
-        preferencias.apply()
-        logueado = true
     }
 
     fun cerrarSesion() {
@@ -56,16 +52,10 @@ class ProfileActivity : AppCompatActivity() {
             preferencias.clear()
             preferencias.apply()
             FirebaseAuth.getInstance().signOut()
-            logueado = false
-            onBackPressed()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
         }
     }
 
-    override fun onBackPressed() {
-        if (logueado) {
-        } else {
-            super.onBackPressed()
-        }
-    }
 
 }

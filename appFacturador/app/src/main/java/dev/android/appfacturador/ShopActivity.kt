@@ -1,8 +1,10 @@
 package dev.android.appfacturador
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
+import android.widget.Toast
 import dev.android.appfacturador.databinding.ActivityShopBinding
 
 class ShopActivity : AppCompatActivity() {
@@ -17,5 +19,9 @@ class ShopActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener {
             finish()
         }
+        //obtener email de usuario
+        val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+        val email = sharedPreferences.getString("email", "")
+        Toast.makeText(this, "Valor del email: $email", Toast.LENGTH_SHORT).show()
     }
 }

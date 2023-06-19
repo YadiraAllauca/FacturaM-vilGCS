@@ -14,16 +14,18 @@ import dev.android.appfacturador.model.PRODUCTO
 //1. Definir dónde se manejan los datos
 //2. Crear el view holder
 //3. Implementar métodos del adaptador
-class ProductAdapter(var products: List<PRODUCTO> = emptyList()): RecyclerView.Adapter<ProductAdapter.ProductAdapterViewHolder>() {
+class ProductAdapter(var products: List<PRODUCTO> = emptyList()) :
+    RecyclerView.Adapter<ProductAdapter.ProductAdapterViewHolder>() {
     //Funciones para manipular la edición y eliminación de registros
     lateinit var setOnClickListenerProductDelete: (PRODUCTO) -> Unit
     lateinit var setOnClickListenerProductEdit: (PRODUCTO) -> Unit
     private val mfirestore: FirebaseFirestore? = null
+
     //    lateinit var setOnClickProduct: (PRODUCTO) -> Unit
     //Crear el view holder
-    inner class ProductAdapterViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+    inner class ProductAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var binding: ItemProductBinding = ItemProductBinding.bind(itemView)
-        fun bind(product: PRODUCTO) = with(binding){
+        fun bind(product: PRODUCTO) = with(binding) {
             binding.txtProduct.text = product.nombre
             binding.txtPrice.text = "$" + product.precio.toString()
             binding.txtIVA.text = product.id_categoria_impuesto + "%"
@@ -41,9 +43,12 @@ class ProductAdapter(var products: List<PRODUCTO> = emptyList()): RecyclerView.A
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductAdapter.ProductAdapterViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ProductAdapter.ProductAdapterViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false)
-        return  ProductAdapterViewHolder(view)
+        return ProductAdapterViewHolder(view)
     }
 
     //esta funcion se va a repetir tantas veces como elementos existen en la lista
