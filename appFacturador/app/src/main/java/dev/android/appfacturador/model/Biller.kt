@@ -18,8 +18,8 @@ data class CATEGORIA_IVA (
 data class CLIENTE (
     @SerializedName("id")
     val id:String,
-    @SerializedName("id_dni")
-    val id_dni:String,
+    @SerializedName("tipo_dni")
+    val tipo_dni:String,
     @SerializedName("numero_dni")
     val numero_dni:String,
     @SerializedName("primer_nombre")
@@ -36,7 +36,7 @@ data class CLIENTE (
     val telefono:String,
     @SerializedName("direccion")
     val direccion:String
-): Serializable // -> convierte al objeto en una secuencia de bites
+): Serializable
 
 data class PRODUCTO(
     @SerializedName("id")
