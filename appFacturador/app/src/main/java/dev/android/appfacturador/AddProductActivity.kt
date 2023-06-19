@@ -205,13 +205,13 @@ class AddProductActivity : AppCompatActivity() {
 //                    // Agregar el downloadUrl a productData
 //                    progressDialog?.dismiss()
                 })
-<<<<<<< HEAD
+//<<<<<<< HEAD
                 val storageRef = FirebaseStorage.getInstance().getReference(rute_storage_photo)
                 storageRef.metadata.addOnSuccessListener { metadata ->
-=======
+//=======
             val storageRef = FirebaseStorage.getInstance().getReference(rute_storage_photo)
             storageRef.metadata.addOnSuccessListener { metadata ->
->>>>>>> origin/yadi
+//>>>>>>> origin/yadi
                 if (metadata != null && metadata.sizeBytes > 0) {
                     storageRef.downloadUrl.addOnSuccessListener { uri ->
                         val downloadUrl = uri.toString()
@@ -247,5 +247,5 @@ class AddProductActivity : AppCompatActivity() {
         }
 
     }
-
+    }
 }

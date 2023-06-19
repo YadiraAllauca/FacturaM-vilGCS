@@ -51,7 +51,7 @@ class MenuActivity : AppCompatActivity() {
         }
 
         binding.btnClients.setOnClickListener {
-            val intent = Intent(this, ProductActivity::class.java)
+            val intent = Intent(this, ClientActivity::class.java)
             startActivity(intent)
         }
 
