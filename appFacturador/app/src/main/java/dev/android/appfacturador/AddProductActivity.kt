@@ -195,7 +195,7 @@ class AddProductActivity : AppCompatActivity() {
 //                    progressDialog?.dismiss()
                 })
                 val storageRef = FirebaseStorage.getInstance().getReference(rute_storage_photo)
-            storageRef.metadata.addOnSuccessListener { metadata ->
+                storageRef.metadata.addOnSuccessListener { metadata ->
                 if (metadata != null && metadata.sizeBytes > 0) {
                     storageRef.downloadUrl.addOnSuccessListener { uri ->
                         val downloadUrl = uri.toString()
