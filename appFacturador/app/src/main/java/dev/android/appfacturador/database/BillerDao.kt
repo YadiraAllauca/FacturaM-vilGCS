@@ -13,13 +13,13 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ClientDao {
-    @GET("Client.json")
+    @GET("Cliente.json")
     fun getClients(): Call<List<CLIENTE>>
-    @POST("Client.json")
+    @POST("Cliente.json")
     fun addClient(@Body membership: CLIENTE): Call<CLIENTE>
-    @DELETE("Client/{id}.json")
+    @DELETE("Cliente/{id}.json")
     fun deleteClient(@Path("id") id:String): Call<CLIENTE>
-    @PUT("Client/{id}.json")
+    @PUT("Cliente/{id}.json")
     fun updateClient(@Path("id") id:String, @Body membership: CLIENTE): Call<CLIENTE>
 }
 

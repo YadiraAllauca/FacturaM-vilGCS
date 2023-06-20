@@ -1,7 +1,9 @@
 package dev.android.appfacturador
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,9 +12,15 @@ import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import dev.android.appfacturador.database.ClientDao
 import dev.android.appfacturador.databinding.ActivityAddClientBinding
 import dev.android.appfacturador.model.CLIENTE
+import dev.android.appfacturador.model.EMPLEADO
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,7 +29,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class AddClientActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddClientBinding
-    private val typeDNI = arrayOf("Cédula", "RUC")
+    lateinit var email: String
+    lateinit var shop: String
+    private val typeDNI = arrayOf("Cédula", "RUC", "Pasaporte")
     var id = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +46,10 @@ class AddClientActivity : AppCompatActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, typeDNI)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
+        //usuario y tienda actual
+        val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+        email = sharedPreferences.getString("email", "").toString()
+        getShop()
         //Eventos
         binding.btnAdd.setOnClickListener {
             val typeDNI = spinner.selectedItem.toString()
@@ -49,7 +63,6 @@ class AddClientActivity : AppCompatActivity() {
             val email = binding.edtEmailClient.text.toString()
             val phone = binding.edtPhoneClient.text.toString()
             val address = binding.edtAddressClient.text.toString()
-
             if (fullName.isEmpty() || fullLastName.isEmpty() || numberDNI.isEmpty() ||
                 email.isEmpty() || phone.isEmpty() || address.isEmpty()
             ) {
@@ -66,7 +79,8 @@ class AddClientActivity : AppCompatActivity() {
                         secondLastName,
                         email,
                         phone,
-                        address
+                        address,
+                        shop
                     )
                 if (clientData.id.isEmpty()) {
                     addClient(clientData)
@@ -78,6 +92,7 @@ class AddClientActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+
     }
 
     fun initialize() {
@@ -95,6 +110,35 @@ class AddClientActivity : AppCompatActivity() {
             binding.edtAddressClient.setText("")
         }
         binding.edtNameClient.requestFocus()
+    }
+
+    private fun getShop() {
+        val user = FirebaseAuth.getInstance().currentUser
+        val userId = user?.uid
+
+        val database = FirebaseDatabase.getInstance()
+        val usuariosRef = database.getReference("Empleado")
+
+        usuariosRef.child(userId!!).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val empleado = dataSnapshot.getValue(EMPLEADO::class.java)
+
+                    if (empleado != null) {
+                        shop = empleado.negocio
+
+                    }
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Toast.makeText(
+                    this@AddClientActivity,
+                    "Error en la solicitud: " + databaseError.message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
     }
 
     private fun addClient(cliente: CLIENTE) {

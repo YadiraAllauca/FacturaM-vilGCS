@@ -6,68 +6,70 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.text.DecimalFormat
 
-data class CATEGORIA_IVA (
+data class CATEGORIA_IVA(
     @SerializedName("id")
-    val id:String,
+    val id: String,
     @SerializedName("categoria")
-    val categoria:String,
+    val categoria: String,
     @SerializedName("valor")
-    val valor:String
-): Serializable // -> convierte al objeto en una secuencia de bites
+    val valor: String
+) : Serializable // -> convierte al objeto en una secuencia de bites
 
-data class CLIENTE (
+data class CLIENTE(
     @SerializedName("id")
-    val id:String,
+    val id: String,
     @SerializedName("tipo_dni")
-    val tipo_dni:String,
+    val tipo_dni: String,
     @SerializedName("numero_dni")
-    val numero_dni:String,
+    val numero_dni: String,
     @SerializedName("primer_nombre")
-    val primer_nombre:String,
+    val primer_nombre: String,
     @SerializedName("segundo_nombre")
-    val segundo_nombre:String,
+    val segundo_nombre: String,
     @SerializedName("apellido_paterno")
-    val apellido_paterno:String,
+    val apellido_paterno: String,
     @SerializedName("apellido_materno")
-    val apellido_materno:String,
+    val apellido_materno: String,
     @SerializedName("email")
-    val email:String,
+    val email: String,
     @SerializedName("telefono")
-    val telefono:String,
+    val telefono: String,
     @SerializedName("direccion")
-    val direccion:String
-): Serializable
+    val direccion: String,
+    @SerializedName("negocio")
+    val negocio: String
+) : Serializable
 
 data class PRODUCTO(
     @SerializedName("id")
-    var id:String,
+    var id: String,
     @SerializedName("nombre")
-    val nombre:String,
+    val nombre: String,
     @SerializedName("precio")
-    val precio:Float,
+    val precio: Float,
     @SerializedName("max_descuento")
-    val max_descuento:Number,
+    val max_descuento: Number,
     @SerializedName("id_categoria_impuesto")
-    val id_categoria_impuesto:String,
+    val id_categoria_impuesto: String,
     @SerializedName("codigo_barras")
-    val codigo_barras:String,
+    val codigo_barras: String,
     @SerializedName("imagen")
     var imagen: String
-): Serializable // -> convierte al objeto en una secuencia de bites
+) : Serializable // -> convierte al objeto en una secuencia de bites
 
 data class EMPLEADO(
     @SerializedName("id")
-    var id:String,
+    var id: String,
     @SerializedName("apellidoMaterno")
-    val apellidoMaterno:String,
+    val apellidoMaterno: String,
     @SerializedName("apellidoPaterno")
-    val apellidoPaterno:String,
+    val apellidoPaterno: String,
     @SerializedName("clave")
-    val clave:String,
+    val clave: String,
     @SerializedName("correoElectronico")
-    val correoElectronico:String,
+    val correoElectronico: String,
     @SerializedName("numeroDni")
-    val numeroDni:String,
+    val numeroDni: String,
     @SerializedName("primerNombre")
     var primerNombre: String,
     @SerializedName("segundoNombre")
@@ -75,7 +77,9 @@ data class EMPLEADO(
     @SerializedName("tipoDni")
     var tipoDni: String,
     @SerializedName("tipoEmpleado")
-    var tipoEmpleado: String
-): Serializable{
-    constructor() : this("", "", "", "", "", "", "", "", "", "")
+    var tipoEmpleado: String,
+    @SerializedName("negocio")
+    var negocio: String
+) : Serializable {
+    constructor() : this("", "", "", "", "", "", "", "", "", "", "")
 }
