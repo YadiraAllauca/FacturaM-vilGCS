@@ -140,5 +140,8 @@ class LoginActivity : AppCompatActivity() {
 
         }
     }
+    override fun onBackPressed() {
+        Toast.makeText(this, "Botón bloqueado por su seguridad", Toast.LENGTH_SHORT).show()
+    }
 
 }

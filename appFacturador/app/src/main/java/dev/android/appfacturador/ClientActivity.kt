@@ -15,18 +15,16 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import dev.android.appfacturador.databinding.ActivityClientBinding
 import dev.android.appfacturador.model.CLIENTE
 import dev.android.appfacturador.model.EMPLEADO
-import dev.android.appfacturador.model.PRODUCTO
-import dev.android.appfacturador.utils.Constants
+import dev.android.appfacturador.utils.Constants.Companion.KEY_CLIENT
 
 class ClientActivity : AppCompatActivity() {
     lateinit var binding: ActivityClientBinding
-    lateinit var shop: String
     lateinit var email: String
+    lateinit var shop: String
     private var list: MutableList<CLIENTE> = ArrayList()
     private val adapter: ClientAdapter by lazy {
         ClientAdapter()
@@ -34,6 +32,7 @@ class ClientActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private val fb = Firebase.database
     private val dr = fb.getReference("Cliente")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClientBinding.inflate(layoutInflater)
@@ -53,6 +52,15 @@ class ClientActivity : AppCompatActivity() {
 
         binding.btnAddClient.setOnClickListener {
             val intent = Intent(this, AddClientActivity::class.java)
+            startActivity(intent)
+        }
+        adapter.setOnClickClient = {
+            val bundle = Bundle().apply {
+                putSerializable(KEY_CLIENT, it)
+            }
+            val intent = Intent(this, AddClientActivity::class.java).apply {
+                putExtras(bundle)
+            }
             startActivity(intent)
         }
         recyclerView = binding.rvClients
@@ -90,7 +98,6 @@ class ClientActivity : AppCompatActivity() {
             }
         })
     }
-
 
     fun loadData() {
         var listen = object : ValueEventListener {

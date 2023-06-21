@@ -9,14 +9,20 @@ import dev.android.appfacturador.model.CLIENTE
 
 class ClientAdapter (var clients: List<CLIENTE> = emptyList()) :
     RecyclerView.Adapter<ClientAdapter.ClientAdapterViewHolder>() {
-
+    lateinit var setOnClickClient: (CLIENTE) -> Unit
     inner class ClientAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var binding: ItemClientBinding = ItemClientBinding.bind(itemView)
         fun bind(client: CLIENTE) = with(binding) {
             binding.textView7.text = client.primer_nombre.first().toString() + client.apellido_paterno.first().toString()
             binding.txtClient.text = "${client.primer_nombre} ${client.segundo_nombre} ${client.apellido_paterno} ${client.apellido_materno}"
             binding.txtID.text = client.numero_dni
+
+            itemView.setOnClickListener {
+                setOnClickClient(client)
+            }
         }
+
+
     }
 
     override fun onCreateViewHolder(
