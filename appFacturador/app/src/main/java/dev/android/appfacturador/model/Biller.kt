@@ -1,10 +1,7 @@
 package dev.android.appfacturador.model
 
-import android.net.Uri
-import com.google.firebase.database.IgnoreExtraProperties
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
-import java.text.DecimalFormat
 
 data class CATEGORIA_IVA(
     @SerializedName("id")
@@ -54,7 +51,8 @@ data class PRODUCTO(
     @SerializedName("codigo_barras")
     val codigo_barras: String,
     @SerializedName("imagen")
-    var imagen: String
+    var imagen: String,
+    val toString: String
 ) : Serializable // -> convierte al objeto en una secuencia de bites
 
 data class EMPLEADO(

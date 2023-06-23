@@ -10,17 +10,18 @@ import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import dev.android.appfacturador.database.ProductDao
 import dev.android.appfacturador.databinding.ActivityProductBinding
+import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.model.PRODUCTO
 import dev.android.appfacturador.utils.Constants
 import retrofit2.Call
@@ -32,8 +33,9 @@ import java.util.concurrent.Executors
 
 
 class ProductActivity : AppCompatActivity() {
-    private lateinit var email: String
     lateinit var binding: ActivityProductBinding
+    lateinit var email: String
+    lateinit var shop: String
     private var list: MutableList<PRODUCTO> = ArrayList()
     private val adapter: ProductAdapter by lazy {
         ProductAdapter()
@@ -49,6 +51,10 @@ class ProductActivity : AppCompatActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
+        //usuario y negocio actual
+        val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+        email = sharedPreferences.getString("email", "").toString()
+        getShop()
 
         binding.btnCloses.setOnClickListener {
             val intent = Intent(this, MenuActivity::class.java).apply {
@@ -70,41 +76,62 @@ class ProductActivity : AppCompatActivity() {
         recyclerView = binding.rvProducts
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
-
-        loadData()
-
-        getEmail()
-
-
     }
 
-    private fun getEmail() {
-        val preferences: SharedPreferences =
-            getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
-        email = preferences.getString("email", "") ?: ""
-        Toast.makeText(this, "Valor del email: $email", Toast.LENGTH_SHORT).show()
+    private fun getShop() {
+        val user = FirebaseAuth.getInstance().currentUser
+        val userId = user?.uid
 
+        val database = FirebaseDatabase.getInstance()
+        val usuariosRef = database.getReference("Empleado")
+
+        usuariosRef.child(userId!!).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val empleado = dataSnapshot.getValue(EMPLEADO::class.java)
+
+                    if (empleado != null) {
+                        shop = empleado.negocio
+                        Toast.makeText(this@ProductActivity, shop, Toast.LENGTH_SHORT).show()
+                        loadData() // Llamar a loadData() una vez que se ha obtenido el valor de shop
+                    }
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Toast.makeText(
+                    this@ProductActivity,
+                    "Error en la solicitud: " + databaseError.message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
     }
-
 
     fun loadData() {
         var listen = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 list.clear()
                 snapshot.children.forEach { child ->
-                    val product: PRODUCTO? =
-                        child.key?.let {
-                            PRODUCTO(
-                                child.key.toString(),
-                                child.child("nombre").value.toString(),
-                                child.child("precio").value.toString().toFloat(),
-                                child.child("max_descuento").value.toString().toInt(),
-                                child.child("id_categoria_impuesto").value.toString(),
-                                child.child("codigo_barras").value.toString(),
-                                child.child("imagen").value.toString()
-                            )
-                        }
-                    product?.let { list.add(it) }
+                    val negocio = child.child("negocio").value?.toString()
+                    if (negocio == shop) {
+                        val product: PRODUCTO? =
+                            child.key?.let {
+                                PRODUCTO(
+                                    child.key.toString(),
+                                    child.child("nombre").value.toString(),
+                                    child.child("precio").value.toString().toFloat(),
+                                    child.child("max_descuento").value.toString().toInt(),
+                                    child.child("id_categoria_impuesto").value.toString(),
+                                    child.child("codigo_barras").value.toString(),
+                                    child.child("imagen").value.toString(),
+                                    child.child("negocio").value.toString()
+                                )
+                            }
+                        product?.let { list.add(it) }
+                    }else{
+                        //Toast.makeText(this@ProductActivity, "shop no", Toast.LENGTH_SHORT).show()
+                    }
                 }
                 adapter.updateListProducts(list)
                 recyclerView.adapter = adapter

@@ -15,11 +15,11 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
-import com.google.firebase.FirebaseError
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.snapshot.ChildKey
-import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -27,6 +27,7 @@ import com.squareup.picasso.Picasso
 import dev.android.appfacturador.R.drawable.load
 import dev.android.appfacturador.database.ProductDao
 import dev.android.appfacturador.databinding.ActivityAddProductBinding
+import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.model.PRODUCTO
 import dev.android.appfacturador.utils.Constants
 import retrofit2.Call
@@ -35,11 +36,12 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
-import kotlin.collections.HashMap
 
 
 class AddProductActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddProductBinding
+    lateinit var email: String
+    lateinit var shop: String
     private lateinit var message: String
     var id = ""
     private val mAuth: FirebaseAuth? = null
@@ -65,6 +67,12 @@ class AddProductActivity : AppCompatActivity() {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         initialize()
+
+        //usuario y tienda actual
+        val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+        email = sharedPreferences.getString("email", "").toString()
+        getShop()
+
         storageReference = FirebaseStorage.getInstance().reference
         val storageRef = FirebaseStorage.getInstance()
         val myReference = storageRef.getReference("Registrado: " + System.currentTimeMillis())
@@ -79,6 +87,11 @@ class AddProductActivity : AppCompatActivity() {
 //                    uploadImage(image!!)
                 }
             })
+
+        binding.btnBack.setOnClickListener{
+            val intent = Intent(baseContext, ProductActivity::class.java)
+            startActivity(intent)
+        }
 
         binding.btnCamera.setOnClickListener {
             loadImage.launch("image/*")
@@ -95,7 +108,16 @@ class AddProductActivity : AppCompatActivity() {
                 Toast.makeText(this, "Campos vacíos", Toast.LENGTH_SHORT).show()
             } else {
                 var productData =
-                    PRODUCTO(id, product, price.toFloat(), discount.toInt(), iva, qrCode, "")
+                    PRODUCTO(
+                        id,
+                        product,
+                        price.toFloat(),
+                        discount.toInt(),
+                        iva,
+                        qrCode,
+                        "",
+                        shop
+                    )
                 if (productData.id.isEmpty()) {
 //                    productData = PRODUCTO(System.currentTimeMillis().toString(), product, price.toFloat(), discount.toInt(), iva, qrCode, "")
 //                    addProduct(productData)
@@ -114,8 +136,37 @@ class AddProductActivity : AppCompatActivity() {
         }
 
         //obtener email usuario
-        val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
-        val email = sharedPreferences.getString("email", "")
+        //val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+        //val email = sharedPreferences.getString("email", "")
+    }
+
+    private fun getShop() {
+        val user = FirebaseAuth.getInstance().currentUser
+        val userId = user?.uid
+
+        val database = FirebaseDatabase.getInstance()
+        val usuariosRef = database.getReference("Empleado")
+
+        usuariosRef.child(userId!!).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val empleado = dataSnapshot.getValue(EMPLEADO::class.java)
+
+                    if (empleado != null) {
+                        shop = empleado.negocio
+
+                    }
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Toast.makeText(
+                    this@AddProductActivity,
+                    "Error en la solicitud: " + databaseError.message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
     }
 
     private fun addProduct(producto: PRODUCTO) {
