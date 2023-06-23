@@ -45,6 +45,8 @@ class AddClientActivity : AppCompatActivity() {
         email = sharedPreferences.getString("email", "").toString()
         getShop()
         //Eventos
+        binding.btnBack.setOnClickListener{finish()}
+
         binding.btnAdd.setOnClickListener {
             val typeDNI = spinner.selectedItem.toString()
             val numberDNI = binding.edtNumDNI.text.toString()
