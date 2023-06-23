@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="15dp"
+    app:cardBackgroundColor="#00000000"
+    app:cardElevation="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btnClose"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="-40dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/btnContainer"
+            app:layout_constraintStart_toEndOf="@+id/btnContainer"
+            app:layout_constraintTop_toTopOf="@+id/btnContainer"
+            tools:ignore="MissingConstraints">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <ImageView
+                    android:id="@+id/btnArrow"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_baseline_arrow_back_ios_new_24" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btnContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/btnProduct"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginEnd="20dp"
+                    app:cardBackgroundColor="#F2F5FC"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="MissingConstraints">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
+                        <ImageView
+                            android:id="@+id/btnProducts"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_baseline_shopping_bag_24" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/btnClient"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    app:cardBackgroundColor="#F2F5FC"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnProduct"
+                    tools:ignore="MissingConstraints">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
+                        <ImageView
+                            android:id="@+id/btnClients"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_baseline_people_24" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/btnBill"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    app:cardBackgroundColor="#F2F5FC"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnClient"
+                    tools:ignore="MissingConstraints">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
+                        <ImageView
+                            android:id="@+id/btnBills"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_baseline_insert_drive_file_24" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/btnProfile"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="25dp"
+                    app:cardBackgroundColor="#F2F5FC"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnBill"
+                    tools:ignore="MissingConstraints">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
+                        <ImageView
+                            android:id="@+id/btnProfiles"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_baseline_person_24" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

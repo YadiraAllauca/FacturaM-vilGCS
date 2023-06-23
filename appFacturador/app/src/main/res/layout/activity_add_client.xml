@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddClientActivity">
+
+    <TextView
+        android:id="@+id/txtTittleRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Nuevo cliente"
+        android:textColor="#000000"
+        android:textSize="30dp"
+        app:layout_constraintStart_toEndOf="@+id/btnBack"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/txtTittleRegister"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtTittleRegister"
+        app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/degradado"
+        android:fontFamily="@font/roboto_bold"
+        android:text="CREAR"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTittleRegister">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btnImageProduct"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            app:cardBackgroundColor="#F2F5FC"
+            app:cardCornerRadius="25dp"
+            app:cardElevation="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/roboto_bold"
+                    android:text="NC"
+                    android:textColor="#5780FA"
+                    android:textSize="60sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="3dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Nombres"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/edtNameClient"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edtNameClient" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="3dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Email"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/edtEmailClient"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edtEmailClient" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Celular"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/edtPhoneClient"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtEmailClient" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Dirección"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/edtAddressClient"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edtAddressClient" />
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Tipo DNI"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view4" />
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Número DNI"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view4" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="3dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Apellidos"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/edtLastNameClient"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edtLastNameClient" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:background="#D3D3D3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtLastNameClient" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:background="#D3D3D3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtNumDNI" />
+
+    <EditText
+        android:id="@+id/edtNameClient"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/texto_info"
+        android:drawablePadding="10dp"
+        android:fontFamily="@font/roboto_bold"
+        android:hint="Nombres"
+        android:padding="10dp"
+        android:textColor="#787878"
+        android:textColorHint="#B3B3B3"
+        android:textSize="16sp"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <EditText
+        android:id="@+id/edtEmailClient"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/texto_info"
+        android:drawablePadding="10dp"
+        android:fontFamily="@font/roboto_bold"
+        android:hint="Correo electrónico"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textColor="#787878"
+        android:textColorHint="#B3B3B3"
+        android:textSize="16sp"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+    <EditText
+        android:id="@+id/edtPhoneClient"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/texto_info"
+        android:drawablePadding="10dp"
+        android:fontFamily="@font/roboto_bold"
+        android:hint="Número de teléfono"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textColor="#787878"
+        android:textColorHint="#B3B3B3"
+        android:textSize="16sp"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintTop_toBottomOf="@+id/edtEmailClient" />
+
+    <EditText
+        android:id="@+id/edtAddressClient"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/texto_info"
+        android:drawablePadding="10dp"
+        android:fontFamily="@font/roboto_bold"
+        android:hint="Ciudad/ Calles"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textColor="#787878"
+        android:textColorHint="#B3B3B3"
+        android:textSize="16sp"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintTop_toBottomOf="@+id/edtPhoneClient" />
+
+    <EditText
+        android:id="@+id/edtNumDNI"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="200dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/texto_info"
+        android:drawablePadding="10dp"
+        android:fontFamily="@font/roboto_bold"
+        android:hint="Identificación"
+        android:inputType="number"
+        android:padding="10dp"
+        android:textColor="#787878"
+        android:textColorHint="#B3B3B3"
+        android:textSize="16sp"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+    <EditText
+        android:id="@+id/edtLastNameClient"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/texto_info"
+        android:drawablePadding="10dp"
+        android:fontFamily="@font/roboto_bold"
+        android:hint="Apellidos"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textColor="#787878"
+        android:textColorHint="#B3B3B3"
+        android:textSize="16sp"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintTop_toBottomOf="@+id/edtNameClient" />
+
+    <Spinner
+        android:id="@+id/spnDNI"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/edtNumDNI"
+        app:layout_constraintEnd_toStartOf="@+id/edtNumDNI"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
