@@ -52,7 +52,8 @@ data class PRODUCTO(
     val codigo_barras: String,
     @SerializedName("imagen")
     var imagen: String,
-    val toString: String
+    @SerializedName("negocio")
+    val negocio: String
 ) : Serializable // -> convierte al objeto en una secuencia de bites
 
 data class EMPLEADO(

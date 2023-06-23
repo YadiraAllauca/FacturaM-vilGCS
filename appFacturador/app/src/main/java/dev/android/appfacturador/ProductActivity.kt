@@ -45,12 +45,12 @@ class ProductActivity : AppCompatActivity() {
     private val dr = fb.getReference("Product")
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         binding = ActivityProductBinding.inflate(layoutInflater)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
+
         //usuario y negocio actual
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
@@ -129,8 +129,6 @@ class ProductActivity : AppCompatActivity() {
                                 )
                             }
                         product?.let { list.add(it) }
-                    }else{
-                        //Toast.makeText(this@ProductActivity, "shop no", Toast.LENGTH_SHORT).show()
                     }
                 }
                 adapter.updateListProducts(list)
@@ -149,7 +147,6 @@ class ProductActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
                 Log.e("TAG", "messages:onCancelled: ${error.message}")
             }
@@ -183,6 +180,4 @@ class ProductActivity : AppCompatActivity() {
         })
         builder.show()
     }
-
-
 }

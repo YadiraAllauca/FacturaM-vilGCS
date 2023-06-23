@@ -7,7 +7,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Window
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -42,21 +45,14 @@ class AddProductActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddProductBinding
     lateinit var email: String
     lateinit var shop: String
+    private val typeIVA = arrayOf("0%", "12%", "14%")
+    lateinit var spinner: Spinner
     private lateinit var message: String
     var id = ""
-    private val mAuth: FirebaseAuth? = null
-    private val mfirestore: FirebaseFirestore? = null
     private lateinit var storageReference: StorageReference
     private val storage_path = "products/*"
 
-    private val COD_SEL_STORAGE = 200
-    private val COD_SEL_IMAGE = 300
-
-    private val image_url = ""
     private var photo = "imagen"
-    var imageUrlStorage: Task<Uri>? = null
-    private val idd = ""
-
     private val progressDialog: ProgressDialog? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -74,8 +70,6 @@ class AddProductActivity : AppCompatActivity() {
         getShop()
 
         storageReference = FirebaseStorage.getInstance().reference
-        val storageRef = FirebaseStorage.getInstance()
-        val myReference = storageRef.getReference("Registrado: " + System.currentTimeMillis())
 
         var image: Uri? = null
 
@@ -100,7 +94,7 @@ class AddProductActivity : AppCompatActivity() {
         binding.btnAdd.setOnClickListener {
             val product = binding.edtProduct.text.toString()
             val price = binding.edtPrice.text.toString()
-            val iva = "12"
+            val iva = spinner.selectedItem.toString()
             val discount = binding.edtDiscount.text.toString()
             val qrCode = "1234567890"
 
@@ -119,7 +113,6 @@ class AddProductActivity : AppCompatActivity() {
                         shop
                     )
                 if (productData.id.isEmpty()) {
-//                    productData = PRODUCTO(System.currentTimeMillis().toString(), product, price.toFloat(), discount.toInt(), iva, qrCode, "")
 //                    addProduct(productData)
                     uploadImage(image!!, productData)
                     Toast.makeText(this, "¡Producto agregado exitosamente!", Toast.LENGTH_SHORT)
@@ -134,10 +127,6 @@ class AddProductActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-
-        //obtener email usuario
-        //val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
-        //val email = sharedPreferences.getString("email", "")
     }
 
     private fun getShop() {
@@ -179,11 +168,11 @@ class AddProductActivity : AppCompatActivity() {
         retrofit.enqueue(
             object : Callback<PRODUCTO> {
                 override fun onFailure(call: Call<PRODUCTO>, t: Throwable) {
-                    message = "Error al guardar"
+                    Log.d("Agregar", "Error al agregar producto")
                 }
 
                 override fun onResponse(call: Call<PRODUCTO>, response: Response<PRODUCTO>) {
-                    message = "Producto guardado con éxito"
+                    Log.d("Agregar", "Producto agregado con éxito")
                 }
             }
         )
@@ -200,11 +189,11 @@ class AddProductActivity : AppCompatActivity() {
         retrofit.enqueue(
             object : Callback<PRODUCTO> {
                 override fun onFailure(call: Call<PRODUCTO>, t: Throwable) {
-                    message = "Error al guardar"
+                    Log.d("Actualizar", "Error al actualizar datos")
                 }
 
                 override fun onResponse(call: Call<PRODUCTO>, response: Response<PRODUCTO>) {
-                    message = "Pasaje guardado con éxito"
+                    Log.d("Actualizar", "Datos actualizados")
                 }
             }
         )
@@ -212,22 +201,29 @@ class AddProductActivity : AppCompatActivity() {
 
     @SuppressLint("ResourceType")
     fun initialize() {
+        spinner = binding.spnIVA
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, typeIVA)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+
         val bundle = intent.extras
         bundle?.let {
             val product = bundle.getSerializable(Constants.KEY_PRODUCT) as PRODUCTO
+            id = product.id
             binding.btnAdd.text = "ACTUALIZAR"
             binding.txtTittleRegister.text = "Editar producto"
-            id = product.id
             binding.edtProduct.setText(product.nombre)
             binding.edtPrice.setText(product.precio.toString())
-//            binding.spnIVA.setText(membresia.cedula)
             binding.edtDiscount.setText(product.max_descuento.toString())
             Picasso.get().load(product.imagen).error(R.drawable.load).into(binding.imgProduct)
+            val productTypeIVA = product.id_categoria_impuesto
+            val position = typeIVA.indexOf(productTypeIVA)
+            spinner.setSelection(position)
+
         } ?: run {
             binding.btnAdd.text = "AGREGAR"
             binding.edtProduct.setText("")
             binding.edtPrice.setText("")
-//            binding.spnIVA.setText(membresia.cedula)
             binding.edtDiscount.setText("")
             binding.imgProduct.setImageResource(load)
         }
@@ -256,13 +252,13 @@ class AddProductActivity : AppCompatActivity() {
 //                    // Agregar el downloadUrl a productData
 //                    progressDialog?.dismiss()
                 })
-//<<<<<<< HEAD
+
                 val storageRef = FirebaseStorage.getInstance().getReference(rute_storage_photo)
                 storageRef.metadata.addOnSuccessListener { metadata ->
-//=======
+
             val storageRef = FirebaseStorage.getInstance().getReference(rute_storage_photo)
             storageRef.metadata.addOnSuccessListener { metadata ->
-//>>>>>>> origin/yadi
+
                 if (metadata != null && metadata.sizeBytes > 0) {
                     storageRef.downloadUrl.addOnSuccessListener { uri ->
                         val downloadUrl = uri.toString()
