@@ -16,15 +16,11 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
@@ -41,18 +37,18 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
-
 class AddProductActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddProductBinding
     lateinit var email: String
     lateinit var shop: String
-    private val typeIVA = arrayOf("0%", "12%", "14%")
+    private val typeIVA = arrayOf("0", "12", "14")
     lateinit var spinner: Spinner
     var id = ""
     private lateinit var storageReference: StorageReference
     private val storage_path = "products/*"
     var imageBD: String = ""
     var image: Uri? = null
+    private var imageStorage = ""
     private var photo = "imagen"
     private val progressDialog: ProgressDialog? = null
 
@@ -68,48 +64,17 @@ class AddProductActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
         getShop()
+        initialize()
 
         storageReference = FirebaseStorage.getInstance().reference
-
-        //var image: Uri? = null
 
         val loadImage =
             registerForActivityResult(ActivityResultContracts.GetContent(), ActivityResultCallback {
                 if (it != null) {
                     binding.imgProduct.setImageURI(it)
                     image = it
-//                    uploadImage(image!!)
                 }
             })
-
-        initialize()
-
-        //genero una variable para la imagen
-        //en inicializar cargar el uri de la iamgen y alamacenar en la variable
-        //en el btnAdd se llama al agregar o editar
-        //se debe actilizar la imagen en firebase storage en lugar de cargar una nueva
-        // --- o se debe eliminar la anterior y agregar la nueva
-        ///se peude enviar el mismo url? si es que no cambia la imagen
-        //como saber si se cambia o no la imagen?
-
-
-        //variable URLImagen -> alamcenar el url de realtime database
-        //variable URIImagen -> almacena el uri de la nueva imagen
-
-        //al inicializar verifica si urlImagen esta vacio
-        // si no esta vacio carga el url -> actualizar
-        //si esta vacio carga la img por defecto -> agregar
-
-        //en el agregar debe eviarse un URI
-        //si no hay URI -> campo vacio
-
-        //en el actualizar
-        //si el URI esta vacio
-            //enviar el mismo URL
-        //si no esta vacio
-            //enviar el URI
-
-
 
         binding.btnBack.setOnClickListener{finish()}
 
@@ -123,10 +88,17 @@ class AddProductActivity : AppCompatActivity() {
             val iva = spinner.selectedItem.toString()
             val discount = binding.edtDiscount.text.toString()
             val qrCode = "1234567890"
+            var img = ""
 
-            if (product.isEmpty() || price.isEmpty() || iva.isEmpty() || discount.isEmpty() || qrCode.isEmpty() || image == null) {
+            if (product.isEmpty() || price.isEmpty() || iva.isEmpty() || discount.isEmpty() || qrCode.isEmpty() || (image == null && imageBD.isEmpty())) {
                 Toast.makeText(this, "Campos vacíos", Toast.LENGTH_SHORT).show()
             } else {
+              if (!imageBD.isEmpty() && image==null) {
+                    //actualizar pero misma imagen
+                    img = imageBD
+                }else{
+                    img = "null"
+                }
                 var productData =
                     PRODUCTO(
                         id,
@@ -135,19 +107,18 @@ class AddProductActivity : AppCompatActivity() {
                         discount.toInt(),
                         iva,
                         qrCode,
-                        "",
+                        img,
                         shop
                     )
                 if (productData.id.isEmpty()) {
-//                    addProduct(productData)
-                    uploadImage(image!!, productData)
-                    Toast.makeText(this, "¡Producto agregado exitosamente!", Toast.LENGTH_SHORT)
-                        .show()
+                    addNewProduct(productData)
+                    Toast.makeText(this, "¡Producto agregado exitosamente!", Toast.LENGTH_SHORT).show()
                 } else {
-//                    updateProduct(productData)
-                    uploadImage(image!!, productData)
-                    Toast.makeText(this, "¡Producto actualizado exitosamente!", Toast.LENGTH_SHORT)
-                        .show()
+                    if(!imageBD.isEmpty() && image!=null){
+                        uploadImage(image!!, productData.id)
+                    }
+                    updateProduct(productData)
+                    Toast.makeText(this, "¡Producto actualizado exitosamente!", Toast.LENGTH_SHORT).show()
                 }
                 val intent = Intent(baseContext, ProductActivity::class.java)
                 startActivity(intent)
@@ -157,6 +128,10 @@ class AddProductActivity : AppCompatActivity() {
 
     @SuppressLint("ResourceType")
     fun initialize() {
+        image = null
+        imageBD = ""
+        imageStorage = ""
+
         spinner = binding.spnIVA
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, typeIVA)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -172,13 +147,10 @@ class AddProductActivity : AppCompatActivity() {
             binding.edtPrice.setText(product.precio.toString())
             binding.edtDiscount.setText(product.max_descuento.toString())
             Picasso.get().load(product.imagen).error(R.drawable.load).into(binding.imgProduct)
-            image = product.imagen.toUri() //agregar la imagen a una variable
-            Toast.makeText(this, image.toString(), Toast.LENGTH_SHORT)
-                .show()
+            imageBD = product.imagen //agregar la imagen a una variable
             val productTypeIVA = product.id_categoria_impuesto
             val position = typeIVA.indexOf(productTypeIVA)
             spinner.setSelection(position)
-
         } ?: run {
             binding.btnAdd.text = "AGREGAR"
             binding.edtProduct.setText("")
@@ -199,10 +171,8 @@ class AddProductActivity : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
                     val empleado = dataSnapshot.getValue(EMPLEADO::class.java)
-
                     if (empleado != null) {
                         shop = empleado.negocio
-
                     }
                 }
             }
@@ -216,23 +186,25 @@ class AddProductActivity : AppCompatActivity() {
         })
     }
 
-    private fun addProduct(producto: PRODUCTO) {
-        val retrofitBuilder = Retrofit.Builder()
-            .baseUrl("https://appfacturador-b516d-default-rtdb.firebaseio.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ProductDao::class.java)
-        val retrofit = retrofitBuilder.addProduct(producto)
-        retrofit.enqueue(
-            object : Callback<PRODUCTO> {
-                override fun onFailure(call: Call<PRODUCTO>, t: Throwable) {
-                    Log.d("Agregar", "Error al agregar producto")
-                }
-                override fun onResponse(call: Call<PRODUCTO>, response: Response<PRODUCTO>) {
-                    Log.d("Agregar", "Producto agregado con éxito")
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun addNewProduct(producto: PRODUCTO) {
+        val database = FirebaseDatabase.getInstance()
+        val productsRef = database.getReference("Product")
+
+        val newProductRef = productsRef.push() // Crea un nuevo nodo en la referencia de "Product"
+        val newProductId = newProductRef.key // Obtiene el ID del nuevo producto
+
+        // Guarda el producto en la base de datos
+        newProductRef.setValue(producto)
+            .addOnSuccessListener {
+                Log.d("Agregar", "Producto agregado con éxito. ID: $newProductId")
+                if (imageBD.isEmpty() && image != null){
+                    uploadImage(image!!, newProductId.toString())
                 }
             }
-        )
+            .addOnFailureListener { exception ->
+                Log.d("Agregar", "Error al agregar producto: ${exception.message}")
+            }
     }
 
     private fun updateProduct(producto: PRODUCTO) {
@@ -247,73 +219,54 @@ class AddProductActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<PRODUCTO>, t: Throwable) {
                     Log.d("Actualizar", "Error al actualizar datos")
                 }
+                @RequiresApi(Build.VERSION_CODES.O)
                 override fun onResponse(call: Call<PRODUCTO>, response: Response<PRODUCTO>) {
                     Log.d("Actualizar", "Datos actualizados")
                 }
             }
         )
     }
-
     @SuppressLint("SuspiciousIndentation")
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun uploadImage(image_url: Uri, producto: PRODUCTO) {
+    private fun uploadImage(imageUrl: Uri, productId: String) {
         progressDialog?.setMessage("Actualizando foto")
         progressDialog?.show()
-        var uriTask: Task<Uri>?
-//        var download_uri = ""
-        val rute_storage_photo: String =
-            storage_path + " " + photo + System.currentTimeMillis().toString()
-        val reference: StorageReference = storageReference.child(rute_storage_photo)
-        reference.putFile(image_url).addOnSuccessListener { taskSnapshot ->
-            uriTask = taskSnapshot.storage.downloadUrl
-            while (!uriTask!!.isSuccessful)
-                uriTask!!.addOnSuccessListener(OnSuccessListener<Uri> {
-//                    download_uri = uri.toString()
-//                    val map: HashMap<String, Any> = HashMap()
-//                    map["imagen"] = download_uri
-//                    mfirestore?.collection("Product")?.document(id)?.update(map)
-//
-//                    // Agregar el downloadUrl a productData
-//                    progressDialog?.dismiss()
-                })
-                val storageRef = FirebaseStorage.getInstance().getReference(rute_storage_photo)
-                storageRef.metadata.addOnSuccessListener { metadata ->
-            val storageRef = FirebaseStorage.getInstance().getReference(rute_storage_photo)
-            storageRef.metadata.addOnSuccessListener { metadata ->
 
-                if (metadata != null && metadata.sizeBytes > 0) {
-                    storageRef.downloadUrl.addOnSuccessListener { uri ->
-                        val downloadUrl = uri.toString()
-//                        Toast.makeText(this, downloadUrl, Toast.LENGTH_LONG).show()
-                        producto.imagen = downloadUrl
-                        if (producto.id.isEmpty()) {
-                            producto.id = System.currentTimeMillis().toString()
-                            addProduct(producto)
-                        } else {
-                            updateProduct(producto)
-                        }
-                    }.addOnFailureListener { exception ->
-                        // Manejar el caso en el que no se pudo obtener la URL de descarga
-                        Toast.makeText(
-                            this,
-                            "Error al obtener la URL de descarga",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        progressDialog?.dismiss()
-                    }
-                } else {
-                    // Manejar el caso en el que el archivo no existe
-                    Toast.makeText(this, "El archivo no existe", Toast.LENGTH_SHORT).show()
+        val storagePath = "$storage_path $photo${System.currentTimeMillis()}"
+        val reference: StorageReference = storageReference.child(storagePath)
+
+        reference.putFile(imageUrl)
+            .addOnSuccessListener { taskSnapshot ->
+                taskSnapshot.storage.downloadUrl.addOnSuccessListener { uri ->
+                    val downloadUrl = uri.toString()
+                    updateImageUrlInDatabase(productId, downloadUrl)
+                }.addOnFailureListener { exception ->
+                    showToast("Error al obtener la URL de descarga")
                     progressDialog?.dismiss()
                 }
             }
-        }.addOnFailureListener {
-            Toast.makeText(
-                this,
-                "Error al cargar foto",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+            .addOnFailureListener { exception ->
+                showToast("Error al cargar foto")
+            }
     }
+
+    private fun updateImageUrlInDatabase(productId: String, imageUrl: String) {
+        val database = FirebaseDatabase.getInstance()
+        val productRef = database.getReference("Product")
+
+        productRef.child(productId).child("imagen").setValue(imageUrl)
+            .addOnSuccessListener {
+                showToast("Imagen subida exitosamente")
+            }
+            .addOnFailureListener { exception ->
+                showToast("Error al subir la imagen: ${exception.message}")
+            }
+            .addOnCompleteListener {
+                progressDialog?.dismiss()
+            }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this@AddProductActivity, message, Toast.LENGTH_SHORT).show()
     }
 }

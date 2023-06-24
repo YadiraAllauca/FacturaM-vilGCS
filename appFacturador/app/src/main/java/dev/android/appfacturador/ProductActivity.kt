@@ -3,7 +3,6 @@ package dev.android.appfacturador
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
@@ -30,7 +29,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.Executors
-
 
 class ProductActivity : AppCompatActivity() {
     lateinit var binding: ActivityProductBinding
@@ -92,7 +90,6 @@ class ProductActivity : AppCompatActivity() {
 
                     if (empleado != null) {
                         shop = empleado.negocio
-                        Toast.makeText(this@ProductActivity, shop, Toast.LENGTH_SHORT).show()
                         loadData() // Llamar a loadData() una vez que se ha obtenido el valor de shop
                     }
                 }
