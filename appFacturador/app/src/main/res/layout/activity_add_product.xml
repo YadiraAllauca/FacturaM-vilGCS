@@ -208,7 +208,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="3dp"
         android:background="@drawable/texto_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
@@ -219,6 +219,7 @@
         android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnMicProduct"
         app:layout_constraintStart_toEndOf="@+id/textView18"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
@@ -228,7 +229,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="3dp"
         android:background="@drawable/texto_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
@@ -239,6 +240,7 @@
         android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnScanner"
         app:layout_constraintStart_toEndOf="@+id/textView18"
         app:layout_constraintTop_toBottomOf="@+id/view3" />
 
@@ -247,7 +249,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="200dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="3dp"
         android:background="@drawable/texto_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
@@ -259,6 +261,7 @@
         android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnMicDiscount"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
@@ -267,7 +270,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="3dp"
         android:background="@drawable/texto_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
@@ -279,6 +282,7 @@
         android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnMicPrice"
         app:layout_constraintStart_toEndOf="@+id/textView18"
         app:layout_constraintTop_toBottomOf="@+id/edtProduct" />
 
@@ -298,8 +302,9 @@
         android:id="@+id/btnMicProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
         app:layout_constraintBottom_toTopOf="@+id/edtPrice"
-        app:layout_constraintEnd_toEndOf="@+id/edtProduct"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/edtProduct"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
@@ -308,8 +313,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/edtPrice"
-        app:layout_constraintEnd_toEndOf="@+id/edtPrice"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/edtPrice"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
@@ -317,8 +323,9 @@
         android:id="@+id/btnMicDiscount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/edtDiscount"
-        app:layout_constraintEnd_toEndOf="@+id/edtDiscount"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/edtDiscount"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
@@ -326,8 +333,9 @@
         android:id="@+id/btnScanner"
         android:layout_width="25dp"
         android:layout_height="25dp"
+        android:layout_marginEnd="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/edtProduct2"
-        app:layout_constraintEnd_toEndOf="@+id/edtProduct2"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/edtProduct2"
         app:srcCompat="@drawable/scanner" />
 

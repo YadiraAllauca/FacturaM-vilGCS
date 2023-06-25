@@ -4,30 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EmployeeActivity">
+    tools:context=".BillActivity">
 
     <TextView
         android:id="@+id/txtTittleRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="50dp"
         android:fontFamily="@font/roboto_bold"
-        android:text="Empleados"
+        android:text="Facturas"
         android:textColor="#000000"
         android:textSize="30dp"
-        app:layout_constraintStart_toEndOf="@+id/btnBack"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/btnBack"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/txtTittleRegister"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txtTittleRegister"
-        app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextTextPersonName2"
@@ -50,38 +40,68 @@
         android:textColorHint="#B3B3B3"
         android:textSize="16sp"
         app:backgroundTint="@null"
-        app:layout_constraintEnd_toStartOf="@+id/btnMicSearch"
+        app:layout_constraintEnd_toStartOf="@+id/btnFilters"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTittleRegister" />
 
     <ImageView
-        android:id="@+id/btnMicSearch"
+        android:id="@+id/btnFilters"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginEnd="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName2"
-        app:srcCompat="@drawable/ic_baseline_mic_24" />
+        app:srcCompat="@drawable/ic_baseline_filter_alt_24" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/btnClose"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="-40dp"
+        app:cardBackgroundColor="#5780FA"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/btnCloses"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_244" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvEmployees"
+        android:id="@+id/rvBills"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="25dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="25dp"
-        android:paddingBottom="0dp"
+        android:padding="0dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2"
         app:spanCount="1"
-        tools:listitem="@layout/item_employee" />
+        tools:listitem="@layout/item_bill" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnAddEmployee"
+        android:id="@+id/btnAddBill"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
@@ -91,7 +111,7 @@
         android:foregroundTint="#FFFFFF"
         android:tint="#FFFFFF"
         app:backgroundTint="@color/blues"
-        app:layout_constraintBottom_toBottomOf="@+id/rvEmployees"
+        app:layout_constraintBottom_toBottomOf="@+id/rvBills"
         app:layout_constraintEnd_toEndOf="parent"
         app:rippleColor="#FFFFFF"
         app:srcCompat="@drawable/ic_baseline_add_24" />

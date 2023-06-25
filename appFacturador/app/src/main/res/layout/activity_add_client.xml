@@ -211,7 +211,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="3dp"
         android:background="@drawable/texto_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
@@ -221,7 +221,7 @@
         android:textColorHint="#B3B3B3"
         android:textSize="16sp"
         app:backgroundTint="@null"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnMicClientNames"
         app:layout_constraintStart_toEndOf="@+id/textView18"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
@@ -231,7 +231,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="3dp"
         android:background="@drawable/texto_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
@@ -243,6 +243,7 @@
         android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnMicEmail"
         app:layout_constraintStart_toEndOf="@+id/textView18"
         app:layout_constraintTop_toBottomOf="@+id/view2" />
 
@@ -251,7 +252,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="3dp"
         android:background="@drawable/texto_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
@@ -263,6 +264,7 @@
         android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnMicPhoneNumber"
         app:layout_constraintStart_toEndOf="@+id/textView18"
         app:layout_constraintTop_toBottomOf="@+id/edtEmailClient" />
 
@@ -271,7 +273,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="3dp"
         android:background="@drawable/texto_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
@@ -283,6 +285,7 @@
         android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnMicAddres"
         app:layout_constraintStart_toEndOf="@+id/textView18"
         app:layout_constraintTop_toBottomOf="@+id/edtPhoneClient" />
 
@@ -291,7 +294,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="200dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="3dp"
         android:background="@drawable/texto_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
@@ -303,6 +306,7 @@
         android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnMicIDNumber"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
@@ -311,7 +315,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="3dp"
         android:background="@drawable/texto_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
@@ -323,6 +327,7 @@
         android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnMicClientLastNames"
         app:layout_constraintStart_toEndOf="@+id/textView18"
         app:layout_constraintTop_toBottomOf="@+id/edtNameClient" />
 
@@ -341,8 +346,9 @@
         android:id="@+id/btnMicClientNames"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/edtNameClient"
-        app:layout_constraintEnd_toEndOf="@+id/edtNameClient"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/edtNameClient"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
@@ -350,8 +356,9 @@
         android:id="@+id/btnMicClientLastNames"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/edtLastNameClient"
-        app:layout_constraintEnd_toEndOf="@+id/edtLastNameClient"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/edtLastNameClient"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
@@ -359,8 +366,9 @@
         android:id="@+id/btnMicIDNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/edtNumDNI"
-        app:layout_constraintEnd_toEndOf="@+id/edtNumDNI"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/edtNumDNI"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
@@ -368,8 +376,9 @@
         android:id="@+id/btnMicEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/edtEmailClient"
-        app:layout_constraintEnd_toEndOf="@+id/edtEmailClient"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/edtEmailClient"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
@@ -377,8 +386,9 @@
         android:id="@+id/btnMicPhoneNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/edtPhoneClient"
-        app:layout_constraintEnd_toEndOf="@+id/edtPhoneClient"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/edtPhoneClient"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
@@ -386,8 +396,9 @@
         android:id="@+id/btnMicAddres"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/edtAddressClient"
-        app:layout_constraintEnd_toEndOf="@+id/edtAddressClient"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/edtAddressClient"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
