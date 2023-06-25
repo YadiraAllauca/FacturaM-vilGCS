@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddClientActivity">
+    tools:context=".AddEmployeeActivity">
 
     <TextView
         android:id="@+id/txtTittleRegister"
@@ -13,7 +13,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="50dp"
         android:fontFamily="@font/roboto_bold"
-        android:text="Nuevo cliente"
+        android:text="Nuevo empleado"
         android:textColor="#000000"
         android:textSize="30dp"
         app:layout_constraintStart_toEndOf="@+id/btnBack"
@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:fontFamily="@font/roboto_bold"
-                    android:text="NC"
+                    android:text="NE"
                     android:textColor="#5780FA"
                     android:textSize="60sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -97,9 +97,9 @@
         android:text="Nombres"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtNameClient"
+        app:layout_constraintBottom_toBottomOf="@+id/edtNameEmployee"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtNameClient" />
+        app:layout_constraintTop_toTopOf="@+id/edtNameEmployee" />
 
     <TextView
         android:id="@+id/textView10"
@@ -111,9 +111,9 @@
         android:text="Email"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtEmailClient"
+        app:layout_constraintBottom_toBottomOf="@+id/edtEmailEmployee"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtEmailClient" />
+        app:layout_constraintTop_toTopOf="@+id/edtEmailEmployee" />
 
     <TextView
         android:id="@+id/textView12"
@@ -121,25 +121,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:fontFamily="@font/roboto_bold"
-        android:text="Celular"
+        android:text="Clave"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtPhoneClient"
+        app:layout_constraintBottom_toBottomOf="@+id/edtPhoneEmployee"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtEmailClient" />
-
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:fontFamily="@font/roboto_bold"
-        android:text="Dirección"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtAddressClient"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtAddressClient" />
+        app:layout_constraintTop_toBottomOf="@+id/edtEmailEmployee" />
 
     <TextView
         android:id="@+id/textView21"
@@ -177,9 +164,9 @@
         android:text="Apellidos"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtLastNameClient"
+        app:layout_constraintBottom_toBottomOf="@+id/edtLastNameEmployee"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtLastNameClient" />
+        app:layout_constraintTop_toTopOf="@+id/edtLastNameEmployee" />
 
     <View
         android:id="@+id/view4"
@@ -191,7 +178,7 @@
         android:background="#D3D3D3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtLastNameClient" />
+        app:layout_constraintTop_toBottomOf="@+id/edtLastNameEmployee" />
 
     <View
         android:id="@+id/view2"
@@ -206,7 +193,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edtNumDNI" />
 
     <EditText
-        android:id="@+id/edtNameClient"
+        android:id="@+id/edtNameEmployee"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
@@ -226,7 +213,7 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <EditText
-        android:id="@+id/edtEmailClient"
+        android:id="@+id/edtEmailEmployee"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
@@ -247,7 +234,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view2" />
 
     <EditText
-        android:id="@+id/edtPhoneClient"
+        android:id="@+id/edtPhoneEmployee"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
@@ -264,27 +251,7 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView18"
-        app:layout_constraintTop_toBottomOf="@+id/edtEmailClient" />
-
-    <EditText
-        android:id="@+id/edtAddressClient"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:background="@drawable/texto_info"
-        android:drawablePadding="10dp"
-        android:fontFamily="@font/roboto_bold"
-        android:hint="Ciudad/ Calles"
-        android:inputType="text"
-        android:padding="10dp"
-        android:textColor="#787878"
-        android:textColorHint="#B3B3B3"
-        android:textSize="16sp"
-        app:backgroundTint="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView18"
-        app:layout_constraintTop_toBottomOf="@+id/edtPhoneClient" />
+        app:layout_constraintTop_toBottomOf="@+id/edtEmailEmployee" />
 
     <EditText
         android:id="@+id/edtNumDNI"
@@ -307,7 +274,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
     <EditText
-        android:id="@+id/edtLastNameClient"
+        android:id="@+id/edtLastNameEmployee"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
@@ -324,7 +291,7 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView18"
-        app:layout_constraintTop_toBottomOf="@+id/edtNameClient" />
+        app:layout_constraintTop_toBottomOf="@+id/edtNameEmployee" />
 
     <Spinner
         android:id="@+id/spnDNI"
@@ -338,21 +305,21 @@
         app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
     <ImageView
-        android:id="@+id/btnMicClientNames"
+        android:id="@+id/btnMicEmployeeNames"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/edtNameClient"
-        app:layout_constraintEnd_toEndOf="@+id/edtNameClient"
-        app:layout_constraintTop_toTopOf="@+id/edtNameClient"
+        app:layout_constraintBottom_toBottomOf="@+id/edtNameEmployee"
+        app:layout_constraintEnd_toEndOf="@+id/edtNameEmployee"
+        app:layout_constraintTop_toTopOf="@+id/edtNameEmployee"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
     <ImageView
-        android:id="@+id/btnMicClientLastNames"
+        android:id="@+id/btnMicEmployeeLastNames"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/edtLastNameClient"
-        app:layout_constraintEnd_toEndOf="@+id/edtLastNameClient"
-        app:layout_constraintTop_toTopOf="@+id/edtLastNameClient"
+        app:layout_constraintBottom_toBottomOf="@+id/edtLastNameEmployee"
+        app:layout_constraintEnd_toEndOf="@+id/edtLastNameEmployee"
+        app:layout_constraintTop_toTopOf="@+id/edtLastNameEmployee"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
     <ImageView
@@ -368,27 +335,18 @@
         android:id="@+id/btnMicEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/edtEmailClient"
-        app:layout_constraintEnd_toEndOf="@+id/edtEmailClient"
-        app:layout_constraintTop_toTopOf="@+id/edtEmailClient"
+        app:layout_constraintBottom_toBottomOf="@+id/edtEmailEmployee"
+        app:layout_constraintEnd_toEndOf="@+id/edtEmailEmployee"
+        app:layout_constraintTop_toTopOf="@+id/edtEmailEmployee"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
     <ImageView
         android:id="@+id/btnMicPhoneNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/edtPhoneClient"
-        app:layout_constraintEnd_toEndOf="@+id/edtPhoneClient"
-        app:layout_constraintTop_toTopOf="@+id/edtPhoneClient"
-        app:srcCompat="@drawable/ic_baseline_mic_24" />
-
-    <ImageView
-        android:id="@+id/btnMicAddres"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/edtAddressClient"
-        app:layout_constraintEnd_toEndOf="@+id/edtAddressClient"
-        app:layout_constraintTop_toTopOf="@+id/edtAddressClient"
+        app:layout_constraintBottom_toBottomOf="@+id/edtPhoneEmployee"
+        app:layout_constraintEnd_toEndOf="@+id/edtPhoneEmployee"
+        app:layout_constraintTop_toTopOf="@+id/edtPhoneEmployee"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

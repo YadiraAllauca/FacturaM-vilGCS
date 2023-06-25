@@ -29,14 +29,16 @@
 
                 <TextView
                     android:id="@+id/txtProduct"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="22dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
+                    android:layout_marginEnd="5dp"
                     android:fontFamily="@font/roboto_bold"
                     android:text="Nombre producto"
                     android:textColor="#000000"
                     android:textSize="16dp"
+                    app:layout_constraintEnd_toStartOf="@+id/txtPrice"
                     app:layout_constraintStart_toEndOf="@+id/btnProfile"
                     app:layout_constraintTop_toTopOf="parent" />
 

@@ -125,6 +125,20 @@
         app:layout_constraintTop_toTopOf="@+id/edtProduct" />
 
     <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="3dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Código:"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/edtProduct2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edtProduct2" />
+
+    <TextView
         android:id="@+id/textView21"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -176,6 +190,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtPrice" />
 
+    <View
+        android:id="@+id/view3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:background="#D3D3D3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtDiscount" />
+
     <EditText
         android:id="@+id/edtProduct"
         android:layout_width="0dp"
@@ -195,6 +221,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView18"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+    <EditText
+        android:id="@+id/edtProduct2"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/texto_info"
+        android:drawablePadding="10dp"
+        android:fontFamily="@font/roboto_bold"
+        android:hint="Número de barras"
+        android:padding="10dp"
+        android:textColor="#787878"
+        android:textColorHint="#B3B3B3"
+        android:textSize="16sp"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintTop_toBottomOf="@+id/view3" />
 
     <EditText
         android:id="@+id/edtDiscount"
@@ -241,10 +287,48 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginEnd="200dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/edtDiscount"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/edtDiscount"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+    <ImageView
+        android:id="@+id/btnMicProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/edtPrice"
+        app:layout_constraintEnd_toEndOf="@+id/edtProduct"
+        app:layout_constraintTop_toTopOf="@+id/edtProduct"
+        app:srcCompat="@drawable/ic_baseline_mic_24" />
+
+    <ImageView
+        android:id="@+id/btnMicPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/edtPrice"
+        app:layout_constraintEnd_toEndOf="@+id/edtPrice"
+        app:layout_constraintTop_toTopOf="@+id/edtPrice"
+        app:srcCompat="@drawable/ic_baseline_mic_24" />
+
+    <ImageView
+        android:id="@+id/btnMicDiscount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/edtDiscount"
+        app:layout_constraintEnd_toEndOf="@+id/edtDiscount"
+        app:layout_constraintTop_toTopOf="@+id/edtDiscount"
+        app:srcCompat="@drawable/ic_baseline_mic_24" />
+
+    <ImageView
+        android:id="@+id/btnScanner"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:layout_constraintBottom_toBottomOf="@+id/edtProduct2"
+        app:layout_constraintEnd_toEndOf="@+id/edtProduct2"
+        app:layout_constraintTop_toTopOf="@+id/edtProduct2"
+        app:srcCompat="@drawable/scanner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
