@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.zxing.integration.android.IntentIntegrator
 import com.squareup.picasso.Picasso
 import dev.android.appfacturador.R.drawable.load
 import dev.android.appfacturador.database.ProductDao
@@ -43,6 +44,7 @@ class AddProductActivity : AppCompatActivity() {
     lateinit var shop: String
     private val typeIVA = arrayOf("0", "12", "14")
     lateinit var spinner: Spinner
+    lateinit var codigoBarras: String
     var id = ""
     private lateinit var storageReference: StorageReference
     private val storage_path = "products/*"
@@ -82,15 +84,19 @@ class AddProductActivity : AppCompatActivity() {
             loadImage.launch("image/*")
         }
 
+        binding.btnScanner.setOnClickListener {
+            initScanner()
+        }
+
         binding.btnAdd.setOnClickListener {
             val product = binding.edtProduct.text.toString()
             val price = binding.edtPrice.text.toString()
             val iva = spinner.selectedItem.toString()
             val discount = binding.edtDiscount.text.toString()
-            val qrCode = "1234567890"
+            val barcode = binding.edtCodigoBarras.text.toString()
             var img = ""
 
-            if (product.isEmpty() || price.isEmpty() || iva.isEmpty() || discount.isEmpty() || qrCode.isEmpty() || (image == null && imageBD.isEmpty())) {
+            if (product.isEmpty() || price.isEmpty() || iva.isEmpty() || discount.isEmpty() || barcode.isEmpty() || (image == null && imageBD.isEmpty())) {
                 Toast.makeText(this, "Campos vacíos", Toast.LENGTH_SHORT).show()
             } else {
               if (!imageBD.isEmpty() && image==null) {
@@ -106,7 +112,7 @@ class AddProductActivity : AppCompatActivity() {
                         price.toFloat(),
                         discount.toInt(),
                         iva,
-                        qrCode,
+                        barcode,
                         img,
                         shop
                     )
@@ -146,6 +152,7 @@ class AddProductActivity : AppCompatActivity() {
             binding.edtProduct.setText(product.nombre)
             binding.edtPrice.setText(product.precio.toString())
             binding.edtDiscount.setText(product.max_descuento.toString())
+            binding.edtCodigoBarras.setText(product.codigo_barras.toString())
             Picasso.get().load(product.imagen).error(R.drawable.load).into(binding.imgProduct)
             imageBD = product.imagen //agregar la imagen a una variable
             val productTypeIVA = product.id_categoria_impuesto
@@ -156,9 +163,32 @@ class AddProductActivity : AppCompatActivity() {
             binding.edtProduct.setText("")
             binding.edtPrice.setText("")
             binding.edtDiscount.setText("")
+            binding.edtCodigoBarras.setText("")
             binding.imgProduct.setImageResource(load)
         }
         binding.edtProduct.requestFocus()
+    }
+
+    private fun initScanner() {
+        val integrator = IntentIntegrator(this)
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.EAN_13)
+        integrator.setPrompt("Código de Barras")
+        integrator.initiateScan()
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null) {
+            if(result.contents == null){
+                Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show()
+            }else{
+                codigoBarras = result.contents
+                binding.edtCodigoBarras.setText(result.contents)
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
     private fun getShop() {
