@@ -19,5 +19,7 @@ class AddBillActivity : AppCompatActivity() {
             val intent = Intent(this, AddClientActivity::class.java)
             startActivity(intent)
         }
+
+        binding.btnBack.setOnClickListener{finish()}
     }
 }
