@@ -19,5 +19,7 @@ class EmployeeActivity : AppCompatActivity() {
             val intent = Intent(this, AddEmployeeActivity::class.java)
             startActivity(intent)
         }
+
+        binding.btnBack.setOnClickListener{finish()}
     }
 }
