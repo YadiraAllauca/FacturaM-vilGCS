@@ -145,7 +145,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/btnHistory"
+                android:id="@+id/btnEmployees"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_marginEnd="20dp"
@@ -230,7 +230,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
             <ImageView
-                android:id="@+id/btnEmployees"
+                android:id="@+id/btnSign"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_marginEnd="20dp"
