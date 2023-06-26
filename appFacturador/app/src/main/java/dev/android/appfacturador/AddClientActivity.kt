@@ -18,6 +18,7 @@ import dev.android.appfacturador.database.ClientDao
 import dev.android.appfacturador.databinding.ActivityAddClientBinding
 import dev.android.appfacturador.model.CLIENTE
 import dev.android.appfacturador.model.EMPLEADO
+import dev.android.appfacturador.utils.Constants
 import dev.android.appfacturador.utils.Constants.Companion.KEY_CLIENT
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,7 +30,6 @@ class AddClientActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddClientBinding
     lateinit var email: String
     lateinit var shop: String
-    private val typeDNI = arrayOf("Cédula", "RUC", "Pasaporte")
     var id = ""
     lateinit var spinner: Spinner
 
@@ -45,7 +45,7 @@ class AddClientActivity : AppCompatActivity() {
         email = sharedPreferences.getString("email", "").toString()
         getShop()
         //Eventos
-        binding.btnBack.setOnClickListener{finish()}
+        binding.btnBack.setOnClickListener { finish() }
 
         binding.btnAdd.setOnClickListener {
             val typeDNI = spinner.selectedItem.toString()
@@ -97,14 +97,15 @@ class AddClientActivity : AppCompatActivity() {
 
     fun initialize() {
         spinner = binding.spnDNI
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, typeDNI)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Constants.TYPE_DNI)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
         val bundle = intent.extras
         bundle?.let {
             val client = it.getSerializable(KEY_CLIENT) as CLIENTE
             id = client.id
-            binding.textView8.text =client.primer_nombre.first().toString() + client.apellido_paterno.first().toString()
+            binding.textView8.text =
+                client.primer_nombre.first().toString() + client.apellido_paterno.first().toString()
             binding.btnAdd.text = "ACTUALIZAR"
             binding.edtNameClient.setText(client.primer_nombre + " " + client.segundo_nombre)
             binding.edtLastNameClient.setText(client.apellido_paterno + " " + client.apellido_materno)
@@ -113,7 +114,7 @@ class AddClientActivity : AppCompatActivity() {
             binding.edtPhoneClient.setText(client.telefono)
             binding.edtAddressClient.setText(client.direccion)
             val clientTypeDNI = client.tipo_dni
-            val position = typeDNI.indexOf(clientTypeDNI)
+            val position = Constants.TYPE_DNI.indexOf(clientTypeDNI)
             spinner.setSelection(position)
 
         } ?: run {
@@ -130,31 +131,32 @@ class AddClientActivity : AppCompatActivity() {
 
     private fun getShop() {
         val user = FirebaseAuth.getInstance().currentUser
-        val userId = user?.uid
+        val email = user?.email
 
         val database = FirebaseDatabase.getInstance()
         val usuariosRef = database.getReference("Empleado")
 
-        usuariosRef.child(userId!!).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    val empleado = dataSnapshot.getValue(EMPLEADO::class.java)
-
-                    if (empleado != null) {
-                        shop = empleado.negocio
-
+        usuariosRef.orderByChild("correoElectronico").equalTo(email)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (childSnapshot in dataSnapshot.children) {
+                            val empleado = childSnapshot.getValue(EMPLEADO::class.java)
+                            if (empleado != null) {
+                                shop = empleado.negocio
+                            }
+                        }
                     }
                 }
-            }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Toast.makeText(
-                    this@AddClientActivity,
-                    "Error en la solicitud: " + databaseError.message,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Toast.makeText(
+                        this@AddClientActivity,
+                        "Error en la solicitud: " + databaseError.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
     }
 
     private fun addClient(cliente: CLIENTE) {

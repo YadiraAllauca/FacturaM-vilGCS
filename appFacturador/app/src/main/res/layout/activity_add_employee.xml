@@ -124,7 +124,7 @@
         android:text="Clave"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtPhoneEmployee"
+        app:layout_constraintBottom_toBottomOf="@+id/edtPasswordEmployee"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtEmailEmployee" />
 
@@ -236,7 +236,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view2" />
 
     <EditText
-        android:id="@+id/edtPhoneEmployee"
+        android:id="@+id/edtPasswordEmployee"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
@@ -354,9 +354,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtPhoneEmployee"
+        app:layout_constraintBottom_toBottomOf="@+id/edtPasswordEmployee"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtPhoneEmployee"
+        app:layout_constraintTop_toTopOf="@+id/edtPasswordEmployee"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

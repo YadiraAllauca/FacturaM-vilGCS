@@ -78,7 +78,7 @@ class AddProductActivity : AppCompatActivity() {
                 }
             })
 
-        binding.btnBack.setOnClickListener{finish()}
+        binding.btnBack.setOnClickListener { finish() }
 
         binding.btnCamera.setOnClickListener {
             loadImage.launch("image/*")
@@ -99,10 +99,10 @@ class AddProductActivity : AppCompatActivity() {
             if (product.isEmpty() || price.isEmpty() || iva.isEmpty() || discount.isEmpty() || barcode.isEmpty() || (image == null && imageBD.isEmpty())) {
                 Toast.makeText(this, "Campos vacíos", Toast.LENGTH_SHORT).show()
             } else {
-              if (!imageBD.isEmpty() && image==null) {
+                if (!imageBD.isEmpty() && image == null) {
                     //actualizar pero misma imagen
                     img = imageBD
-                }else{
+                } else {
                     img = "null"
                 }
                 var productData =
@@ -118,13 +118,15 @@ class AddProductActivity : AppCompatActivity() {
                     )
                 if (productData.id.isEmpty()) {
                     addNewProduct(productData)
-                    Toast.makeText(this, "¡Producto agregado exitosamente!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "¡Producto agregado exitosamente!", Toast.LENGTH_SHORT)
+                        .show()
                 } else {
-                    if(!imageBD.isEmpty() && image!=null){
+                    if (!imageBD.isEmpty() && image != null) {
                         uploadImage(image!!, productData.id)
                     }
                     updateProduct(productData)
-                    Toast.makeText(this, "¡Producto actualizado exitosamente!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "¡Producto actualizado exitosamente!", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 val intent = Intent(baseContext, ProductActivity::class.java)
                 startActivity(intent)
@@ -180,9 +182,9 @@ class AddProductActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
-            if(result.contents == null){
+            if (result.contents == null) {
                 Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show()
-            }else{
+            } else {
                 codigoBarras = result.contents
                 binding.edtCodigoBarras.setText(result.contents)
             }
@@ -193,27 +195,32 @@ class AddProductActivity : AppCompatActivity() {
 
     private fun getShop() {
         val user = FirebaseAuth.getInstance().currentUser
-        val userId = user?.uid
+        val email = user?.email
+
         val database = FirebaseDatabase.getInstance()
         val usuariosRef = database.getReference("Empleado")
 
-        usuariosRef.child(userId!!).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    val empleado = dataSnapshot.getValue(EMPLEADO::class.java)
-                    if (empleado != null) {
-                        shop = empleado.negocio
+        usuariosRef.orderByChild("correoElectronico").equalTo(email)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (childSnapshot in dataSnapshot.children) {
+                            val empleado = childSnapshot.getValue(EMPLEADO::class.java)
+                            if (empleado != null) {
+                                shop = empleado.negocio
+                            }
+                        }
                     }
                 }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {
-                Toast.makeText(
-                    this@AddProductActivity,
-                    "Error en la solicitud: " + databaseError.message,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Toast.makeText(
+                        this@AddProductActivity,
+                        "Error en la solicitud: " + databaseError.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -228,7 +235,7 @@ class AddProductActivity : AppCompatActivity() {
         newProductRef.setValue(producto)
             .addOnSuccessListener {
                 Log.d("Agregar", "Producto agregado con éxito. ID: $newProductId")
-                if (imageBD.isEmpty() && image != null){
+                if (imageBD.isEmpty() && image != null) {
                     uploadImage(image!!, newProductId.toString())
                 }
             }
@@ -249,6 +256,7 @@ class AddProductActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<PRODUCTO>, t: Throwable) {
                     Log.d("Actualizar", "Error al actualizar datos")
                 }
+
                 @RequiresApi(Build.VERSION_CODES.O)
                 override fun onResponse(call: Call<PRODUCTO>, response: Response<PRODUCTO>) {
                     Log.d("Actualizar", "Datos actualizados")
@@ -256,6 +264,7 @@ class AddProductActivity : AppCompatActivity() {
             }
         )
     }
+
     @SuppressLint("SuspiciousIndentation")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun uploadImage(imageUrl: Uri, productId: String) {

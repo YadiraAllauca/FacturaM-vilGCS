@@ -87,41 +87,61 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showNewActivity(email: String) {
 
-        val user = FirebaseAuth.getInstance().currentUser
-        val userId = user?.uid
-
         val database = FirebaseDatabase.getInstance()
         val usuariosRef = database.getReference("Empleado")
 
-        usuariosRef.child(userId!!).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    val empleado = dataSnapshot.getValue(EMPLEADO::class.java)
+        usuariosRef.orderByChild("correoElectronico").equalTo(email)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (childSnapshot in dataSnapshot.children) {
+                            val empleado = childSnapshot.getValue(EMPLEADO::class.java)
 
-                    if (empleado != null && empleado.tipoEmpleado == "A") {
-                        Toast.makeText(this@LoginActivity, "ADMIN", Toast.LENGTH_SHORT).show()
-                    } else if (empleado != null && empleado.tipoEmpleado == "V") {
-                        Toast.makeText(this@LoginActivity, "VENDEDOR", Toast.LENGTH_SHORT).show()
+                            if (empleado != null) {
+                                if (empleado.tipoEmpleado == "A") {
+                                    Toast.makeText(this@LoginActivity, "ADMIN", Toast.LENGTH_SHORT)
+                                        .show()
+                                } else if (empleado.tipoEmpleado == "V") {
+                                    Toast.makeText(
+                                        this@LoginActivity,
+                                        "VENDEDOR",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    Toast.makeText(
+                                        this@LoginActivity,
+                                        "Tipo de empleado desconocido",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                break
+                            }
+                        }
                     } else {
                         Toast.makeText(
                             this@LoginActivity,
-                            "Tipo de empleado desconocido",
+                            "Usuario no encontrado",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                } else {
-                    Toast.makeText(this@LoginActivity, "Usuario no encontrado", Toast.LENGTH_SHORT)
-                        .show()
+
+                    val preferences: SharedPreferences.Editor =
+                        getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE).edit()
+                    preferences.putString("email", email)
+                    preferences.apply()
+
+                    val intent = Intent(this@LoginActivity, ProductActivity::class.java)
+                    startActivity(intent)
                 }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {
-                Toast.makeText(
-                    this@LoginActivity,
-                    "Error en la solicitud: " + databaseError.message,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Error en la solicitud: " + databaseError.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
         val preferences: SharedPreferences.Editor =
             getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE).edit()
         preferences.putString("email", email)
@@ -140,6 +160,7 @@ class LoginActivity : AppCompatActivity() {
 
         }
     }
+
     override fun onBackPressed() {
         Toast.makeText(this, "Botón bloqueado por su seguridad", Toast.LENGTH_SHORT).show()
     }

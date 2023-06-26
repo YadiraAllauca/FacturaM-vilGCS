@@ -71,33 +71,35 @@ class ClientActivity : AppCompatActivity() {
 
     private fun getShop() {
         val user = FirebaseAuth.getInstance().currentUser
-        val userId = user?.uid
+        val email = user?.email
 
         val database = FirebaseDatabase.getInstance()
         val usuariosRef = database.getReference("Empleado")
 
-        usuariosRef.child(userId!!).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    val empleado = dataSnapshot.getValue(EMPLEADO::class.java)
-
-                    if (empleado != null) {
-                        shop = empleado.negocio
-                        Toast.makeText(this@ClientActivity, shop, Toast.LENGTH_SHORT).show()
-                        loadData() // Llamar a loadData() una vez que se ha obtenido el valor de shop
+        usuariosRef.orderByChild("correoElectronico").equalTo(email)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (childSnapshot in dataSnapshot.children) {
+                            val empleado = childSnapshot.getValue(EMPLEADO::class.java)
+                            if (empleado != null) {
+                                shop = empleado.negocio
+                                loadData()
+                            }
+                        }
                     }
                 }
-            }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Toast.makeText(
-                    this@ClientActivity,
-                    "Error en la solicitud: " + databaseError.message,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Toast.makeText(
+                        this@ClientActivity,
+                        "Error en la solicitud: " + databaseError.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
     }
+
 
     fun loadData() {
         var listen = object : ValueEventListener {

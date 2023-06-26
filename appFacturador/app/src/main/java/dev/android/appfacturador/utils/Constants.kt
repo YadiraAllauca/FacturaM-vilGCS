@@ -5,5 +5,6 @@ class Constants {
         val KEY_BILL = "key_bill"
         val KEY_PRODUCT = "key_product"
         val KEY_CLIENT = "key_client"
+        val TYPE_DNI = arrayOf("Cédula", "RUC", "Pasaporte")
     }
 }
