@@ -138,9 +138,9 @@
         android:text="Tipo"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/spnDNI2"
+        app:layout_constraintBottom_toBottomOf="@+id/spnType"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/spnDNI2" />
+        app:layout_constraintTop_toTopOf="@+id/spnType" />
 
     <TextView
         android:id="@+id/textView21"
@@ -324,7 +324,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
     <Spinner
-        android:id="@+id/spnDNI2"
+        android:id="@+id/spnType"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
