@@ -90,7 +90,7 @@ class LoginActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance()
         val usuariosRef = database.getReference("Empleado")
 
-        usuariosRef.orderByChild("correoElectronico").equalTo(email)
+        usuariosRef.orderByChild("correo_electronico").equalTo(email)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
@@ -98,10 +98,10 @@ class LoginActivity : AppCompatActivity() {
                             val empleado = childSnapshot.getValue(EMPLEADO::class.java)
 
                             if (empleado != null) {
-                                if (empleado.tipoEmpleado == "A") {
+                                if (empleado.tipo_empleado == "A") {
                                     Toast.makeText(this@LoginActivity, "ADMIN", Toast.LENGTH_SHORT)
                                         .show()
-                                } else if (empleado.tipoEmpleado == "V") {
+                                } else if (empleado.tipo_empleado == "V") {
                                     Toast.makeText(
                                         this@LoginActivity,
                                         "VENDEDOR",

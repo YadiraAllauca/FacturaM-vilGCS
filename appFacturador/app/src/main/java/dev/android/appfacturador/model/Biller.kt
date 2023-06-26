@@ -27,7 +27,7 @@ data class CLIENTE(
     val apellido_paterno: String,
     @SerializedName("apellido_materno")
     val apellido_materno: String,
-    @SerializedName("email")
+    @SerializedName("correo_electronico")
     val email: String,
     @SerializedName("telefono")
     val telefono: String,
@@ -59,24 +59,24 @@ data class PRODUCTO(
 data class EMPLEADO(
     @SerializedName("id")
     var id: String,
-    @SerializedName("apellidoMaterno")
-    val apellidoMaterno: String,
-    @SerializedName("apellidoPaterno")
-    val apellidoPaterno: String,
+    @SerializedName("apellido_materno")
+    val apellido_materno: String,
+    @SerializedName("apellido_paterno")
+    val apellido_paterno: String,
     @SerializedName("clave")
     val clave: String,
-    @SerializedName("correoElectronico")
-    val correoElectronico: String,
-    @SerializedName("numeroDni")
-    val numeroDni: String,
-    @SerializedName("primerNombre")
-    var primerNombre: String,
-    @SerializedName("segundoNombre")
-    var segundoNombre: String,
-    @SerializedName("tipoDni")
-    var tipoDni: String,
-    @SerializedName("tipoEmpleado")
-    var tipoEmpleado: String,
+    @SerializedName("correo_electronico")
+    val correo_electronico: String,
+    @SerializedName("numero_dni")
+    val numero_dni: String,
+    @SerializedName("primer_nombre")
+    var primer_nombre: String,
+    @SerializedName("segundo_nombre")
+    var segundo_nombre: String,
+    @SerializedName("tipo_dni")
+    var tipo_dni: String,
+    @SerializedName("tipo_empleado")
+    var tipo_empleado: String,
     @SerializedName("negocio")
     var negocio: String
 ) : Serializable {

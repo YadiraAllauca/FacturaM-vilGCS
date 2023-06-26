@@ -126,7 +126,7 @@ class AddEmployeeActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance()
         val usuariosRef = database.getReference("Empleado")
 
-        usuariosRef.orderByChild("correoElectronico").equalTo(email)
+        usuariosRef.orderByChild("correo_electronico").equalTo(email)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
@@ -151,7 +151,7 @@ class AddEmployeeActivity : AppCompatActivity() {
 
     fun addUser(empleado: EMPLEADO) {
         val auth = FirebaseAuth.getInstance()
-        auth.createUserWithEmailAndPassword(empleado.correoElectronico, empleado.clave)
+        auth.createUserWithEmailAndPassword(empleado.correo_electronico, empleado.clave)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Log.d("Agregar", "Usuario agregado con éxito")

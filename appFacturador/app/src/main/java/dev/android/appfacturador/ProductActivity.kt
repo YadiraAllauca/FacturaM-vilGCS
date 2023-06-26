@@ -83,7 +83,7 @@ class ProductActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance()
         val usuariosRef = database.getReference("Empleado")
 
-        usuariosRef.orderByChild("correoElectronico").equalTo(email)
+        usuariosRef.orderByChild("correo_electronico").equalTo(email)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {

@@ -76,7 +76,7 @@ class ClientActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance()
         val usuariosRef = database.getReference("Empleado")
 
-        usuariosRef.orderByChild("correoElectronico").equalTo(email)
+        usuariosRef.orderByChild("correo_electronico").equalTo(email)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
@@ -118,7 +118,7 @@ class ClientActivity : AppCompatActivity() {
                                     child.child("segundo_nombre").value.toString(),
                                     child.child("apellido_paterno").value.toString(),
                                     child.child("apellido_materno").value.toString(),
-                                    child.child("email").value.toString(),
+                                    child.child("correo_electronico").value.toString(),
                                     child.child("telefono").value.toString(),
                                     child.child("direccion").value.toString(),
                                     child.child("negocio").value.toString()
