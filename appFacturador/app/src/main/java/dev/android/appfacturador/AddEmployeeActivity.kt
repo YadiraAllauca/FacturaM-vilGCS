@@ -30,7 +30,10 @@ class AddEmployeeActivity : AppCompatActivity() {
     lateinit var email: String
     lateinit var shop: String
     var id = ""
-    lateinit var spinner: Spinner
+    lateinit var spinnerDNI: Spinner
+    lateinit var spinnerType: Spinner
+    val typeEmployee = arrayOf("Vendedor", "Administrador")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddEmployeeBinding.inflate(layoutInflater)
@@ -45,7 +48,11 @@ class AddEmployeeActivity : AppCompatActivity() {
         //Eventos
         binding.btnBack.setOnClickListener { finish() }
         binding.btnAdd.setOnClickListener {
-            val typeDNI = spinner.selectedItem.toString()
+            var typeEmployee = "V"
+            if (spinnerType.selectedItem.toString().equals("Administrador")) {
+                typeEmployee = "A"
+            }
+            val typeDNI = spinnerDNI.selectedItem.toString()
             val numberDNI = binding.edtNumDNI.text.toString()
             val fullName = (binding.edtNameEmployee.text.toString()).split(" ")
             val firstName = fullName[0].toLowerCase().capitalize()
@@ -76,11 +83,11 @@ class AddEmployeeActivity : AppCompatActivity() {
                         numberDNI,
                         firstName,
                         secondName,
-                        typeDNI, "V",
+                        typeDNI, typeEmployee,
                         shop
                     )
                 if (employeeData.id.isEmpty()) {
-                    addUser(employeeData)
+                    addEmployee(employeeData)
                     Toast.makeText(this, "¡Empleado agregado exitosamente!", Toast.LENGTH_SHORT)
                         .show()
                 }
@@ -91,10 +98,14 @@ class AddEmployeeActivity : AppCompatActivity() {
     }
 
     fun initialize() {
-        spinner = binding.spnDNI
-        val adapter = ArrayAdapter(this, R.layout.simple_spinner_item, Constants.TYPE_DNI)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
+        spinnerDNI = binding.spnDNI
+        val adapterDNI = ArrayAdapter(this, R.layout.simple_spinner_item, Constants.TYPE_DNI)
+        adapterDNI.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerDNI.adapter = adapterDNI
+        spinnerType = binding.spnType
+        val adapterType = ArrayAdapter(this, R.layout.simple_spinner_item, typeEmployee)
+        adapterType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerType.adapter = adapterType
         val bundle = intent.extras
         bundle?.let {
         } ?: run {
@@ -144,7 +155,6 @@ class AddEmployeeActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Log.d("Agregar", "Usuario agregado con éxito")
-                    addEmployee(empleado)
                 } else {
                     Log.d("Agregar", "Error al agregar usuario")
                 }
@@ -165,6 +175,7 @@ class AddEmployeeActivity : AppCompatActivity() {
                 }
 
                 override fun onResponse(call: Call<EMPLEADO>, response: Response<EMPLEADO>) {
+                    addUser(empleado)
                     Log.d("Agregar", "Empleado agregado con éxito")
                 }
             }
