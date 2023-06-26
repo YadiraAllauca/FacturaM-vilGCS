@@ -129,6 +129,20 @@
         app:layout_constraintTop_toBottomOf="@+id/edtEmailEmployee" />
 
     <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="3dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Tipo"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/spnType"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/spnType" />
+
+    <TextView
         android:id="@+id/textView21"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -308,6 +322,15 @@
         app:layout_constraintEnd_toStartOf="@+id/edtNumDNI"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+    <Spinner
+        android:id="@+id/spnType"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/btnMicPhoneNumber"
+        app:layout_constraintStart_toStartOf="@+id/edtPasswordEmployee"
+        app:layout_constraintTop_toBottomOf="@+id/edtPasswordEmployee" />
 
     <ImageView
         android:id="@+id/btnMicEmployeeNames"
