@@ -11,6 +11,7 @@ import dev.android.appfacturador.model.EMPLEADO
 
 class EmployeeAdapter(var employees: List<EMPLEADO> = emptyList()) :
     RecyclerView.Adapter<EmployeeAdapter.EmployeeAdapterViewHolder>() {
+    lateinit var setOnClickEmployee: (EMPLEADO) -> Unit
     inner class EmployeeAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var binding: ItemEmployeeBinding = ItemEmployeeBinding.bind(itemView)
         fun bind(employee: EMPLEADO) = with(binding) {
@@ -25,6 +26,9 @@ class EmployeeAdapter(var employees: List<EMPLEADO> = emptyList()) :
                 binding.txtType.text = "Vendedor"
             } else {
                 binding.txtType.text = "Administrador"
+            }
+            itemView.setOnClickListener {
+                setOnClickEmployee(employee)
             }
         }
 

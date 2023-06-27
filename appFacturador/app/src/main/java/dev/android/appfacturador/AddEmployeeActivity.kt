@@ -15,8 +15,10 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import dev.android.appfacturador.database.ClientDao
 import dev.android.appfacturador.database.EmployeeDao
 import dev.android.appfacturador.databinding.ActivityAddEmployeeBinding
+import dev.android.appfacturador.model.CLIENTE
 import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.utils.Constants
 import retrofit2.Call
@@ -90,6 +92,10 @@ class AddEmployeeActivity : AppCompatActivity() {
                     addEmployee(employeeData)
                     Toast.makeText(this, "¡Empleado agregado exitosamente!", Toast.LENGTH_SHORT)
                         .show()
+                } else {
+                    updateEmployee(employeeData)
+                    Toast.makeText(this, "¡Datos actualizados exitosamente!", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 val intent = Intent(baseContext, EmployeeActivity::class.java)
                 startActivity(intent)
@@ -108,6 +114,29 @@ class AddEmployeeActivity : AppCompatActivity() {
         spinnerType.adapter = adapterType
         val bundle = intent.extras
         bundle?.let {
+            val employee = it.getSerializable(Constants.KEY_EMPLOYEE) as EMPLEADO
+            id = employee.id
+            binding.textView8.text =
+                employee.primer_nombre.first().toString() + employee.apellido_paterno.first()
+                    .toString()
+            binding.edtNameEmployee.setText(employee.primer_nombre + " " + employee.segundo_nombre)
+            binding.edtLastNameEmployee.setText(employee.apellido_paterno + " " + employee.apellido_materno)
+            binding.edtNumDNI.setText(employee.numero_dni)
+            binding.edtEmailEmployee.setText(employee.correo_electronico)
+            binding.edtPasswordEmployee.setText(employee.clave)
+            val employeeTypeDNI = employee.tipo_dni
+            val positionDNI = Constants.TYPE_DNI.indexOf(employeeTypeDNI)
+            spinnerDNI.setSelection(positionDNI)
+            var employeeType = ""
+            if (employee.tipo_empleado.equals("V")) {
+                employeeType = "Vendedor"
+            } else {
+                employeeType = "Administrador"
+            }
+            val positionType = Constants.TYPE_DNI.indexOf(employeeType)
+            spinnerType.setSelection(positionType)
+            binding.btnAdd.text = "ACTUALIZAR"
+
         } ?: run {
             binding.btnAdd.text = "AGREGAR"
             binding.edtNameEmployee.setText("")
@@ -181,6 +210,28 @@ class AddEmployeeActivity : AppCompatActivity() {
             }
         )
 
+    }
+
+    private fun updateEmployee(empleado: EMPLEADO) {
+        val retrofitBuilder = Retrofit.Builder()
+            .baseUrl("https://appfacturador-b516d-default-rtdb.firebaseio.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(EmployeeDao::class.java)
+
+        val retrofit = retrofitBuilder.updateEmployee(empleado.id, empleado)
+        retrofit.enqueue(
+            object : Callback<EMPLEADO> {
+                override fun onFailure(call: Call<EMPLEADO>, t: Throwable) {
+                    Log.d("Actualizar", "Error al actualizar datos")
+                }
+
+                override fun onResponse(call: Call<EMPLEADO>, response: Response<EMPLEADO>) {
+                    addUser(empleado)
+                    Log.d("Actualizar", "Datos actualizados")
+                }
+            }
+        )
     }
 
 

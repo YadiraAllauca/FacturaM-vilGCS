@@ -19,6 +19,7 @@ import com.google.firebase.ktx.Firebase
 import dev.android.appfacturador.databinding.ActivityEmployeeBinding
 import dev.android.appfacturador.model.CLIENTE
 import dev.android.appfacturador.model.EMPLEADO
+import dev.android.appfacturador.utils.Constants
 
 class EmployeeActivity : AppCompatActivity() {
     lateinit var binding: ActivityEmployeeBinding
@@ -44,6 +45,15 @@ class EmployeeActivity : AppCompatActivity() {
         getShop()
         binding.btnAddEmployee.setOnClickListener {
             val intent = Intent(this, AddEmployeeActivity::class.java)
+            startActivity(intent)
+        }
+        adapter.setOnClickEmployee = {
+            val bundle = Bundle().apply {
+                putSerializable(Constants.KEY_EMPLOYEE, it)
+            }
+            val intent = Intent(this, AddEmployeeActivity::class.java).apply {
+                putExtras(bundle)
+            }
             startActivity(intent)
         }
         recyclerView = binding.rvEmployees
