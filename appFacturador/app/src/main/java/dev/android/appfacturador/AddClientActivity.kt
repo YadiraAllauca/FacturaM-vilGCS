@@ -28,10 +28,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class AddClientActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddClientBinding
-    lateinit var email: String
-    lateinit var shop: String
-    var id = ""
-    lateinit var spinner: Spinner
+    private lateinit var email: String
+    private lateinit var shop: String
+    private var id = ""
+    private lateinit var spinner: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,62 +40,13 @@ class AddClientActivity : AppCompatActivity() {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         initialize()
-        //usuario y tienda actual
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
         getShop()
-        //Eventos
-        binding.btnBack.setOnClickListener { finish() }
-
-        binding.btnAdd.setOnClickListener {
-            val typeDNI = spinner.selectedItem.toString()
-            val numberDNI = binding.edtNumDNI.text.toString()
-            val fullName = (binding.edtNameClient.text.toString()).split(" ")
-            val firstName = fullName[0].toLowerCase().capitalize()
-            val secondName = fullName[1].toLowerCase().capitalize()
-            val fullLastName = (binding.edtLastNameClient.text.toString()).split(" ")
-            val firstLastName = fullLastName[0].toLowerCase().capitalize()
-            val secondLastName = fullLastName[1].toLowerCase().capitalize()
-            val email = binding.edtEmailClient.text.toString()
-            val phone = binding.edtPhoneClient.text.toString()
-            val address = binding.edtAddressClient.text.toString()
-            if (fullName.isEmpty() || fullLastName.isEmpty() || numberDNI.isEmpty() ||
-                email.isEmpty() || phone.isEmpty() || address.isEmpty()
-            ) {
-                Toast.makeText(this, "Campos vacíos", Toast.LENGTH_SHORT).show()
-            } else {
-                var clientData =
-                    CLIENTE(
-                        id,
-                        typeDNI,
-                        numberDNI,
-                        firstName,
-                        secondName,
-                        firstLastName,
-                        secondLastName,
-                        email,
-                        phone,
-                        address,
-                        shop
-                    )
-                if (clientData.id.isEmpty()) {
-                    addClient(clientData)
-                    Toast.makeText(this, "¡Cliente agregado exitosamente!", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    updateClient(clientData)
-                    Toast.makeText(this, "¡Datos actualizados exitosamente!", Toast.LENGTH_SHORT)
-                        .show()
-                }
-
-                val intent = Intent(baseContext, ClientActivity::class.java)
-                startActivity(intent)
-            }
-        }
-
+        events()
     }
 
-    fun initialize() {
+    private fun initialize() {
         spinner = binding.spnDNI
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Constants.TYPE_DNI)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -158,6 +109,56 @@ class AddClientActivity : AppCompatActivity() {
                 }
             })
     }
+
+    private fun events() {
+        binding.btnAdd.setOnClickListener {
+            val typeDNI = spinner.selectedItem.toString()
+            val numberDNI = binding.edtNumDNI.text.toString()
+            val fullName = (binding.edtNameClient.text.toString()).split(" ")
+            val firstName = fullName[0].toLowerCase().capitalize()
+            val secondName = fullName[1].toLowerCase().capitalize()
+            val fullLastName = (binding.edtLastNameClient.text.toString()).split(" ")
+            val firstLastName = fullLastName[0].toLowerCase().capitalize()
+            val secondLastName = fullLastName[1].toLowerCase().capitalize()
+            val email = binding.edtEmailClient.text.toString()
+            val phone = binding.edtPhoneClient.text.toString()
+            val address = binding.edtAddressClient.text.toString()
+            if (fullName.isEmpty() || fullLastName.isEmpty() || numberDNI.isEmpty() ||
+                email.isEmpty() || phone.isEmpty() || address.isEmpty()
+            ) {
+                Toast.makeText(this, "Campos vacíos", Toast.LENGTH_SHORT).show()
+            } else {
+                var clientData =
+                    CLIENTE(
+                        id,
+                        typeDNI,
+                        numberDNI,
+                        firstName,
+                        secondName,
+                        firstLastName,
+                        secondLastName,
+                        email,
+                        phone,
+                        address,
+                        shop
+                    )
+                if (clientData.id.isEmpty()) {
+                    addClient(clientData)
+                    Toast.makeText(this, "¡Cliente agregado exitosamente!", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    updateClient(clientData)
+                    Toast.makeText(this, "¡Datos actualizados exitosamente!", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                val intent = Intent(baseContext, ClientActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        binding.btnBack.setOnClickListener { finish() }
+    }
+
 
     private fun addClient(cliente: CLIENTE) {
         val retrofitBuilder = Retrofit.Builder()

@@ -4,14 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import dev.android.appfacturador.databinding.ItemClientBinding
 import dev.android.appfacturador.databinding.ItemEmployeeBinding
-import dev.android.appfacturador.model.CLIENTE
 import dev.android.appfacturador.model.EMPLEADO
 
 class EmployeeAdapter(var employees: List<EMPLEADO> = emptyList()) :
     RecyclerView.Adapter<EmployeeAdapter.EmployeeAdapterViewHolder>() {
     lateinit var setOnClickEmployee: (EMPLEADO) -> Unit
+    lateinit var setOnClickListenerEmployeeDelete: (EMPLEADO) -> Unit
     inner class EmployeeAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var binding: ItemEmployeeBinding = ItemEmployeeBinding.bind(itemView)
         fun bind(employee: EMPLEADO) = with(binding) {
@@ -29,6 +28,9 @@ class EmployeeAdapter(var employees: List<EMPLEADO> = emptyList()) :
             }
             itemView.setOnClickListener {
                 setOnClickEmployee(employee)
+            }
+            binding.btnDeleteEmployee.setOnClickListener {
+                setOnClickListenerEmployeeDelete(employee)
             }
         }
 

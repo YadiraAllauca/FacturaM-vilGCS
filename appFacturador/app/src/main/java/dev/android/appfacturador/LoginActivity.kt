@@ -7,11 +7,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.google.firebase.auth.FirebaseAuth
 import android.content.Intent
-import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
-import android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -25,7 +22,7 @@ import dev.android.appfacturador.model.EMPLEADO
 
 class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
-    private lateinit var database: FirebaseDatabase
+    private lateinit var db: FirebaseDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,13 +31,12 @@ class LoginActivity : AppCompatActivity() {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         hiddeVisiblePassword()
-        database = FirebaseDatabase.getInstance()
+        db = FirebaseDatabase.getInstance()
         login()
         session()
-
     }
 
-    fun hiddeVisiblePassword() {
+    private fun hiddeVisiblePassword() {
         var passwordHidden = false
         binding.btnHide.setOnClickListener {
             if (passwordHidden) {
@@ -57,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    fun login() {
+    private fun login() {
         binding.btnNext.setOnClickListener {
             if (binding.edtEmail.text.isNotEmpty() && binding.txtPaassword.text.isNotEmpty()) {
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(
@@ -79,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
     private fun showAlert() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Error")
-        builder.setMessage("Se ha producido un error al iniciar sesión")
+        builder.setMessage("Ingrese correctamente su usuario y contraseña")
         builder.setPositiveButton("Aceptar", null)
         val dialog: AlertDialog = builder.create()
         dialog.show()
@@ -87,8 +83,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showNewActivity(email: String) {
 
-        val database = FirebaseDatabase.getInstance()
-        val usuariosRef = database.getReference("Empleado")
+        val usuariosRef = db.getReference("Empleado")
 
         usuariosRef.orderByChild("correo_electronico").equalTo(email)
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -96,21 +91,33 @@ class LoginActivity : AppCompatActivity() {
                     if (dataSnapshot.exists()) {
                         for (childSnapshot in dataSnapshot.children) {
                             val empleado = childSnapshot.getValue(EMPLEADO::class.java)
-
                             if (empleado != null) {
                                 if (empleado.tipo_empleado == "A") {
-                                    Toast.makeText(this@LoginActivity, "ADMIN", Toast.LENGTH_SHORT)
-                                        .show()
+                                    val preferences: SharedPreferences.Editor =
+                                        getSharedPreferences(
+                                            "PREFERENCE_FILE_KEY",
+                                            Context.MODE_PRIVATE
+                                        ).edit()
+                                    preferences.putString("email", email)
+                                    preferences.apply()
+                                    val intent =
+                                        Intent(this@LoginActivity, ProductActivity::class.java)
+                                    startActivity(intent)
                                 } else if (empleado.tipo_empleado == "V") {
-                                    Toast.makeText(
-                                        this@LoginActivity,
-                                        "VENDEDOR",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    val preferences: SharedPreferences.Editor =
+                                        getSharedPreferences(
+                                            "PREFERENCE_FILE_KEY",
+                                            Context.MODE_PRIVATE
+                                        ).edit()
+                                    preferences.putString("email", email)
+                                    preferences.apply()
+                                    val intent =
+                                        Intent(this@LoginActivity, ProductActivity::class.java)
+                                    startActivity(intent)
                                 } else {
                                     Toast.makeText(
                                         this@LoginActivity,
-                                        "Tipo de empleado desconocido",
+                                        "Usuario no encontrado",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
@@ -124,14 +131,6 @@ class LoginActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-
-                    val preferences: SharedPreferences.Editor =
-                        getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE).edit()
-                    preferences.putString("email", email)
-                    preferences.apply()
-
-                    val intent = Intent(this@LoginActivity, ProductActivity::class.java)
-                    startActivity(intent)
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
@@ -142,12 +141,6 @@ class LoginActivity : AppCompatActivity() {
                     ).show()
                 }
             })
-        val preferences: SharedPreferences.Editor =
-            getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE).edit()
-        preferences.putString("email", email)
-        preferences.apply()
-        var intent = Intent(this, ProductActivity::class.java)
-        startActivity(intent)
     }
 
 
@@ -157,12 +150,6 @@ class LoginActivity : AppCompatActivity() {
         val email: String? = preferences.getString("email", null)
         if (email != null) {
             showNewActivity(email)
-
         }
     }
-
-    override fun onBackPressed() {
-        Toast.makeText(this, "Botón bloqueado por su seguridad", Toast.LENGTH_SHORT).show()
-    }
-
 }
