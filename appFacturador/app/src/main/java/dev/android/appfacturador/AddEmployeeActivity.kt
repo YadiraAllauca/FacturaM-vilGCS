@@ -15,10 +15,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import dev.android.appfacturador.database.ClientDao
 import dev.android.appfacturador.database.EmployeeDao
 import dev.android.appfacturador.databinding.ActivityAddEmployeeBinding
-import dev.android.appfacturador.model.CLIENTE
 import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.utils.Constants
 import retrofit2.Call
@@ -29,12 +27,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class AddEmployeeActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddEmployeeBinding
-    lateinit var email: String
-    lateinit var shop: String
-    var id = ""
-    lateinit var spinnerDNI: Spinner
-    lateinit var spinnerType: Spinner
-    val typeEmployee = arrayOf("Vendedor", "Administrador")
+    private lateinit var email: String
+    private var oldEmailEdit: String = ""
+    private lateinit var shop: String
+    private var id = ""
+    private lateinit var spinnerDNI: Spinner
+    private lateinit var spinnerType: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,73 +41,20 @@ class AddEmployeeActivity : AppCompatActivity() {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         initialize()
-        //usuario y tienda actual
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
         getShop()
-        //Eventos
-        binding.btnBack.setOnClickListener { finish() }
-        binding.btnAdd.setOnClickListener {
-            var typeEmployee = "V"
-            if (spinnerType.selectedItem.toString().equals("Administrador")) {
-                typeEmployee = "A"
-            }
-            val typeDNI = spinnerDNI.selectedItem.toString()
-            val numberDNI = binding.edtNumDNI.text.toString()
-            val fullName = (binding.edtNameEmployee.text.toString()).split(" ")
-            val firstName = fullName[0].toLowerCase().capitalize()
-            val secondName = fullName[1].toLowerCase().capitalize()
-            val fullLastName = (binding.edtLastNameEmployee.text.toString()).split(" ")
-            val firstLastName = fullLastName[0].toLowerCase().capitalize()
-            val secondLastName = fullLastName[1].toLowerCase().capitalize()
-            val email = binding.edtEmailEmployee.text.toString()
-            val password = binding.edtPasswordEmployee.text.toString()
-            if (fullName.isEmpty() || fullLastName.isEmpty() || numberDNI.isEmpty() ||
-                email.isEmpty() || password.isEmpty()
-            ) {
-                Toast.makeText(this, "Campos vacíos", Toast.LENGTH_SHORT).show()
-            } else if (password.length < 6) {
-                Toast.makeText(
-                    this,
-                    "La clave debe ser de al menos 6 caracteres",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                var employeeData =
-                    EMPLEADO(
-                        id,
-                        secondLastName,
-                        firstLastName,
-                        password,
-                        email,
-                        numberDNI,
-                        firstName,
-                        secondName,
-                        typeDNI, typeEmployee,
-                        shop
-                    )
-                if (employeeData.id.isEmpty()) {
-                    addEmployee(employeeData)
-                    Toast.makeText(this, "¡Empleado agregado exitosamente!", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    updateEmployee(employeeData)
-                    Toast.makeText(this, "¡Datos actualizados exitosamente!", Toast.LENGTH_SHORT)
-                        .show()
-                }
-                val intent = Intent(baseContext, EmployeeActivity::class.java)
-                startActivity(intent)
-            }
-        }
+        events()
+
     }
 
-    fun initialize() {
+    private fun initialize() {
         spinnerDNI = binding.spnDNI
         val adapterDNI = ArrayAdapter(this, R.layout.simple_spinner_item, Constants.TYPE_DNI)
         adapterDNI.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerDNI.adapter = adapterDNI
         spinnerType = binding.spnType
-        val adapterType = ArrayAdapter(this, R.layout.simple_spinner_item, typeEmployee)
+        val adapterType = ArrayAdapter(this, R.layout.simple_spinner_item, Constants.TYPE_EMPLOYEE)
         adapterType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerType.adapter = adapterType
         val bundle = intent.extras
@@ -123,6 +68,7 @@ class AddEmployeeActivity : AppCompatActivity() {
             binding.edtLastNameEmployee.setText(employee.apellido_paterno + " " + employee.apellido_materno)
             binding.edtNumDNI.setText(employee.numero_dni)
             binding.edtEmailEmployee.setText(employee.correo_electronico)
+            this.oldEmailEdit = employee.correo_electronico
             binding.edtPasswordEmployee.setText(employee.clave)
             val employeeTypeDNI = employee.tipo_dni
             val positionDNI = Constants.TYPE_DNI.indexOf(employeeTypeDNI)
@@ -178,10 +124,97 @@ class AddEmployeeActivity : AppCompatActivity() {
             })
     }
 
-    fun addUser(empleado: EMPLEADO) {
+    private fun events() {
+        binding.btnBack.setOnClickListener { finish() }
+        binding.btnAdd.setOnClickListener {
+            var typeEmployee = "V"
+            if (spinnerType.selectedItem.toString().equals("Administrador")) {
+                typeEmployee = "A"
+            }
+            val typeDNI = spinnerDNI.selectedItem.toString()
+            val numberDNI = binding.edtNumDNI.text.toString()
+            val fullName = (binding.edtNameEmployee.text.toString()).split(" ")
+            val firstName = fullName[0].toLowerCase().capitalize()
+            val secondName = fullName[1].toLowerCase().capitalize()
+            val fullLastName = (binding.edtLastNameEmployee.text.toString()).split(" ")
+            val firstLastName = fullLastName[0].toLowerCase().capitalize()
+            val secondLastName = fullLastName[1].toLowerCase().capitalize()
+            val email = binding.edtEmailEmployee.text.toString()
+            val password = binding.edtPasswordEmployee.text.toString()
+            if (fullName.isEmpty() || fullLastName.isEmpty() || numberDNI.isEmpty() ||
+                email.isEmpty() || password.isEmpty()
+            ) {
+                Toast.makeText(this, "Campos vacíos", Toast.LENGTH_SHORT).show()
+            } else if (password.length < 6) {
+                Toast.makeText(
+                    this,
+                    "La clave debe ser de al menos 6 caracteres",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                var employeeData =
+                    EMPLEADO(
+                        id,
+                        secondLastName,
+                        firstLastName,
+                        password,
+                        email,
+                        numberDNI,
+                        firstName,
+                        secondName,
+                        typeDNI, typeEmployee,
+                        shop
+                    )
+                if (employeeData.id.isEmpty()) {
+                    addEmployee(employeeData) { employee ->
+                        if (employee) {
+                            Toast.makeText(this, "¡Empleado agregado exitosamente!", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this, EmployeeActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(this, "Correo ya registrado, ingrese uno nuevo", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } else {
+                    updateEmployee(employeeData) { employee ->
+                        if (employee) {
+                            Toast.makeText(this, "¡Datos actualizados!", Toast.LENGTH_SHORT).show()
+                            setResult(RESULT_OK)
+                            finish()
+                        } else {
+                            Toast.makeText(this, "Correo ya registrado, ingrese uno nuevo", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+    private fun validateEmail(empleado: EMPLEADO, callback: (Boolean) -> Unit) {
+        if(this.oldEmailEdit != empleado.correo_electronico) {
+            val auth = FirebaseAuth.getInstance()
+            auth.fetchSignInMethodsForEmail(empleado.correo_electronico)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val signInMethods = task.result?.signInMethods
+                        val validated = signInMethods == null || signInMethods.isEmpty()
+                        callback(validated)
+                    } else {
+                        Log.d("Agregar", "Error al verificar el correo electrónico")
+                        callback(false)
+                    }
+
+                }
+        }else{
+            callback(true)
+        }
+    }
+
+    private fun addUser(empleado: EMPLEADO) {
         val auth = FirebaseAuth.getInstance()
         auth.createUserWithEmailAndPassword(empleado.correo_electronico, empleado.clave)
-            .addOnCompleteListener(this) { task ->
+            .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d("Agregar", "Usuario agregado con éxito")
                 } else {
@@ -190,49 +223,62 @@ class AddEmployeeActivity : AppCompatActivity() {
             }
     }
 
-    private fun addEmployee(empleado: EMPLEADO) {
-        val retrofitBuilder = Retrofit.Builder()
-            .baseUrl("https://appfacturador-b516d-default-rtdb.firebaseio.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(EmployeeDao::class.java)
-        val retrofit = retrofitBuilder.addEmployee(empleado)
-        retrofit.enqueue(
-            object : Callback<EMPLEADO> {
-                override fun onFailure(call: Call<EMPLEADO>, t: Throwable) {
-                    Log.d("Agregar", "Error al agregar empleado")
-                }
 
-                override fun onResponse(call: Call<EMPLEADO>, response: Response<EMPLEADO>) {
-                    addUser(empleado)
-                    Log.d("Agregar", "Empleado agregado con éxito")
-                }
+    private fun addEmployee(empleado: EMPLEADO, callback: (Boolean) -> Unit) {
+        validateEmail(empleado) { validated ->
+            if (validated) {
+                val retrofitBuilder = Retrofit.Builder()
+                    .baseUrl("https://appfacturador-b516d-default-rtdb.firebaseio.com/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                    .create(EmployeeDao::class.java)
+                val retrofit = retrofitBuilder.addEmployee(empleado)
+                retrofit.enqueue(
+                    object : Callback<EMPLEADO> {
+                        override fun onFailure(call: Call<EMPLEADO>, t: Throwable) {
+                            Log.d("Agregar", "Error al agregar empleado")
+                            callback(false)
+                        }
+
+                        override fun onResponse(call: Call<EMPLEADO>, response: Response<EMPLEADO>) {
+                            addUser(empleado)
+                            Log.d("Agregar", "Empleado agregado con éxito")
+                            callback(true)
+                        }
+                    }
+                )
+            } else {
+                callback(false)
             }
-        )
-
+        }
     }
+    private fun updateEmployee(empleado: EMPLEADO, callback: (Boolean) -> Unit) {
+        validateEmail(empleado) { validated ->
+            if (validated) {
+                val retrofitBuilder = Retrofit.Builder()
+                    .baseUrl("https://appfacturador-b516d-default-rtdb.firebaseio.com/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                    .create(EmployeeDao::class.java)
+                val retrofit = retrofitBuilder.updateEmployee(empleado.id, empleado)
+                retrofit.enqueue(
+                    object : Callback<EMPLEADO> {
+                        override fun onFailure(call: Call<EMPLEADO>, t: Throwable) {
+                            Log.d("Agregar", "Error al agregar empleado")
+                            callback(false)
+                        }
 
-    private fun updateEmployee(empleado: EMPLEADO) {
-        val retrofitBuilder = Retrofit.Builder()
-            .baseUrl("https://appfacturador-b516d-default-rtdb.firebaseio.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(EmployeeDao::class.java)
-
-        val retrofit = retrofitBuilder.updateEmployee(empleado.id, empleado)
-        retrofit.enqueue(
-            object : Callback<EMPLEADO> {
-                override fun onFailure(call: Call<EMPLEADO>, t: Throwable) {
-                    Log.d("Actualizar", "Error al actualizar datos")
-                }
-
-                override fun onResponse(call: Call<EMPLEADO>, response: Response<EMPLEADO>) {
-                    addUser(empleado)
-                    Log.d("Actualizar", "Datos actualizados")
-                }
+                        override fun onResponse(call: Call<EMPLEADO>, response: Response<EMPLEADO>) {
+                            addUser(empleado)
+                            Log.d("Agregar", "Empleado agregado con éxito")
+                            callback(true)
+                        }
+                    }
+                )
+            } else {
+                callback(false)
             }
-        )
+        }
     }
-
 
 }

@@ -31,8 +31,6 @@ interface ProductDao {
     fun updateProduct(@Path("id") id:String, @Body membership: PRODUCTO): Call<PRODUCTO>
 }
 interface EmployeeDao {
-    @GET("Empleado.json")
-    fun getEmployees(): Call<List<EMPLEADO>>
     @POST("Empleado.json")
     fun addEmployee(@Body membership: EMPLEADO): Call<EMPLEADO>
     @DELETE("Empleado/{id}.json")

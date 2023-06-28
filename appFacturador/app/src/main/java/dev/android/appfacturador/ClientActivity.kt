@@ -23,15 +23,15 @@ import dev.android.appfacturador.utils.Constants.Companion.KEY_CLIENT
 
 class ClientActivity : AppCompatActivity() {
     lateinit var binding: ActivityClientBinding
-    lateinit var email: String
-    lateinit var shop: String
+    private lateinit var email: String
+    private lateinit var shop: String
     private var list: MutableList<CLIENTE> = ArrayList()
     private val adapter: ClientAdapter by lazy {
         ClientAdapter()
     }
     private lateinit var recyclerView: RecyclerView
-    private val fb = Firebase.database
-    private val dr = fb.getReference("Cliente")
+    private val instanceFirebase = Firebase.database
+    private val db = instanceFirebase.getReference("Cliente")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,30 +39,10 @@ class ClientActivity : AppCompatActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
-        //usuario y negocio actual
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
         getShop()
-        binding.btnCloses.setOnClickListener {
-            val intent = Intent(this, MenuActivity::class.java).apply {
-                putExtra("option", "client")
-            }
-            startActivity(intent)
-        }
-
-        binding.btnAddClient.setOnClickListener {
-            val intent = Intent(this, AddClientActivity::class.java)
-            startActivity(intent)
-        }
-        adapter.setOnClickClient = {
-            val bundle = Bundle().apply {
-                putSerializable(KEY_CLIENT, it)
-            }
-            val intent = Intent(this, AddClientActivity::class.java).apply {
-                putExtras(bundle)
-            }
-            startActivity(intent)
-        }
+        events()
         recyclerView = binding.rvClients
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
@@ -73,8 +53,7 @@ class ClientActivity : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
         val email = user?.email
 
-        val database = FirebaseDatabase.getInstance()
-        val usuariosRef = database.getReference("Empleado")
+        val usuariosRef = instanceFirebase.getReference("Empleado")
 
         usuariosRef.orderByChild("correo_electronico").equalTo(email)
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -100,8 +79,30 @@ class ClientActivity : AppCompatActivity() {
             })
     }
 
+    private fun events() {
+        binding.btnCloses.setOnClickListener {
+            val intent = Intent(this, MenuActivity::class.java).apply {
+                putExtra("option", "client")
+            }
+            startActivity(intent)
+        }
 
-    fun loadData() {
+        binding.btnAddClient.setOnClickListener {
+            val intent = Intent(this, AddClientActivity::class.java)
+            startActivity(intent)
+        }
+        adapter.setOnClickClient = {
+            val bundle = Bundle().apply {
+                putSerializable(KEY_CLIENT, it)
+            }
+            val intent = Intent(this, AddClientActivity::class.java).apply {
+                putExtras(bundle)
+            }
+            startActivity(intent)
+        }
+    }
+
+    private fun loadData() {
         var listen = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 list.clear()
@@ -135,7 +136,7 @@ class ClientActivity : AppCompatActivity() {
                 Log.e("TAG", "messages:onCancelled: ${error.message}")
             }
         }
-        dr.addValueEventListener(listen)
+        db.addValueEventListener(listen)
     }
 
 

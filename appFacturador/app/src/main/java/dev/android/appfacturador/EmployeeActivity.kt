@@ -1,12 +1,14 @@
 package dev.android.appfacturador
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -16,22 +18,31 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import dev.android.appfacturador.database.EmployeeDao
+import dev.android.appfacturador.database.ProductDao
 import dev.android.appfacturador.databinding.ActivityEmployeeBinding
 import dev.android.appfacturador.model.CLIENTE
 import dev.android.appfacturador.model.EMPLEADO
+import dev.android.appfacturador.model.PRODUCTO
 import dev.android.appfacturador.utils.Constants
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.Executors
 
 class EmployeeActivity : AppCompatActivity() {
     lateinit var binding: ActivityEmployeeBinding
-    lateinit var email: String
-    lateinit var shop: String
+    private lateinit var email: String
+    private lateinit var shop: String
     private var list: MutableList<EMPLEADO> = ArrayList()
     private val adapter: EmployeeAdapter by lazy {
         EmployeeAdapter()
     }
     private lateinit var recyclerView: RecyclerView
-    private val fb = Firebase.database
-    private val dr = fb.getReference("Empleado")
+    private val instanceFirebase = Firebase.database
+    private val db = instanceFirebase.getReference("Empleado")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +50,17 @@ class EmployeeActivity : AppCompatActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
-        //usuario y negocio actual
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
         getShop()
+        events()
+        recyclerView = binding.rvEmployees
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.setHasFixedSize(true)
+
+    }
+
+    private fun events() {
         binding.btnAddEmployee.setOnClickListener {
             val intent = Intent(this, AddEmployeeActivity::class.java)
             startActivity(intent)
@@ -56,10 +74,6 @@ class EmployeeActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
-        recyclerView = binding.rvEmployees
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.setHasFixedSize(true)
-
         binding.btnBack.setOnClickListener { finish() }
     }
 
@@ -67,10 +81,7 @@ class EmployeeActivity : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
         val email = user?.email
 
-        val database = FirebaseDatabase.getInstance()
-        val usuariosRef = database.getReference("Empleado")
-
-        usuariosRef.orderByChild("correo_electronico").equalTo(email)
+        db.orderByChild("correo_electronico").equalTo(email)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
@@ -95,7 +106,7 @@ class EmployeeActivity : AppCompatActivity() {
     }
 
 
-    fun loadData() {
+    private fun loadData() {
         var listen = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 list.clear()
@@ -124,13 +135,48 @@ class EmployeeActivity : AppCompatActivity() {
                 }
                 adapter.updateListEmployees(list)
                 recyclerView.adapter = adapter
+                adapter.setOnClickListenerEmployeeDelete = {
+                    deleteEmployee(it)
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.e("TAG", "messages:onCancelled: ${error.message}")
             }
         }
-        dr.addValueEventListener(listen)
+        db.addValueEventListener(listen)
+    }
+
+    private fun deleteEmployee(empleado: EMPLEADO) {
+        val retrofitBuilder = Retrofit.Builder()
+            .baseUrl("https://appfacturador-b516d-default-rtdb.firebaseio.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(EmployeeDao::class.java)
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Eliminar registro")
+        builder.setMessage("¿Desea continuar?")
+        builder.setNegativeButton("Cancelar", DialogInterface.OnClickListener { dialog, which ->
+            dialog.dismiss()
+        })
+        builder.setPositiveButton("Aceptar", DialogInterface.OnClickListener { dialog, which ->
+            Executors.newSingleThreadExecutor().execute {
+                val retrofit = retrofitBuilder.deleteEmployee(empleado.id)
+                retrofit.enqueue(object : Callback<EMPLEADO> {
+                    override fun onResponse(call: Call<EMPLEADO>, response: Response<EMPLEADO>) {
+                        Log.e("Eliminación", "Eliminado con éxito")
+                    }
+
+                    override fun onFailure(call: Call<EMPLEADO>, t: Throwable) {
+                        Log.e("Eliminación", "No se ha podido eliminar")
+                    }
+                })
+                runOnUiThread {
+                    Toast.makeText(this, "Registro eliminado", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+        builder.show()
     }
 
 }
