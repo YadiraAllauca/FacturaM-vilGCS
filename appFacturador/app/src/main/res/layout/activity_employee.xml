@@ -30,7 +30,7 @@
         app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/edtSearchEmployee"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -59,9 +59,9 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName2"
+        app:layout_constraintBottom_toBottomOf="@+id/edtSearchEmployee"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName2"
+        app:layout_constraintTop_toTopOf="@+id/edtSearchEmployee"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -76,7 +76,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2"
+        app:layout_constraintTop_toBottomOf="@+id/edtSearchEmployee"
         app:spanCount="1"
         tools:listitem="@layout/item_employee" />
 

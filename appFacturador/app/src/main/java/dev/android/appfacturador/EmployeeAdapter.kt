@@ -21,11 +21,7 @@ class EmployeeAdapter(var employees: List<EMPLEADO> = emptyList()) :
                 "${employee.primer_nombre} ${employee.segundo_nombre} ${employee.apellido_paterno} ${employee.apellido_materno}"
             binding.txtPassword.text = employee.clave
             binding.txtEmail.text = employee.correo_electronico
-            if (employee.tipo_empleado.equals("V")) {
-                binding.txtType.text = "Vendedor"
-            } else {
-                binding.txtType.text = "Administrador"
-            }
+            binding.txtIDEmployee.text = employee.numero_dni
             itemView.setOnClickListener {
                 setOnClickEmployee(employee)
             }

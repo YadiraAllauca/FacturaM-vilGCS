@@ -148,7 +148,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_bold"
-                        android:text="Cargo:"
+                        android:text="Cédula:"
                         android:textColor="#C0C0C0"
                         android:textSize="12dp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -156,7 +156,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/txtType"
+                        android:id="@+id/txtIDEmployee"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="3dp"
