@@ -124,9 +124,23 @@
         android:text="Clave"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtPhoneEmployee"
+        app:layout_constraintBottom_toBottomOf="@+id/edtPasswordEmployee"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtEmailEmployee" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="3dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Tipo"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/spnType"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/spnType" />
 
     <TextView
         android:id="@+id/textView21"
@@ -236,7 +250,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view2" />
 
     <EditText
-        android:id="@+id/edtPhoneEmployee"
+        android:id="@+id/edtPasswordEmployee"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
@@ -309,6 +323,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
+    <Spinner
+        android:id="@+id/spnType"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/btnMicPhoneNumber"
+        app:layout_constraintStart_toStartOf="@+id/edtPasswordEmployee"
+        app:layout_constraintTop_toBottomOf="@+id/edtPasswordEmployee" />
+
     <ImageView
         android:id="@+id/btnMicEmployeeNames"
         android:layout_width="wrap_content"
@@ -354,9 +377,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtPhoneEmployee"
+        app:layout_constraintBottom_toBottomOf="@+id/edtPasswordEmployee"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtPhoneEmployee"
+        app:layout_constraintTop_toTopOf="@+id/edtPasswordEmployee"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
