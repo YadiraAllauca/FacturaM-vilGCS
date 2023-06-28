@@ -27,7 +27,7 @@
         android:text="Productos"
         app:backgroundTint="@null"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+        app:layout_constraintTop_toBottomOf="@+id/edtBuscador" />
 
     <Button
         android:id="@+id/btnAddedProducts"
@@ -41,7 +41,7 @@
         android:text="Añadidos"
         app:backgroundTint="@null"
         app:layout_constraintStart_toEndOf="@+id/btnAllProducts"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+        app:layout_constraintTop_toBottomOf="@+id/edtBuscador" />
 
     <TextView
         android:id="@+id/txtTittleRegister"
@@ -67,7 +67,7 @@
         app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/edtBuscador"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -96,9 +96,9 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName2"
-        app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName2"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName2"
+        app:layout_constraintBottom_toBottomOf="@+id/edtBuscador"
+        app:layout_constraintStart_toEndOf="@+id/edtBuscador"
+        app:layout_constraintTop_toTopOf="@+id/edtBuscador"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
     <ImageView
@@ -106,9 +106,9 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName2"
+        app:layout_constraintBottom_toBottomOf="@+id/edtBuscador"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName2"
+        app:layout_constraintTop_toTopOf="@+id/edtBuscador"
         app:srcCompat="@drawable/scanner_black" />
 
     <androidx.recyclerview.widget.RecyclerView

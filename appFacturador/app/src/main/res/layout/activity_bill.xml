@@ -30,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/edtBuscador"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -59,9 +59,9 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName2"
+        app:layout_constraintBottom_toBottomOf="@+id/edtBuscador"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName2"
+        app:layout_constraintTop_toTopOf="@+id/edtBuscador"
         app:srcCompat="@drawable/ic_baseline_filter_alt_24" />
 
     <androidx.cardview.widget.CardView
@@ -137,7 +137,7 @@
         android:text="Todas"
         app:backgroundTint="@null"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+        app:layout_constraintTop_toBottomOf="@+id/edtBuscador" />
 
     <Button
         android:id="@+id/btnCanceledBills"
@@ -151,6 +151,6 @@
 
         app:backgroundTint="@null"
         app:layout_constraintStart_toEndOf="@+id/btnAllBills"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+        app:layout_constraintTop_toBottomOf="@+id/edtBuscador" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
