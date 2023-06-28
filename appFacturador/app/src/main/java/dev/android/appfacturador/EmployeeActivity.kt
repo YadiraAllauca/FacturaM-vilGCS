@@ -5,6 +5,8 @@ import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Window
 import android.widget.Toast
@@ -74,6 +76,7 @@ class EmployeeActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
+        search()
         binding.btnBack.setOnClickListener { finish() }
     }
 
@@ -177,6 +180,34 @@ class EmployeeActivity : AppCompatActivity() {
             }
         })
         builder.show()
+    }
+
+    private fun search() = with(binding) {
+        edtSearchEmployee.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(
+                filterText: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                if (filterText?.length!! > 0) {
+                    val filterList = list.filter { employee ->
+                        val fullName =
+                            "${employee.primer_nombre} ${employee.segundo_nombre} ${employee.apellido_paterno} ${employee.apellido_materno}"
+                        fullName.uppercase().startsWith(filterText.toString().uppercase()) ||
+                                employee.numero_dni.uppercase()
+                                    .startsWith(filterText.toString().uppercase())
+                    }
+                    adapter.updateListEmployees(filterList)
+                } else {
+                    loadData()
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 
 }
