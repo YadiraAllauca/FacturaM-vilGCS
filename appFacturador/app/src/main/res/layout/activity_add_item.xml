@@ -4,30 +4,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProductActivity">
+    tools:context=".AddItemActivity">
+
+    <View
+        android:id="@+id/view9"
+        android:layout_width="wrap_content"
+        android:layout_height="5dp"
+        android:layout_marginTop="15dp"
+        android:background="#F1F1F1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnAllProducts" />
+
+    <Button
+        android:id="@+id/btnAllProducts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/degradado"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Productos"
+        app:backgroundTint="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtBuscador" />
+
+    <Button
+        android:id="@+id/btnAddedProducts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/degradado"
+
+        android:fontFamily="@font/roboto_bold"
+        android:text="Añadidos"
+        app:backgroundTint="@null"
+        app:layout_constraintStart_toEndOf="@+id/btnAllProducts"
+        app:layout_constraintTop_toBottomOf="@+id/edtBuscador" />
 
     <TextView
         android:id="@+id/txtTittleRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="50dp"
         android:fontFamily="@font/roboto_bold"
-        android:text="Productos"
+        android:text="Agregar items"
         android:textColor="#000000"
         android:textSize="30dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnBack"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/btnShop"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="30dp"
+        android:id="@+id/btnBack"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/txtTittleRegister"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txtTittleRegister"
-        app:srcCompat="@drawable/ic_baseline_shopping_cart_24" />
+        app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
 
     <EditText
         android:id="@+id/edtBuscador"
@@ -37,8 +74,9 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="120dp"
         android:background="@drawable/search"
-        android:elevation="5dp"
+        android:drawableStart="@drawable/ic_baseline_search_24"
         android:drawablePadding="15dp"
+        android:elevation="5dp"
         android:ems="10"
         android:fontFamily="@font/roboto_bold"
         android:hint="Buscar"
@@ -48,7 +86,6 @@
         android:textColor="#000000"
         android:textColorHint="#B3B3B3"
         android:textSize="16sp"
-        android:drawableStart="@drawable/ic_baseline_search_24"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,36 +111,6 @@
         app:layout_constraintTop_toTopOf="@+id/edtBuscador"
         app:srcCompat="@drawable/scanner_black" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/btnClose"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_marginStart="-40dp"
-        app:cardBackgroundColor="#5780FA"
-        app:cardCornerRadius="15dp"
-        app:cardElevation="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/btnCloses"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="5dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_244" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvProducts"
         android:layout_width="match_parent"
@@ -116,23 +123,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtBuscador"
+        app:layout_constraintTop_toBottomOf="@+id/view9"
         app:spanCount="1"
-        tools:listitem="@layout/item_product" />
+        tools:listitem="@layout/item_add_product_bill" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnAddProduct"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="30dp"
-        android:background="#FFFFFF"
-        android:clickable="true"
-        android:foregroundTint="#FFFFFF"
-        android:tint="#FFFFFF"
-        app:backgroundTint="@color/blues"
-        app:layout_constraintBottom_toBottomOf="@+id/rvProducts"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:rippleColor="#FFFFFF"
-        app:srcCompat="@drawable/ic_baseline_add_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".BillActivity">
 
+    <View
+        android:id="@+id/view7"
+        android:layout_width="wrap_content"
+        android:layout_height="5dp"
+        android:layout_marginTop="15dp"
+        android:background="#F1F1F1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnAllBills" />
+
     <TextView
         android:id="@+id/txtTittleRegister"
         android:layout_width="wrap_content"
@@ -20,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/edtBuscador"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -49,9 +59,9 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPersonName2"
+        app:layout_constraintBottom_toBottomOf="@+id/edtBuscador"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName2"
+        app:layout_constraintTop_toTopOf="@+id/edtBuscador"
         app:srcCompat="@drawable/ic_baseline_filter_alt_24" />
 
     <androidx.cardview.widget.CardView
@@ -96,7 +106,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2"
+        app:layout_constraintTop_toBottomOf="@+id/view7"
         app:spanCount="1"
         tools:listitem="@layout/item_bill" />
 
@@ -115,5 +125,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:rippleColor="#FFFFFF"
         app:srcCompat="@drawable/ic_baseline_add_24" />
+
+    <Button
+        android:id="@+id/btnAllBills"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/degradado"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Todas"
+        app:backgroundTint="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtBuscador" />
+
+    <Button
+        android:id="@+id/btnCanceledBills"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/degradado"
+        android:fontFamily="@font/roboto_bold"
+        android:text="Anuladas"
+
+        app:backgroundTint="@null"
+        app:layout_constraintStart_toEndOf="@+id/btnAllBills"
+        app:layout_constraintTop_toBottomOf="@+id/edtBuscador" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
