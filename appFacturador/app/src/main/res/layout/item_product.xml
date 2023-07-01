@@ -38,7 +38,7 @@
                     android:text="Nombre producto"
                     android:textColor="#000000"
                     android:textSize="16dp"
-                    app:layout_constraintEnd_toStartOf="@+id/txtPrice"
+                    app:layout_constraintEnd_toStartOf="@+id/btnMore"
                     app:layout_constraintStart_toEndOf="@+id/btnProfile"
                     app:layout_constraintTop_toTopOf="parent" />
 

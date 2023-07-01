@@ -28,7 +28,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/txtProduct"
+                    android:id="@+id/txtProductNameShop"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -41,7 +41,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/txtIVA"
+                    android:id="@+id/txtPriceShop"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -72,7 +72,7 @@
                         android:layout_height="match_parent">
 
                         <ImageView
-                            android:id="@+id/imgProfile"
+                            android:id="@+id/imgProductShop"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:scaleType="centerCrop"
@@ -86,7 +86,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <TextView
-                    android:id="@+id/txtPrice"
+                    android:id="@+id/btnMore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
@@ -122,10 +122,10 @@
                     android:textColor="#000000"
                     android:textSize="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/txtPrice" />
+                    app:layout_constraintEnd_toStartOf="@+id/btnMore" />
 
                 <ImageView
-                    android:id="@+id/btnDeleteProduct"
+                    android:id="@+id/btnQuitProduct"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_marginTop="10dp"
