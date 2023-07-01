@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.Window
 import android.widget.ArrayAdapter
@@ -20,6 +21,7 @@ import dev.android.appfacturador.model.CLIENTE
 import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.utils.Constants
 import dev.android.appfacturador.utils.Constants.Companion.KEY_CLIENT
+import dev.android.appfacturador.utils.SpeechToTextUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,6 +34,12 @@ class AddClientActivity : AppCompatActivity() {
     private lateinit var shop: String
     private var id = ""
     private lateinit var spinner: Spinner
+    private val REQUEST_CODE_SPEECH_TO_TEXT1 = 1
+    private val REQUEST_CODE_SPEECH_TO_TEXT2 = 2
+    private val REQUEST_CODE_SPEECH_TO_TEXT3 = 3
+    private val REQUEST_CODE_SPEECH_TO_TEXT4 = 4
+    private val REQUEST_CODE_SPEECH_TO_TEXT5 = 5
+    private val REQUEST_CODE_SPEECH_TO_TEXT6 = 6
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -156,9 +164,29 @@ class AddClientActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+        eventsMicro()
         binding.btnBack.setOnClickListener { finish() }
     }
-
+    private fun eventsMicro(){
+        binding.btnMicClientNames.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this, REQUEST_CODE_SPEECH_TO_TEXT1)
+        }
+        binding.btnMicClientLastNames.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this, REQUEST_CODE_SPEECH_TO_TEXT2)
+        }
+        binding.btnMicIDNumber.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this, REQUEST_CODE_SPEECH_TO_TEXT3)
+        }
+        binding.btnMicEmail.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this, REQUEST_CODE_SPEECH_TO_TEXT4)
+        }
+        binding.btnMicPhoneNumber.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this, REQUEST_CODE_SPEECH_TO_TEXT5)
+        }
+        binding.btnMicAddres.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this, REQUEST_CODE_SPEECH_TO_TEXT6)
+        }
+    }
 
     private fun addClient(cliente: CLIENTE) {
         val retrofitBuilder = Retrofit.Builder()
@@ -201,6 +229,57 @@ class AddClientActivity : AppCompatActivity() {
                 }
             }
         )
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE_SPEECH_TO_TEXT1 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        binding.edtNameClient.setText(spokenText)
+                    }
+                }
+                REQUEST_CODE_SPEECH_TO_TEXT2 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        binding.edtLastNameClient.setText(spokenText)
+                    }
+                }
+                REQUEST_CODE_SPEECH_TO_TEXT3 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        binding.edtNumDNI.setText(spokenText)
+                    }
+                }
+                REQUEST_CODE_SPEECH_TO_TEXT4 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        binding.edtEmailClient.setText(spokenText)
+                    }
+                }
+                REQUEST_CODE_SPEECH_TO_TEXT5 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        binding.edtPhoneClient.setText(spokenText)
+                    }
+                }
+                REQUEST_CODE_SPEECH_TO_TEXT6 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        binding.edtAddressClient.setText(spokenText)
+                    }
+                }
+            }
+        } else {
+            Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
+        }
     }
 
 
