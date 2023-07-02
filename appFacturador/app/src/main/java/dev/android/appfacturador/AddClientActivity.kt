@@ -252,14 +252,16 @@ class AddClientActivity : AppCompatActivity() {
                     val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (!results.isNullOrEmpty()) {
                         val spokenText = results[0]
-                        binding.edtNumDNI.setText(spokenText)
+                        val filteredText = spokenText.replace("\\s".toRegex(), "")
+                        binding.edtNumDNI.setText(filteredText)
                     }
                 }
                 REQUEST_CODE_SPEECH_TO_TEXT4 -> {
                     val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (!results.isNullOrEmpty()) {
                         val spokenText = results[0]
-                        binding.edtEmailClient.setText(spokenText)
+                        val filteredText = spokenText.replace("\\s".toRegex(), "")
+                        binding.edtEmailClient.setText(filteredText)
                     }
                 }
                 REQUEST_CODE_SPEECH_TO_TEXT5 -> {
