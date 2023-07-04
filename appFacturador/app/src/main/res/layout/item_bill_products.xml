@@ -41,9 +41,9 @@
                     android:textColorHint="#C0C0C0"
                     android:textSize="14sp"
                     app:backgroundTint="@null"
-                    app:layout_constraintBottom_toBottomOf="@+id/btnMore"
+                    app:layout_constraintBottom_toBottomOf="@+id/txtUnitPrice"
                     app:layout_constraintStart_toEndOf="@+id/txtPassword3"
-                    app:layout_constraintTop_toTopOf="@+id/btnMore" />
+                    app:layout_constraintTop_toTopOf="@+id/txtUnitPrice" />
 
                 <EditText
                     android:id="@+id/edtDiscount"
@@ -60,12 +60,12 @@
                     android:textColorHint="#C0C0C0"
                     android:textSize="14sp"
                     app:backgroundTint="@null"
-                    app:layout_constraintBottom_toBottomOf="@+id/btnMore"
+                    app:layout_constraintBottom_toBottomOf="@+id/txtUnitPrice"
                     app:layout_constraintEnd_toStartOf="@+id/txtTotal"
-                    app:layout_constraintTop_toTopOf="@+id/btnMore" />
+                    app:layout_constraintTop_toTopOf="@+id/txtUnitPrice" />
 
                 <TextView
-                    android:id="@+id/txtProductNameShop"
+                    android:id="@+id/txtProductNameBill"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_bold"
@@ -76,14 +76,14 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/btnMore"
+                    android:id="@+id/txtUnitPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_bold"
                     android:text="$00.00"
                     android:textColor="#C0C0C0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtProductNameShop" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtProductNameBill" />
 
                 <TextView
                     android:id="@+id/txtPassword3"
@@ -93,8 +93,8 @@
                     android:fontFamily="@font/roboto_bold"
                     android:text="x"
                     android:textColor="#C0C0C0"
-                    app:layout_constraintStart_toEndOf="@+id/btnMore"
-                    app:layout_constraintTop_toBottomOf="@+id/txtProductNameShop" />
+                    app:layout_constraintStart_toEndOf="@+id/txtUnitPrice"
+                    app:layout_constraintTop_toBottomOf="@+id/txtProductNameBill" />
 
                 <TextView
                     android:id="@+id/txtPassword4"
@@ -104,7 +104,7 @@
                     android:text="-"
                     android:textColor="#C0C0C0"
                     app:layout_constraintEnd_toStartOf="@+id/edtDiscount"
-                    app:layout_constraintTop_toBottomOf="@+id/txtProductNameShop" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtProductNameBill" />
 
                 <TextView
                     android:id="@+id/txtTotal"
@@ -114,7 +114,7 @@
                     android:text="$00.00"
                     android:textColor="#000000"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtProductNameShop" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtProductNameBill" />
 
                 <View
                     android:id="@+id/view3"
@@ -125,7 +125,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btnMore" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtUnitPrice" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

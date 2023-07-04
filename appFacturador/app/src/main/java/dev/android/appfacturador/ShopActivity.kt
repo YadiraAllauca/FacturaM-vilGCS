@@ -1,6 +1,7 @@
 package dev.android.appfacturador
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
@@ -37,6 +38,13 @@ class ShopActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.btnFacturar.setOnClickListener {
+            productList.clear()
+            ProductHolder.isBilling = true
+            val intent = Intent(this, AddBillActivity::class.java).apply {}
+            startActivity(intent)
+        }
+
         // Obtener email de usuario
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         val email = sharedPreferences.getString("email", "")
@@ -52,37 +60,29 @@ class ShopActivity : AppCompatActivity() {
 
         adapter.setOnClickListenerProductDelete = { product ->
             productList.removeAll { it.product == product }
-            total = productList.sumByDouble { (it.product.precio * it.quantity).toDouble() }.toFloat()
-            adapter.notifyDataSetChanged()
             updateTotalShop()
         }
 
         adapter.setOnClickListenerProductAdd = { position, quantity ->
-            val product = productList[position]
             ProductHolder.updateQuantity(position, quantity)
-            total = productList.sumByDouble { (it.product.precio * it.quantity).toDouble() }.toFloat()
-            adapter.notifyDataSetChanged()
             updateTotalShop()
         }
 
         adapter.setOnClickListenerProductQuit = { position, quantity ->
-            val product = productList[position]
             ProductHolder.updateQuantity(position, quantity)
-            total = productList.sumByDouble { (it.product.precio * it.quantity).toDouble() }.toFloat()
-            adapter.notifyDataSetChanged()
             updateTotalShop()
         }
 
         binding.btnClear.setOnClickListener{
             ProductHolder.productList.clear()
             productList.clear()
-            total = productList.sumByDouble { (it.product.precio * it.quantity).toDouble() }.toFloat()
-            adapter.notifyDataSetChanged()
             updateTotalShop()
         }
     }
 
     fun updateTotalShop(){
+        total = productList.sumByDouble { (it.product.precio * it.quantity).toDouble() }.toFloat()
+        adapter.notifyDataSetChanged()
         binding.txtTotalCarrito.text = "$" + String.format("%.2f", total)
     }
 }

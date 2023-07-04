@@ -28,7 +28,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/txtProductNameShop"
+                    android:id="@+id/txtProductName"
                     android:layout_width="0dp"
                     android:layout_height="22dp"
                     android:layout_marginStart="20dp"
@@ -41,7 +41,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/txtPriceShop"
+                    android:id="@+id/txtPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -86,7 +86,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <CheckBox
-                    android:id="@+id/checkBox"
+                    android:id="@+id/cbItemBill"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/blues"
