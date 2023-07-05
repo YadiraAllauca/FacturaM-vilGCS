@@ -108,7 +108,6 @@ class AddBillActivity : AppCompatActivity() {
 
         binding.btnGenerateBill.setOnClickListener {
             getShopCounter(shop)
-            println("El contador del negocio $shop es: $contadorNegocio")
             val id = ""
             val numero_factura = contadorNegocio.toString()
             val estado = "enviado"
@@ -241,7 +240,8 @@ class AddBillActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<FACTURA>, response: Response<FACTURA>) {
                     if (response.isSuccessful) {
                         ProductHolder.productList.clear()
-                        updateShopCounter(contadorNegocio) // Actualizar el contador del negocio
+                        clienteEncontrado = null
+                        updateShopCounter(contadorNegocio)
                         Log.d("Agregar", "Factura agregada con éxito")
                     } else {
                         Log.d("Agregar", "Error al agregar la factura")
@@ -271,16 +271,8 @@ class AddBillActivity : AppCompatActivity() {
         negocioRef.child(shopId).child("contador").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val contador = dataSnapshot.getValue(Long::class.java)?.toInt()
-
                 if (contador != null) {
-                    // Aquí puedes utilizar el valor del contador obtenido como un entero
-                    println("El contador del negocio AD $shopId es: $contador")
-
-                    // Guardar el valor del contador en una variable externa
                     contadorNegocio = contador+1
-
-                    // Luego puedes utilizar la variable contadorNegocio en otras partes de tu código
-                    // ...
                 }
             }
 
@@ -293,8 +285,6 @@ class AddBillActivity : AppCompatActivity() {
             }
         })
     }
-
-
 
     fun updateValues(){
         binding.txtDiscount.text = "$"+String.format("%.2f", calculateTotalDiscount())

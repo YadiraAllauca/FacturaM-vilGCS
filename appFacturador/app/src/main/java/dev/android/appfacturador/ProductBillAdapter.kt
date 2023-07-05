@@ -69,7 +69,4 @@ class ProductBillAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
         this.products = products
         notifyDataSetChanged()
     }
-
-
-
 }

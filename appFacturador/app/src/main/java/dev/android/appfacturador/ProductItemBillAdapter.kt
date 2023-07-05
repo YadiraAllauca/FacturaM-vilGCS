@@ -13,7 +13,6 @@ import dev.android.appfacturador.model.PRODUCTO
 
 class ProductItemBillAdapter(var products: List<PRODUCTO> = emptyList()) :
     RecyclerView.Adapter<ProductItemBillAdapter.ProductItemBillAdapterViewHolder>() {
-    lateinit var selectedItems: MutableList<PRODUCTO>
     lateinit var onCheckedChangeListener: (product: PRODUCTO, isChecked: Boolean) -> Unit
 
     inner class ProductItemBillAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

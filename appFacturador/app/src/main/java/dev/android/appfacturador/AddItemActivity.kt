@@ -158,7 +158,7 @@ class AddItemActivity : AppCompatActivity() {
 
                 adapter.onCheckedChangeListener = { product, isChecked ->
                     if (isChecked) {
-                        val productItem = ProductHolder.ProductItem(product, 1, product.max_descuento.toInt())
+                        val productItem = ProductHolder.ProductItem(product, 1, product.max_descuento)
                         ProductHolder.productList.add(productItem)
                         addedList.add(product)
                     } else {
