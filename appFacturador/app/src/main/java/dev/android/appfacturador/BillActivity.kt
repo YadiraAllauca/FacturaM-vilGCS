@@ -5,8 +5,11 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Window
+import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +30,7 @@ class BillActivity : AppCompatActivity() {
     lateinit var binding: ActivityBillBinding
     lateinit var email: String
     lateinit var shop: String
+    lateinit var searchEditText: EditText
     private var list: MutableList<FACTURA> = ArrayList()
     private val adapter: BillAdapter by lazy {
         BillAdapter()
@@ -47,6 +51,17 @@ class BillActivity : AppCompatActivity() {
         email = sharedPreferences.getString("email", "").toString()
 
         getShop()
+
+        searchEditText = binding.edtBuscador
+
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val searchTerm = s.toString().trim()
+                updateBillList(searchTerm)
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
         recyclerView = binding.rvBills
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -139,6 +154,15 @@ class BillActivity : AppCompatActivity() {
             }
         }
         db.addValueEventListener(listen)
+    }
+
+    fun updateBillList(searchTerm: String) {
+        val filteredList = list.filter { factura ->
+            factura.numero_factura.contains(searchTerm, ignoreCase = true) ||
+                    factura.cliente?.numero_dni?.contains(searchTerm, ignoreCase = true) == true ||
+                    factura.fecha.contains(searchTerm, ignoreCase = true)
+        }
+        adapter.updateListbills(filteredList)
     }
 
 }
