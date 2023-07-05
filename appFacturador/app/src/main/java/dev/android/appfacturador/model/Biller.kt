@@ -1,6 +1,7 @@
 package dev.android.appfacturador.model
 
 import com.google.gson.annotations.SerializedName
+import dev.android.appfacturador.ProductHolder
 import java.io.Serializable
 
 data class CATEGORIA_IVA(
@@ -28,14 +29,14 @@ data class CLIENTE(
     @SerializedName("apellido_materno")
     val apellido_materno: String,
     @SerializedName("correo_electronico")
-    val email: String,
+    val correo_electronico: String,
     @SerializedName("telefono")
     val telefono: String,
     @SerializedName("direccion")
     val direccion: String,
     @SerializedName("negocio")
     val negocio: String
-) : Serializable
+) : Serializable{constructor() : this("", "", "", "", "", "", "", "", "", "", "")}
 
 data class PRODUCTO(
     @SerializedName("id")
@@ -45,7 +46,7 @@ data class PRODUCTO(
     @SerializedName("precio")
     val precio: Float,
     @SerializedName("max_descuento")
-    val max_descuento: Number,
+    val max_descuento: Int,
     @SerializedName("id_categoria_impuesto")
     val id_categoria_impuesto: String,
     @SerializedName("codigo_barras")
@@ -54,7 +55,9 @@ data class PRODUCTO(
     var imagen: String,
     @SerializedName("negocio")
     val negocio: String
-) : Serializable // -> convierte al objeto en una secuencia de bites
+) : Serializable {
+    constructor() : this("","",0f,0,"","","","")
+}
 
 data class EMPLEADO(
     @SerializedName("id")
@@ -81,4 +84,35 @@ data class EMPLEADO(
     var negocio: String
 ) : Serializable {
     constructor() : this("", "", "", "", "", "", "", "", "", "", "")
+}
+
+data class FACTURA(
+    @SerializedName("id")
+    var id: String,
+    @SerializedName("numero_factura")
+    var numero_factura: String,
+    @SerializedName("estado")
+    var estado: String,
+    @SerializedName("fecha")
+    var fecha: String,
+    @SerializedName("cliente")
+    var cliente: CLIENTE?,
+    @SerializedName("empleado")
+    var empleado: EMPLEADO?,
+    @SerializedName("forma_pago")
+    var forma_pago: String,
+    @SerializedName("subtotal")
+    var subtotal: Float,
+    @SerializedName("descuento")
+    var descuento: Float,
+    @SerializedName("iva")
+    var iva: Float,
+    @SerializedName("total")
+    var total: Float,
+    @SerializedName("items")
+    var items: MutableList<ProductHolder.ProductItem>?,
+    @SerializedName("negocio")
+    var negocio: String
+) : Serializable {
+    constructor() : this("","","","",null,null,"",0f,0f,0f,0f,null, "")
 }

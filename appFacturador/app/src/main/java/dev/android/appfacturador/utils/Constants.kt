@@ -7,6 +7,7 @@ class Constants {
         val KEY_CLIENT = "key_client"
         val KEY_EMPLOYEE = "key_employee"
         val TYPE_DNI = arrayOf("Cédula", "RUC", "Pasaporte")
+        val TYPE_PAY = arrayOf("Efectivo", "Depósito", "Transferencia")
         val TYPE_EMPLOYEE = arrayOf("Vendedor", "Administrador")
     }
 }

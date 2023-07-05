@@ -12,8 +12,10 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -54,6 +56,9 @@ class ProductActivity : AppCompatActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
+
+        //activar swipe
+        swipeToAddShopCar()
 
         //usuario y negocio actual
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
@@ -228,5 +233,38 @@ class ProductActivity : AppCompatActivity() {
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    private fun swipeToAddShopCar(){
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+        ){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val product = adapter.products[position]
+                val quantity = 1
+                val discount = adapter.products[position].max_descuento.toInt()
+                val productItem = ProductHolder.ProductItem(product, quantity, discount)
+                val existingProduct = ProductHolder.productList.find { it.product?.nombre == product.nombre }
+                if (existingProduct == null) {
+                    ProductHolder.productList.add(productItem)
+                    var nom = product.nombre
+                    //adapter.notifyDataSetChanged()
+                    Snackbar.make(
+                        binding.root, "Producto $nom agregado al carrito", Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+                adapter.notifyDataSetChanged()
+            }
+
+        }).attachToRecyclerView(binding.rvProducts)
     }
 }

@@ -2,6 +2,7 @@ package dev.android.appfacturador.database
 
 import dev.android.appfacturador.model.CLIENTE
 import dev.android.appfacturador.model.EMPLEADO
+import dev.android.appfacturador.model.FACTURA
 import dev.android.appfacturador.model.PRODUCTO
 import retrofit2.Call
 import retrofit2.http.Body
@@ -37,5 +38,12 @@ interface EmployeeDao {
     fun deleteEmployee(@Path("id") id:String): Call<EMPLEADO>
     @PUT("Empleado/{id}.json")
     fun updateEmployee(@Path("id") id:String, @Body membership: EMPLEADO): Call<EMPLEADO>
+}
+
+interface BillDao {
+    @POST("Factura.json")
+    fun addBill(@Body membership: FACTURA): Call<FACTURA>
+    @PUT("Factura/{id}.json")
+    fun updateBill(@Path("id") id:String, @Body membership: FACTURA): Call<FACTURA>
 }
 
