@@ -3,10 +3,9 @@ package dev.android.appfacturador
 import dev.android.appfacturador.model.PRODUCTO
 
 object ProductHolder {
-    data class ProductItem(val product: PRODUCTO, var quantity: Int, var discount: Float)
+    data class ProductItem(val product: PRODUCTO, var quantity: Int, var discount: Int)
 
     val productList: MutableList<ProductItem> = mutableListOf()
-    var isBilling: Boolean = false
 
     fun updateQuantity(index: Int, quantity: Int) {
         if (index in 0 until productList.size) {
@@ -14,7 +13,7 @@ object ProductHolder {
         }
     }
 
-    fun updateDiscount(index: Int, discount: Float) {
+    fun updateDiscount(index: Int, discount: Int) {
         if (index in 0 until productList.size) {
             productList[index].discount = discount
         }

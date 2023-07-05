@@ -161,7 +161,7 @@ class AddItemActivity : AppCompatActivity() {
 
                 adapter.onCheckedChangeListener = { product, isChecked ->
                     if (isChecked) {
-                        val productItem = ProductHolder.ProductItem(product, 1, 0f)
+                        val productItem = ProductHolder.ProductItem(product, 1, product.max_descuento.toInt())
                         ProductHolder.productList.add(productItem)
                         addedList.add(product)
                     } else {
@@ -171,24 +171,7 @@ class AddItemActivity : AppCompatActivity() {
                     }
                     print(addedList.size)
                 }
-
-
-                /*adapter.onCheckedChangeListener = { product, isChecked ->
-                    if (isChecked) {
-                        addedList.add(product)
-                    } else {
-                        //val position = addedList.indexOfFirst { it.nombre == product.nombre }
-                        //addedList.removeAt(position)
-                        addedList.remove(product)
-
-                    }
-                    print(addedList.size)
-                }
-
-                 */
-
             }
-
             override fun onCancelled(error: DatabaseError) {
                 Log.e("TAG", "messages:onCancelled: ${error.message}")
             }

@@ -61,7 +61,7 @@ class AddClientActivity : AppCompatActivity() {
             binding.edtNameClient.setText(client.primer_nombre + " " + client.segundo_nombre)
             binding.edtLastNameClient.setText(client.apellido_paterno + " " + client.apellido_materno)
             binding.edtNumDNI.setText(client.numero_dni)
-            binding.edtEmailClient.setText(client.email)
+            binding.edtEmailClient.setText(client.correo_electronico)
             binding.edtPhoneClient.setText(client.telefono)
             binding.edtAddressClient.setText(client.direccion)
             val clientTypeDNI = client.tipo_dni
@@ -152,8 +152,9 @@ class AddClientActivity : AppCompatActivity() {
                         .show()
                 }
 
-                val intent = Intent(baseContext, ClientActivity::class.java)
-                startActivity(intent)
+                /*val intent = Intent(baseContext, ClientActivity::class.java)
+                startActivity(intent)*/
+                finish()
             }
         }
         binding.btnBack.setOnClickListener { finish() }

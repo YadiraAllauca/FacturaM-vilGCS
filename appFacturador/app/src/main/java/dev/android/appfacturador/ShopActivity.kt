@@ -40,7 +40,6 @@ class ShopActivity : AppCompatActivity() {
 
         binding.btnFacturar.setOnClickListener {
             productList.clear()
-            ProductHolder.isBilling = true
             val intent = Intent(this, AddBillActivity::class.java).apply {}
             startActivity(intent)
         }

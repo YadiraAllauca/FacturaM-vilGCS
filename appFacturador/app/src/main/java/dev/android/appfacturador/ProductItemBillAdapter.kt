@@ -30,30 +30,6 @@ class ProductItemBillAdapter(var products: List<PRODUCTO> = emptyList()) :
                 val isChecked = (view as CheckBox).isChecked
                 onCheckedChangeListener(product, isChecked)
             }
-
-
-
-
-
-
-            /*binding.cbItemBill.setOnCheckedChangeListener { buttonView, isChecked ->
-                onCheckedChangeListener(product, isChecked)
-            }
-
-            /*binding.cbItemBill.setOnCheckedChangeListener { _, isChecked ->
-                /*val productItem = ProductHolder.ProductItem(product, 1, 0f)
-                if (isChecked) {
-                    ProductHolder.productList.add(productItem)
-                } else {
-                    val position = ProductHolder.productList.indexOfFirst { it.product.nombre == product.nombre }
-                    if (position != -1) {
-                        ProductHolder.productList.removeAt(position)
-                    }
-                }
-                notifyDataSetChanged()*/
-            }*/
-
-             */
         }
     }
 

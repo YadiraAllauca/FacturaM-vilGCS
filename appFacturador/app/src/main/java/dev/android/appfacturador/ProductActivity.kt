@@ -252,7 +252,7 @@ class ProductActivity : AppCompatActivity() {
                 val position = viewHolder.adapterPosition
                 val product = adapter.products[position]
                 val quantity = 1
-                val discount = 0f
+                val discount = adapter.products[position].max_descuento.toInt()
                 val productItem = ProductHolder.ProductItem(product, quantity, discount)
                 val existingProduct = ProductHolder.productList.find { it.product.nombre == product.nombre }
                 if (existingProduct == null) {
