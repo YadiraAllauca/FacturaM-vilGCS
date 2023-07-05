@@ -20,11 +20,15 @@ class ProductBillAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
             val quantity = productItem.quantity
             val discount = productItem.discount
 
-            binding.txtProductNameBill.text = product.nombre
-            binding.txtUnitPrice.text = "$" + String.format("%.2f", product.precio)
+            binding.txtProductNameBill.text = product?.nombre
+            if (product != null) {
+                binding.txtUnitPrice.text = "$" + String.format("%.2f", product.precio)
+            }
             binding.edtAmount.setText(quantity.toString())
             binding.edtDiscount.setText(String.format("%d", discount))
-            binding.txtTotal.text = String.format("%.2f", product.precio*quantity)
+            if (product != null) {
+                binding.txtTotal.text = String.format("%.2f", product.precio*quantity)
+            }
 
             binding.edtDiscount.addTextChangedListener {
                 val newDiscount = it.toString().toIntOrNull()
@@ -35,7 +39,9 @@ class ProductBillAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
             binding.edtAmount.addTextChangedListener {
                 val updatedQuantity = it.toString().toIntOrNull()
                 if(updatedQuantity!=null) {
-                    binding.txtTotal.text = String.format("%.2f", product.precio*updatedQuantity)
+                    if (product != null) {
+                        binding.txtTotal.text = String.format("%.2f", product.precio*updatedQuantity)
+                    }
                     addTextChangedListenerAmount(position, updatedQuantity)
                 }
             }

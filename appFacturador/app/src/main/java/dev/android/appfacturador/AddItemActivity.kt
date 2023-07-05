@@ -13,7 +13,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.internal.ToolbarUtils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -22,11 +21,9 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.zxing.integration.android.IntentIntegrator
-import dev.android.appfacturador.ProductHolder.productList
 import dev.android.appfacturador.databinding.ActivityAddItemBinding
 import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.model.PRODUCTO
-import dev.android.appfacturador.utils.Constants
 
 class AddItemActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddItemBinding
@@ -166,7 +163,7 @@ class AddItemActivity : AppCompatActivity() {
                         addedList.add(product)
                     } else {
                         addedList.remove(product)
-                        val position = ProductHolder.productList.indexOfFirst { it.product.nombre == product.nombre }
+                        val position = ProductHolder.productList.indexOfFirst { it.product?.nombre == product.nombre }
                         ProductHolder.productList.removeAt(position)
                     }
                     print(addedList.size)

@@ -23,19 +23,25 @@ class ProductShopAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
             val quantity = productItem.quantity
 
             binding.txtAmount.setText(quantity.toString())
-            binding.txtProductNameShop.text = product.nombre
-            binding.txtPriceShop.text = "$" + String.format("%.2f", product.precio * quantity)
-            Picasso.get().load(product.imagen).error(R.drawable.load).into(imgProductShop)
+            binding.txtProductNameShop.text = product?.nombre
+            if (product != null) {
+                binding.txtPriceShop.text = "$" + String.format("%.2f", product.precio * quantity)
+                Picasso.get().load(product.imagen).error(R.drawable.load).into(imgProductShop)
+            }
 
             binding.btnQuitProduct.setOnClickListener {
-                setOnClickListenerProductDelete(product)
+                if (product != null) {
+                    setOnClickListenerProductDelete(product)
+                }
             }
 
             binding.btnLess.setOnClickListener {
                 if (quantity > 1) {
                     val updatedQuantity = quantity - 1
                     txtAmount.setText(updatedQuantity.toString())
-                    txtPriceShop.setText("$" + (product.precio * updatedQuantity).toString())
+                    if (product != null) {
+                        txtPriceShop.setText("$" + (product.precio * updatedQuantity).toString())
+                    }
                     setOnClickListenerProductQuit(position, updatedQuantity)
                 }
             }
@@ -43,7 +49,9 @@ class ProductShopAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
             binding.btnMore.setOnClickListener {
                 val updatedQuantity = quantity + 1
                 txtAmount.setText(updatedQuantity.toString())
-                txtPriceShop.setText("$" + (product.precio * updatedQuantity).toString())
+                if (product != null) {
+                    txtPriceShop.setText("$" + (product.precio * updatedQuantity).toString())
+                }
                 setOnClickListenerProductAdd(position, updatedQuantity)
             }
         }

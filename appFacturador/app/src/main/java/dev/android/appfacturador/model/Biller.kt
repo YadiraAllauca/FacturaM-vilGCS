@@ -46,7 +46,7 @@ data class PRODUCTO(
     @SerializedName("precio")
     val precio: Float,
     @SerializedName("max_descuento")
-    val max_descuento: Number,
+    val max_descuento: Int,
     @SerializedName("id_categoria_impuesto")
     val id_categoria_impuesto: String,
     @SerializedName("codigo_barras")
@@ -55,7 +55,9 @@ data class PRODUCTO(
     var imagen: String,
     @SerializedName("negocio")
     val negocio: String
-) : Serializable // -> convierte al objeto en una secuencia de bites
+) : Serializable {
+    constructor() : this("","",0f,0,"","","","")
+}
 
 data class EMPLEADO(
     @SerializedName("id")

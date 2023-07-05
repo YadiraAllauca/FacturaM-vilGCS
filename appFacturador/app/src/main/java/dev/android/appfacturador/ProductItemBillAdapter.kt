@@ -23,7 +23,7 @@ class ProductItemBillAdapter(var products: List<PRODUCTO> = emptyList()) :
             binding.txtPrice.text = "$" + product.precio.toString()
             Picasso.get().load(product.imagen).error(R.drawable.load).into(imgProduct)
 
-            val isProductSelected = ProductHolder.productList.any { it.product.nombre == product.nombre }
+            val isProductSelected = ProductHolder.productList.any { it.product?.nombre == product.nombre }
             binding.cbItemBill.isChecked = isProductSelected
 
             binding.cbItemBill.setOnClickListener { view ->

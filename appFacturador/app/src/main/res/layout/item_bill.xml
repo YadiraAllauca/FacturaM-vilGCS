@@ -28,7 +28,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/txtClient"
+                    android:id="@+id/txtBillNumber"
                     android:layout_width="0dp"
                     android:layout_height="22dp"
                     android:layout_marginStart="20dp"
@@ -43,7 +43,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/txtID"
+                    android:id="@+id/txtClienteID"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -64,8 +64,8 @@
                     android:text="fecha"
                     android:textColor="#C0C0C0"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView"
-                    app:layout_constraintEnd_toStartOf="@+id/imageView" />
+                    app:layout_constraintEnd_toEndOf="@+id/btnDetalle"
+                    app:layout_constraintEnd_toStartOf="@+id/btnDetalle" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/btnProfile"
@@ -87,7 +87,7 @@
                         android:layout_height="match_parent">>
 
                         <TextView
-                            android:id="@+id/txtClientInitials"
+                            android:id="@+id/txtBillNumberInitials"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto_bold"
@@ -111,11 +111,11 @@
                     android:background="#C0C0C0"
                     app:layout_constraintBottom_toBottomOf="@+id/txtDate"
                     app:layout_constraintEnd_toStartOf="@+id/txtDate"
-                    app:layout_constraintStart_toEndOf="@+id/txtID"
+                    app:layout_constraintStart_toEndOf="@+id/txtClienteID"
                     app:layout_constraintTop_toTopOf="@+id/txtDate" />
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/btnDetalle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"

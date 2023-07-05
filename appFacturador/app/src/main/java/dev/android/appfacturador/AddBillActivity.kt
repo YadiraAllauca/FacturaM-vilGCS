@@ -306,7 +306,7 @@ class AddBillActivity : AppCompatActivity() {
     fun calculateSubtotal(): Float {
         var totalSubtotal = 0f
         for (product in ProductHolder.productList) {
-            val subtotal = product.quantity * product.product.precio
+            val subtotal = product.quantity * (product.product?.precio ?: 0f)
             totalSubtotal += subtotal
         }
         return totalSubtotal
@@ -315,7 +315,7 @@ class AddBillActivity : AppCompatActivity() {
     fun calculateTotalDiscount(): Float {
         var totalDiscount = 0f
         for (product in ProductHolder.productList) {
-            val discunt = (product.product.precio * product.discount / 100) * product.quantity
+            val discunt = ((product.product?.precio ?: 0f) * product.discount / 100) * product.quantity
             totalDiscount += discunt
         }
         return totalDiscount
@@ -324,7 +324,7 @@ class AddBillActivity : AppCompatActivity() {
     fun calculateTotalIVA(): Float {
         var totalIVA = 0f
         for (product in ProductHolder.productList) {
-            val iva = product.product.id_categoria_impuesto.toFloat() * product.product.precio / 100
+            val iva = (product.product?.id_categoria_impuesto?.toFloat() ?: 0f) * (product.product?.precio ?: 0f) / 100
             totalIVA += iva
         }
         return totalIVA

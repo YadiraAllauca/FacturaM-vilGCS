@@ -34,7 +34,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.Objects
 import java.util.concurrent.Executors
 
 class ProductActivity : AppCompatActivity() {
@@ -254,7 +253,7 @@ class ProductActivity : AppCompatActivity() {
                 val quantity = 1
                 val discount = adapter.products[position].max_descuento.toInt()
                 val productItem = ProductHolder.ProductItem(product, quantity, discount)
-                val existingProduct = ProductHolder.productList.find { it.product.nombre == product.nombre }
+                val existingProduct = ProductHolder.productList.find { it.product?.nombre == product.nombre }
                 if (existingProduct == null) {
                     ProductHolder.productList.add(productItem)
                     var nom = product.nombre

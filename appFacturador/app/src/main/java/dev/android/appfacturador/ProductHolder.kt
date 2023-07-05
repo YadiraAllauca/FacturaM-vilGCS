@@ -3,7 +3,9 @@ package dev.android.appfacturador
 import dev.android.appfacturador.model.PRODUCTO
 
 object ProductHolder {
-    data class ProductItem(val product: PRODUCTO, var quantity: Int, var discount: Int)
+    data class ProductItem(val product: PRODUCTO?, var quantity: Int, var discount: Int){
+        constructor(): this(null, 0,0)
+    }
 
     val productList: MutableList<ProductItem> = mutableListOf()
 

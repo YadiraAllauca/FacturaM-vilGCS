@@ -51,7 +51,7 @@ class ShopActivity : AppCompatActivity() {
     }
 
     private fun loadData() {
-        total = productList.sumByDouble { (it.product.precio * it.quantity).toDouble() }.toFloat()
+        total = productList.sumByDouble { ((it.product?.precio ?: 0f) * it.quantity).toDouble() }.toFloat()
 
         adapter.updateListProducts(productList)
         recyclerView.adapter = adapter
@@ -80,7 +80,7 @@ class ShopActivity : AppCompatActivity() {
     }
 
     fun updateTotalShop(){
-        total = productList.sumByDouble { (it.product.precio * it.quantity).toDouble() }.toFloat()
+        total = productList.sumByDouble { ((it.product?.precio ?: 0f) * it.quantity).toDouble() }.toFloat()
         adapter.notifyDataSetChanged()
         binding.txtTotalCarrito.text = "$" + String.format("%.2f", total)
     }
