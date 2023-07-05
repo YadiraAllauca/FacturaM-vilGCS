@@ -24,6 +24,7 @@ import android.graphics.Color
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import com.google.firebase.firestore.FirebaseFirestore
 import dev.android.appfacturador.database.BillDao
 import dev.android.appfacturador.database.ClientDao
 import dev.android.appfacturador.model.FACTURA
@@ -35,6 +36,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.properties.Delegates
 
 class AddBillActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddBillBinding
@@ -49,6 +51,8 @@ class AddBillActivity : AppCompatActivity() {
     private var clienteEncontrado: CLIENTE? = null
     private var empleadoEncontrado: EMPLEADO? = null
     lateinit var spinner: Spinner
+    var contadorNegocio = 0
+
     val calendar = Calendar.getInstance()
     val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     val fechaActual = dateFormat.format(calendar.time)
@@ -103,8 +107,10 @@ class AddBillActivity : AppCompatActivity() {
         }
 
         binding.btnGenerateBill.setOnClickListener {
+            getShopCounter(shop)
+            println("El contador del negocio $shop es: $contadorNegocio")
             val id = ""
-            val numero_factura = ""
+            val numero_factura = contadorNegocio.toString()
             val estado = "enviado"
             val fecha = fechaActual
             val cliente = clienteEncontrado
@@ -150,6 +156,7 @@ class AddBillActivity : AppCompatActivity() {
                                 empleadoEncontrado = empleado
                                 shop = empleado.negocio
                                 loadData()
+                                getShopCounter(shop)
                             }
                         }
                     }
@@ -232,11 +239,62 @@ class AddBillActivity : AppCompatActivity() {
                     Log.d("Agregar", "Error al agregar la factura")
                 }
                 override fun onResponse(call: Call<FACTURA>, response: Response<FACTURA>) {
-                    Log.d("Agregar", "Factura agregada con éxito")
+                    if (response.isSuccessful) {
+                        ProductHolder.productList.clear()
+                        updateShopCounter(contadorNegocio) // Actualizar el contador del negocio
+                        Log.d("Agregar", "Factura agregada con éxito")
+                    } else {
+                        Log.d("Agregar", "Error al agregar la factura")
+                    }
                 }
             }
         )
     }
+
+    private fun updateShopCounter(counter: Int) {
+        val database = FirebaseDatabase.getInstance()
+        val negocioRef = database.getReference("Negocios")
+
+        negocioRef.child(shop).child("contador").setValue(counter)
+            .addOnSuccessListener {
+                Log.d("Actualizar contador", "Contador del negocio actualizado con éxito")
+            }
+            .addOnFailureListener { error ->
+                Log.d("Actualizar contador", "Error al actualizar el contador del negocio: ${error.message}")
+            }
+    }
+
+    fun getShopCounter(shopId: String) {
+        val database = FirebaseDatabase.getInstance()
+        val negocioRef = database.getReference("Negocios")
+
+        negocioRef.child(shopId).child("contador").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val contador = dataSnapshot.getValue(Long::class.java)?.toInt()
+
+                if (contador != null) {
+                    // Aquí puedes utilizar el valor del contador obtenido como un entero
+                    println("El contador del negocio AD $shopId es: $contador")
+
+                    // Guardar el valor del contador en una variable externa
+                    contadorNegocio = contador+1
+
+                    // Luego puedes utilizar la variable contadorNegocio en otras partes de tu código
+                    // ...
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Toast.makeText(
+                    this@AddBillActivity,
+                    "Error en la solicitud: " + databaseError.message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+    }
+
+
 
     fun updateValues(){
         binding.txtDiscount.text = "$"+String.format("%.2f", calculateTotalDiscount())
