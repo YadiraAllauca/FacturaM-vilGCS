@@ -4,14 +4,18 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.speech.tts.TextToSpeech.OnInitListener
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.Observable
+import androidx.databinding.ObservableField
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -59,7 +63,7 @@ class ProductActivity : AppCompatActivity() {
 
         //activar swipe
         swipeToAddShopCar()
-
+        shoppingCardActive()
         //usuario y negocio actual
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
@@ -73,6 +77,7 @@ class ProductActivity : AppCompatActivity() {
                 val searchTerm = s.toString().trim()
                 updateProductList(searchTerm)
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
 
@@ -182,7 +187,10 @@ class ProductActivity : AppCompatActivity() {
 
     fun updateProductList(searchTerm: String) {
         val filteredList = list.filter { product ->
-            product.nombre.contains(searchTerm, ignoreCase = true) || product.codigo_barras.contains(searchTerm, ignoreCase = true)
+            product.nombre.contains(
+                searchTerm,
+                ignoreCase = true
+            ) || product.codigo_barras.contains(searchTerm, ignoreCase = true)
         }
         adapter.updateListProducts(filteredList)
     }
@@ -224,9 +232,9 @@ class ProductActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
-            if(result.contents == null){
+            if (result.contents == null) {
                 Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show()
-            }else{
+            } else {
                 barcode = result.contents
                 binding.edtBuscador.setText(result.contents)
             }
@@ -235,10 +243,11 @@ class ProductActivity : AppCompatActivity() {
         }
     }
 
-    private fun swipeToAddShopCar(){
+    private fun swipeToAddShopCar() {
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
-        ){
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+        ) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -253,7 +262,8 @@ class ProductActivity : AppCompatActivity() {
                 val quantity = 1
                 val discount = adapter.products[position].max_descuento.toInt()
                 val productItem = ProductHolder.ProductItem(product, quantity, discount)
-                val existingProduct = ProductHolder.productList.find { it.product?.nombre == product.nombre }
+                val existingProduct =
+                    ProductHolder.productList.find { it.product?.nombre == product.nombre }
                 if (existingProduct == null) {
                     ProductHolder.productList.add(productItem)
                     var nom = product.nombre
@@ -263,8 +273,21 @@ class ProductActivity : AppCompatActivity() {
                     ).show()
                 }
                 adapter.notifyDataSetChanged()
+                binding.imgFull.visibility = View.VISIBLE
             }
-
         }).attachToRecyclerView(binding.rvProducts)
+    }
+
+    fun shoppingCardActive() {
+        if (ProductHolder.productList.size == 0) {
+            binding.imgFull.visibility = View.GONE
+        } else {
+            binding.imgFull.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        shoppingCardActive()
     }
 }
