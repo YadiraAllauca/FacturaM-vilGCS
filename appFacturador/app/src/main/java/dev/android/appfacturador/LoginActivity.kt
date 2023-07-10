@@ -1,5 +1,6 @@
 package dev.android.appfacturador
 
+import android.app.ProgressDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
@@ -7,6 +8,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.google.firebase.auth.FirebaseAuth
 import android.content.Intent
+import android.os.Handler
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.widget.Toast
@@ -30,10 +32,19 @@ class LoginActivity : AppCompatActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
+        checkSession()
         hiddeVisiblePassword()
         db = FirebaseDatabase.getInstance()
         login()
         session()
+    }
+
+    private fun checkSession() {
+        val loadingMessage = "Verificando sesión..."
+        val progressDialog = ProgressDialog.show(this, "", loadingMessage, true)
+        Handler().postDelayed({
+            progressDialog.dismiss()
+        }, 1000)
     }
 
     private fun hiddeVisiblePassword() {

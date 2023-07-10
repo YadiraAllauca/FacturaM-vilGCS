@@ -1,20 +1,22 @@
 package dev.android.appfacturador
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Window
+import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -22,6 +24,7 @@ import dev.android.appfacturador.databinding.ActivityClientBinding
 import dev.android.appfacturador.model.CLIENTE
 import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.utils.Constants.Companion.KEY_CLIENT
+import dev.android.appfacturador.utils.SpeechToTextUtil
 
 class ClientActivity : AppCompatActivity() {
     lateinit var binding: ActivityClientBinding
@@ -34,6 +37,7 @@ class ClientActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private val instanceFirebase = Firebase.database
     private val db = instanceFirebase.getReference("Cliente")
+    private val REQUEST_CODE_SPEECH_TO_TEXT1 = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,6 +106,9 @@ class ClientActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
+        binding.btnMicSearch.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this@ClientActivity, REQUEST_CODE_SPEECH_TO_TEXT1)
+        }
         search()
     }
 
@@ -169,6 +176,21 @@ class ClientActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
     }
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE_SPEECH_TO_TEXT1 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        binding.edtSearchClient.setText(spokenText)
+                    }
+                }
+            }
+        } else {
+            Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
+        }
+    }
 
 }

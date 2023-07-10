@@ -70,8 +70,10 @@ class MenuActivity : AppCompatActivity() {
         getWindow().decorView.setBackgroundResource(android.R.color.transparent)
         getWindow().setGravity(Gravity.START)
         //obtener email de usuario
-        val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
-        val email = sharedPreferences.getString("email", "")
-        Toast.makeText(this, "Valor del email: $email", Toast.LENGTH_SHORT).show()
+//        val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+
+        //eliminar las siguientes dos lineas de abajo para que no salgan los mensajes del email
+//        val email = sharedPreferences.getString("email", "")
+//        Toast.makeText(this, "Valor del email: $email", Toast.LENGTH_SHORT).show()
     }
 }

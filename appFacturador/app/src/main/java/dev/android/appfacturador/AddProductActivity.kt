@@ -7,6 +7,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.speech.RecognizerIntent
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Window
 import android.widget.ArrayAdapter
@@ -31,6 +34,7 @@ import dev.android.appfacturador.databinding.ActivityAddProductBinding
 import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.model.PRODUCTO
 import dev.android.appfacturador.utils.Constants
+import dev.android.appfacturador.utils.SpeechToTextUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -53,6 +57,9 @@ class AddProductActivity : AppCompatActivity() {
     private var imageStorage = ""
     private var photo = "imagen"
     private val progressDialog: ProgressDialog? = null
+    private val REQUEST_CODE_SPEECH_TO_TEXT1 = 1
+    private val REQUEST_CODE_SPEECH_TO_TEXT2 = 2
+    private val REQUEST_CODE_SPEECH_TO_TEXT3 = 3
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,6 +139,19 @@ class AddProductActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+        eventsMicro()
+    }
+
+    private fun eventsMicro() {
+        binding.btnMicProduct.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this, REQUEST_CODE_SPEECH_TO_TEXT1)
+        }
+        binding.btnMicPrice.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this, REQUEST_CODE_SPEECH_TO_TEXT2)
+        }
+        binding.btnMicDiscount.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this, REQUEST_CODE_SPEECH_TO_TEXT3)
+        }
     }
 
     @SuppressLint("ResourceType")
@@ -176,21 +196,6 @@ class AddProductActivity : AppCompatActivity() {
         integrator.setDesiredBarcodeFormats(IntentIntegrator.EAN_13)
         integrator.setPrompt("Código de Barras")
         integrator.initiateScan()
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result != null) {
-            if (result.contents == null) {
-                Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show()
-            } else {
-                codigoBarras = result.contents
-                binding.edtCodigoBarras.setText(result.contents)
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
-        }
     }
 
     private fun getShop() {
@@ -307,5 +312,51 @@ class AddProductActivity : AppCompatActivity() {
 
     private fun showToast(message: String) {
         Toast.makeText(this@AddProductActivity, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE_SPEECH_TO_TEXT1 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        binding.edtProduct.setText(spokenText)
+                    }
+                }
+
+                REQUEST_CODE_SPEECH_TO_TEXT2 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        binding.edtPrice.setText(spokenText)
+                    }
+                }
+
+                REQUEST_CODE_SPEECH_TO_TEXT3 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        val filteredText = spokenText.replace("\\s".toRegex(), "")
+                        binding.edtDiscount.setText(filteredText)
+                    }
+                }
+            }
+        } else {
+            Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
+        }
+
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null) {
+            if (result.contents == null) {
+                Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show()
+            } else {
+                codigoBarras = result.contents
+                binding.edtCodigoBarras.setText(result.contents)
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
     }
 }

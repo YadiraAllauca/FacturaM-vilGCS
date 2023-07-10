@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -29,6 +30,7 @@ import dev.android.appfacturador.databinding.ActivityProductBinding
 import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.model.PRODUCTO
 import dev.android.appfacturador.utils.Constants
+import dev.android.appfacturador.utils.SpeechToTextUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,11 +51,13 @@ class ProductActivity : AppCompatActivity() {
     private val dr = fb.getReference("Product")
     lateinit var searchEditText: EditText
     lateinit var barcode: String
+    private val REQUEST_CODE_SPEECH_TO_TEXT1 = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProductBinding.inflate(layoutInflater)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
+
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
@@ -63,8 +67,11 @@ class ProductActivity : AppCompatActivity() {
         //usuario y negocio actual
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
+        if (email.isEmpty()) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
         getShop()
-
         searchEditText = binding.edtBuscador
 
         searchEditText.addTextChangedListener(object : TextWatcher {
@@ -73,6 +80,7 @@ class ProductActivity : AppCompatActivity() {
                 val searchTerm = s.toString().trim()
                 updateProductList(searchTerm)
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
 
@@ -100,6 +108,11 @@ class ProductActivity : AppCompatActivity() {
         recyclerView = binding.rvProducts
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
+
+        binding.btnMicSearch.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this@ProductActivity, REQUEST_CODE_SPEECH_TO_TEXT1)
+        }
+        search()
     }
 
     private fun getShop() {
@@ -182,7 +195,10 @@ class ProductActivity : AppCompatActivity() {
 
     fun updateProductList(searchTerm: String) {
         val filteredList = list.filter { product ->
-            product.nombre.contains(searchTerm, ignoreCase = true) || product.codigo_barras.contains(searchTerm, ignoreCase = true)
+            product.nombre.contains(
+                searchTerm,
+                ignoreCase = true
+            ) || product.codigo_barras.contains(searchTerm, ignoreCase = true)
         }
         adapter.updateListProducts(filteredList)
     }
@@ -221,24 +237,11 @@ class ProductActivity : AppCompatActivity() {
         integrator.initiateScan()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result != null) {
-            if(result.contents == null){
-                Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show()
-            }else{
-                barcode = result.contents
-                binding.edtBuscador.setText(result.contents)
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
-        }
-    }
-
-    private fun swipeToAddShopCar(){
+    private fun swipeToAddShopCar() {
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
-        ){
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+        ) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -253,7 +256,8 @@ class ProductActivity : AppCompatActivity() {
                 val quantity = 1
                 val discount = adapter.products[position].max_descuento.toInt()
                 val productItem = ProductHolder.ProductItem(product, quantity, discount)
-                val existingProduct = ProductHolder.productList.find { it.product?.nombre == product.nombre }
+                val existingProduct =
+                    ProductHolder.productList.find { it.product?.nombre == product.nombre }
                 if (existingProduct == null) {
                     ProductHolder.productList.add(productItem)
                     var nom = product.nombre
@@ -266,5 +270,50 @@ class ProductActivity : AppCompatActivity() {
             }
 
         }).attachToRecyclerView(binding.rvProducts)
+    }
+
+    private fun search() = with(binding) {
+        edtBuscador.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(
+                filterText: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                if (filterText?.length!! > 0) {
+                    val filterList = list.filter { product ->
+                        val fullName =
+                            "${product.nombre}"
+                        fullName.uppercase().startsWith(filterText.toString().uppercase()) ||
+                                product.id.uppercase()
+                                    .startsWith(filterText.toString().uppercase())
+                    }
+                    adapter.updateListProducts(filterList)
+                } else {
+                    loadData()
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE_SPEECH_TO_TEXT1 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        binding.edtBuscador.setText(spokenText)
+                    }
+                }
+            }
+        } else {
+            Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
+        }
     }
 }
