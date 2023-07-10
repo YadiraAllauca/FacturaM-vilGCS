@@ -71,7 +71,9 @@ class MenuActivity : AppCompatActivity() {
         getWindow().setGravity(Gravity.START)
         //obtener email de usuario
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
-        val email = sharedPreferences.getString("email", "")
-        Toast.makeText(this, "Valor del email: $email", Toast.LENGTH_SHORT).show()
+
+        //eliminar las siguientes dos lineas de abajo para que no salgan los mensajes del email
+//        val email = sharedPreferences.getString("email", "")
+//        Toast.makeText(this, "Valor del email: $email", Toast.LENGTH_SHORT).show()
     }
 }
