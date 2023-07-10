@@ -237,20 +237,6 @@ class ProductActivity : AppCompatActivity() {
         integrator.initiateScan()
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-//        if (result != null) {
-//            if (result.contents == null) {
-//                Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show()
-//            } else {
-//                barcode = result.contents
-//                binding.edtBuscador.setText(result.contents)
-//            }
-//        } else {
-//            super.onActivityResult(requestCode, resultCode, data)
-//        }
-//    }
-
     private fun swipeToAddShopCar() {
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
