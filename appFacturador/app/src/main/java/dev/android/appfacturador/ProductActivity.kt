@@ -63,8 +63,11 @@ class ProductActivity : AppCompatActivity() {
         //usuario y negocio actual
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
+        if(email.isEmpty()){
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
         getShop()
-
         searchEditText = binding.edtBuscador
 
         searchEditText.addTextChangedListener(object : TextWatcher {

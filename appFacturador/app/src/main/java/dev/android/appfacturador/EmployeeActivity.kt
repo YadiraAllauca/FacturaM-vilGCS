@@ -5,10 +5,12 @@ import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Window
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +29,7 @@ import dev.android.appfacturador.model.CLIENTE
 import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.model.PRODUCTO
 import dev.android.appfacturador.utils.Constants
+import dev.android.appfacturador.utils.SpeechToTextUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -45,6 +48,7 @@ class EmployeeActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private val instanceFirebase = Firebase.database
     private val db = instanceFirebase.getReference("Empleado")
+    private val REQUEST_CODE_SPEECH_TO_TEXT1 = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +79,9 @@ class EmployeeActivity : AppCompatActivity() {
                 putExtras(bundle)
             }
             startActivity(intent)
+        }
+        binding.btnMicSearch.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this@EmployeeActivity, REQUEST_CODE_SPEECH_TO_TEXT1)
         }
         search()
         binding.btnBack.setOnClickListener { finish() }
@@ -208,6 +215,23 @@ class EmployeeActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {}
         })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE_SPEECH_TO_TEXT1 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        binding.edtSearchEmployee.setText(spokenText)
+                    }
+                }
+            }
+        } else {
+            Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
+        }
     }
 
 }
