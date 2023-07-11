@@ -5,14 +5,18 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
+import android.speech.tts.TextToSpeech.OnInitListener
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.Observable
+import androidx.databinding.ObservableField
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -63,7 +67,7 @@ class ProductActivity : AppCompatActivity() {
 
         //activar swipe
         swipeToAddShopCar()
-
+        shoppingCardActive()
         //usuario y negocio actual
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
@@ -237,6 +241,20 @@ class ProductActivity : AppCompatActivity() {
         integrator.initiateScan()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null) {
+            if (result.contents == null) {
+                Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show()
+            } else {
+                barcode = result.contents
+                binding.edtBuscador.setText(result.contents)
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
     private fun swipeToAddShopCar() {
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
@@ -267,8 +285,8 @@ class ProductActivity : AppCompatActivity() {
                     ).show()
                 }
                 adapter.notifyDataSetChanged()
+                binding.imgFull.visibility = View.VISIBLE
             }
-
         }).attachToRecyclerView(binding.rvProducts)
     }
 
@@ -315,5 +333,17 @@ class ProductActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
         }
+    }
+    fun shoppingCardActive() {
+        if (ProductHolder.productList.size == 0) {
+            binding.imgFull.visibility = View.GONE
+        } else {
+            binding.imgFull.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        shoppingCardActive()
     }
 }

@@ -4,26 +4,31 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.Window
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dev.android.appfacturador.ProductHolder.productList
+import dev.android.appfacturador.databinding.ActivityProductBinding
 import dev.android.appfacturador.databinding.ActivityShopBinding
 import dev.android.appfacturador.model.PRODUCTO
 
-class ShopActivity : AppCompatActivity() {
+class ShopActivity : AppCompatActivity()  {
     lateinit var binding: ActivityShopBinding
+    lateinit var bindingProductBinding: ActivityProductBinding
     private val adapter: ProductShopAdapter by lazy {
         ProductShopAdapter()
     }
     private lateinit var recyclerView: RecyclerView
     private var total: Float = 0f
-    val productList: MutableList<ProductHolder.ProductItem> = ProductHolder.productList.toMutableList()
+    private val productList: MutableList<ProductHolder.ProductItem> = ProductHolder.productList.toMutableList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityShopBinding.inflate(layoutInflater)
+        bindingProductBinding = ActivityProductBinding.inflate(layoutInflater)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
@@ -73,6 +78,7 @@ class ShopActivity : AppCompatActivity() {
         }
 
         binding.btnClear.setOnClickListener{
+            bindingProductBinding.imgFull.visibility = View.GONE
             ProductHolder.productList.clear()
             productList.clear()
             updateTotalShop()

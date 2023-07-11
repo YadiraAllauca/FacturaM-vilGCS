@@ -4,22 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddBillActivity">
-
-    <Button
-        android:id="@+id/btnAddItem"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="325dp"
-        android:layout_marginEnd="30dp"
-        android:background="@drawable/degradado"
-        android:fontFamily="@font/roboto_bold"
-        android:text="AGREGAR ITEM"
-        app:backgroundTint="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtProduct4" />
+    tools:context=".BillDetailActivity">
 
     <Button
         android:id="@+id/btnGenerateBill"
@@ -31,7 +16,7 @@
         android:background="@drawable/boton"
         android:fontFamily="@font/roboto_bold"
         android:stateListAnimator="@null"
-        android:text="GENERAR FACTURA"
+        android:text="ANULAR FACTURA"
         android:textColor="#000000"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
@@ -83,27 +68,26 @@
         android:layout_width="0dp"
         android:layout_height="22dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginTop="385dp"
         android:fontFamily="@font/roboto_bold"
         android:text="Subtotal"
         android:textColor="#A8A8A8"
         android:textSize="14dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnAddItem" />
+        app:layout_constraintTop_toBottomOf="@+id/txtProduct4" />
 
     <TextView
         android:id="@+id/txtSubtotal"
         android:layout_width="0dp"
         android:layout_height="22dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="385dp"
         android:layout_marginEnd="30dp"
         android:fontFamily="@font/roboto_bold"
         android:text="$00.00"
         android:textColor="#000000"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnAddItem" />
+        app:layout_constraintTop_toBottomOf="@+id/txtProduct4" />
 
     <TextView
         android:id="@+id/txtTotalBill"
@@ -225,16 +209,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnBack" />
 
-    <ImageView
-        android:id="@+id/btnAddClient"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="35dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtNumeroIdentificacion"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtNumeroIdentificacion"
-        app:srcCompat="@drawable/ic_baseline_add_circle_24" />
-
     <View
         android:id="@+id/view6"
         android:layout_width="wrap_content"
@@ -255,20 +229,21 @@
         android:layout_marginBottom="10dp"
         android:padding="0dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/btnAddItem"
+        app:layout_constraintBottom_toTopOf="@+id/txtProduct5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtProduct4"
         app:spanCount="1"
-        tools:itemCount="5"
+        tools:itemCount="6"
         tools:listitem="@layout/item_bill_products" />
 
     <Spinner
         android:id="@+id/spinnerPay"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtDiscount" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
