@@ -5,13 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
+import dev.android.appfacturador.ProductHolder.productList
 import dev.android.appfacturador.databinding.ItemBillProductsBinding
 
 class ProductBillAdapter(var products: List<ProductHolder.ProductItem> = emptyList()) :
     RecyclerView.Adapter<ProductBillAdapter.ProductBillAdapterViewHolder>() {
-
     lateinit var addTextChangedListenerAmount: (Int, Int) -> Unit
     lateinit var addTextChangedListenerDiscount: (Int, Int) -> Unit
+    var areFieldsEnabled: Boolean = true
 
     inner class ProductBillAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var binding: ItemBillProductsBinding = ItemBillProductsBinding.bind(itemView)
@@ -19,6 +20,9 @@ class ProductBillAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
             val product = productItem.product
             val quantity = productItem.quantity
             val discount = productItem.discount
+
+            binding.edtAmount.isEnabled = areFieldsEnabled
+            binding.edtDiscount.isEnabled = areFieldsEnabled
 
             binding.txtProductNameBill.text = product?.nombre
             if (product != null) {
@@ -69,4 +73,5 @@ class ProductBillAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
         this.products = products
         notifyDataSetChanged()
     }
+
 }

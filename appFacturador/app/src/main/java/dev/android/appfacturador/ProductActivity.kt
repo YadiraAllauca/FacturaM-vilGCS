@@ -8,6 +8,7 @@ import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.widget.EditText
 import android.widget.Toast
@@ -63,7 +64,7 @@ class ProductActivity : AppCompatActivity() {
 
         //activar swipe
         swipeToAddShopCar()
-
+        shoppingCardActive()
         //usuario y negocio actual
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
@@ -237,6 +238,7 @@ class ProductActivity : AppCompatActivity() {
         integrator.initiateScan()
     }
 
+
     private fun swipeToAddShopCar() {
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
@@ -267,8 +269,8 @@ class ProductActivity : AppCompatActivity() {
                     ).show()
                 }
                 adapter.notifyDataSetChanged()
+                binding.imgFull.visibility = View.VISIBLE
             }
-
         }).attachToRecyclerView(binding.rvProducts)
     }
 
@@ -315,5 +317,18 @@ class ProductActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun shoppingCardActive() {
+        if (ProductHolder.productList.size == 0) {
+            binding.imgFull.visibility = View.GONE
+        } else {
+            binding.imgFull.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        shoppingCardActive()
     }
 }

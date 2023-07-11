@@ -25,6 +25,7 @@ import dev.android.appfacturador.databinding.ActivityBillBinding
 import dev.android.appfacturador.model.CLIENTE
 import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.model.FACTURA
+import dev.android.appfacturador.utils.Constants
 
 class BillActivity : AppCompatActivity() {
     lateinit var binding: ActivityBillBinding
@@ -148,6 +149,15 @@ class BillActivity : AppCompatActivity() {
                 }
                 adapter.updateListbills(list)
                 recyclerView.adapter = adapter
+
+                adapter.setOnClickListenerBillEdit = {
+                    val bundle = Bundle().apply {
+                        putSerializable(Constants.KEY_BILL, it)
+                    }
+                    val intent =
+                        Intent(applicationContext, BillDetailActivity::class.java).putExtras(bundle)
+                    startActivity(intent)
+                }
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.e("TAG", "messages:onCancelled: ${error.message}")
