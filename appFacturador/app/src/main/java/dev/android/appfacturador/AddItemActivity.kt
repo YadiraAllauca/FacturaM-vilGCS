@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -24,6 +25,7 @@ import com.google.zxing.integration.android.IntentIntegrator
 import dev.android.appfacturador.databinding.ActivityAddItemBinding
 import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.model.PRODUCTO
+import dev.android.appfacturador.utils.SpeechToTextUtil
 
 class AddItemActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddItemBinding
@@ -39,6 +41,7 @@ class AddItemActivity : AppCompatActivity() {
     private var addedList: MutableList<PRODUCTO> = mutableListOf()
     lateinit var searchEditText: EditText
     lateinit var barcode: String
+    private val REQUEST_CODE_SPEECH_TO_TEXT1 = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +68,7 @@ class AddItemActivity : AppCompatActivity() {
                 val searchTerm = s.toString().trim()
                 updateProductList(searchTerm)
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
         binding.btnScanner.setOnClickListener {
@@ -93,10 +97,15 @@ class AddItemActivity : AppCompatActivity() {
             adapter.updateListProducts(filteredProducts)
         }
 
-        binding.btnAddItems.setOnClickListener{
+        binding.btnAddItems.setOnClickListener {
             val intent = Intent(this, AddBillActivity::class.java).apply {}
             startActivity(intent)
         }
+
+        binding.btnMicSearch.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this@AddItemActivity, REQUEST_CODE_SPEECH_TO_TEXT1)
+        }
+        search()
     }
 
     private fun getShop() {
@@ -158,17 +167,20 @@ class AddItemActivity : AppCompatActivity() {
 
                 adapter.onCheckedChangeListener = { product, isChecked ->
                     if (isChecked) {
-                        val productItem = ProductHolder.ProductItem(product, 1, product.max_descuento)
+                        val productItem =
+                            ProductHolder.ProductItem(product, 1, product.max_descuento)
                         ProductHolder.productList.add(productItem)
                         addedList.add(product)
                     } else {
                         addedList.remove(product)
-                        val position = ProductHolder.productList.indexOfFirst { it.product?.nombre == product.nombre }
+                        val position =
+                            ProductHolder.productList.indexOfFirst { it.product?.nombre == product.nombre }
                         ProductHolder.productList.removeAt(position)
                     }
                     print(addedList.size)
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 Log.e("TAG", "messages:onCancelled: ${error.message}")
             }
@@ -178,7 +190,10 @@ class AddItemActivity : AppCompatActivity() {
 
     fun updateProductList(searchTerm: String) {
         val filteredList = list.filter { product ->
-            product.nombre.contains(searchTerm, ignoreCase = true) || product.codigo_barras.contains(searchTerm, ignoreCase = true)
+            product.nombre.contains(
+                searchTerm,
+                ignoreCase = true
+            ) || product.codigo_barras.contains(searchTerm, ignoreCase = true)
         }
         adapter.updateListProducts(filteredList)
     }
@@ -189,17 +204,60 @@ class AddItemActivity : AppCompatActivity() {
         integrator.setPrompt("Código de Barras")
         integrator.initiateScan()
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
-            if(result.contents == null){
+            if (result.contents == null) {
                 Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show()
-            }else{
+            } else {
                 barcode = result.contents
                 binding.edtBuscador.setText(result.contents)
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
+
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE_SPEECH_TO_TEXT1 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        binding.edtBuscador.setText(spokenText)
+                    }
+                }
+            }
+        } else {
+            Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun search() = with(binding) {
+        edtBuscador.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(
+                filterText: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                if (filterText?.length!! > 0) {
+                    val filterList = list.filter { product ->
+                        val fullName =
+                            "${product.nombre}"
+                        fullName.uppercase().startsWith(filterText.toString().uppercase()) ||
+                                product.id.uppercase()
+                                    .startsWith(filterText.toString().uppercase())
+                    }
+                    adapter.updateListProducts(filterList)
+                } else {
+                    loadData()
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 }
