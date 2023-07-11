@@ -158,6 +158,8 @@ class AddItemActivity : AppCompatActivity() {
                     }
                 }
                 adapter.updateListProducts(list)
+                recyclerView.adapter = adapter
+                
                 adapter.onCheckedChangeListener = { product, isChecked ->
                     if (isChecked) {
                         val productItem =

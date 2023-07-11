@@ -20,7 +20,9 @@ class ProductAdapter(var products: List<PRODUCTO> = emptyList()) :
             binding.txtProduct.text = product.nombre
             binding.txtPrice.text = "$" + product.precio.toString()
             binding.txtIVA.text = product.id_categoria_impuesto + "%"
-            Picasso.get().load(product.imagen).error(R.drawable.load).into(imgProduct)
+            if (!product.imagen.isNullOrEmpty()) {
+                Picasso.get().load(product.imagen).into(imgProduct)
+            }
 
             binding.btnDeleteProduct.setOnClickListener {
                 setOnClickListenerProductDelete(product)
