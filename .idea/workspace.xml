@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b5ee7a08-6fe8-4234-bfbb-bce4d6ca4801" name="Changes" comment="Actualización" />
+    <list default="true" id="b5ee7a08-6fe8-4234-bfbb-bce4d6ca4801" name="Changes" comment="Actualización">
+      <change beforePath="$PROJECT_DIR$/.idea/FacturaMovilGCS.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/FacturaMovilGCS.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

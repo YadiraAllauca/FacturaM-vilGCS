@@ -5,13 +5,15 @@ import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import dev.android.appfacturador.databinding.ActivityProductBinding
 import dev.android.appfacturador.model.PRODUCTO
+import java.io.Serializable
 
 object ProductHolder: BaseObservable() {
-    data class ProductItem(val product: PRODUCTO?, var quantity: Int, var discount: Int){
+    data class ProductItem(val product: PRODUCTO?, var quantity: Int, var discount: Int):
+        Serializable {
         constructor(): this(null, 0,0)
     }
 
-    val productList: MutableList<ProductItem> = mutableListOf()
+    var productList: MutableList<ProductItem> = mutableListOf()
 
     fun updateQuantity(index: Int, quantity: Int) {
         if (index in 0 until productList.size) {
