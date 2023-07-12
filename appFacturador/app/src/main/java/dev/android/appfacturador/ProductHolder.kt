@@ -26,10 +26,4 @@ object ProductHolder: BaseObservable() {
             productList[index].discount = discount
         }
     }
-
-    private var itemCount: Int = 0
-
-    fun getItemCount(): Int {
-        return itemCount
-    }
 }

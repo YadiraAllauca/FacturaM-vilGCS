@@ -26,12 +26,12 @@ class BillDetailActivity : AppCompatActivity() {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
-        inicialice()
-        loaddata()
+        initialize()
+        loadData()
         actions()
     }
 
-    fun inicialice(){
+    fun initialize(){
         val bundle = intent.extras
         bundle?.let{
             val bill = bundle.getSerializable(Constants.KEY_BILL) as FACTURA
@@ -47,7 +47,7 @@ class BillDetailActivity : AppCompatActivity() {
         }
     }
 
-    fun loaddata(){
+    fun loadData(){
         recyclerView = binding.rvProducts
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
