@@ -101,8 +101,6 @@ class AddItemActivity : AppCompatActivity() {
         binding.btnMicSearch.setOnClickListener {
             SpeechToTextUtil.startSpeechToText(this@AddItemActivity, REQUEST_CODE_SPEECH_TO_TEXT1)
         }
-
-        search()
     }
 
     private fun getShop() {
@@ -159,7 +157,7 @@ class AddItemActivity : AppCompatActivity() {
                 }
                 adapter.updateListProducts(list)
                 recyclerView.adapter = adapter
-                
+
                 adapter.onCheckedChangeListener = { product, isChecked ->
                     if (isChecked) {
                         val productItem =
@@ -225,26 +223,5 @@ class AddItemActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun search() {
-        binding.edtBuscador.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(filterText: CharSequence?, start: Int, before: Int, count: Int) {
-                if (filterText?.length!! > 0) {
-                    val filterList = list.filter { product ->
-                        val fullName = "${product.nombre}"
-                        fullName.uppercase().startsWith(filterText.toString().uppercase()) ||
-                                product.id.uppercase().startsWith(filterText.toString().uppercase())
-                    }
-                    adapter.updateListProducts(filterList)
-                } else {
-                    loadData()
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {}
-        })
     }
 }

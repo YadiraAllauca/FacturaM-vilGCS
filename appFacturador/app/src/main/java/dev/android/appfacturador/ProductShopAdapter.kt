@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import dev.android.appfacturador.databinding.ItemShopBinding
 import dev.android.appfacturador.model.PRODUCTO
@@ -26,7 +27,14 @@ class ProductShopAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
             binding.txtProductNameShop.text = product?.nombre
             if (product != null) {
                 binding.txtPriceShop.text = "$" + String.format("%.2f", product.precio * quantity)
-                Picasso.get().load(product.imagen).error(R.drawable.load).into(imgProductShop)
+                if (!product.imagen.isNullOrEmpty()) {
+                    Glide.with(binding.root.context)
+                        .load(product.imagen)
+                        .override(300, 300) // Establece el tamaño deseado
+                        .centerCrop()
+                        .placeholder(R.drawable.load)
+                        .into(imgProductShop)
+                }
             }
 
             binding.btnQuitProduct.setOnClickListener {

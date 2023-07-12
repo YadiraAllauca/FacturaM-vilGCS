@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import dev.android.appfacturador.databinding.ItemAddProductBillBinding
@@ -20,7 +21,15 @@ class ProductItemBillAdapter(var products: List<PRODUCTO> = emptyList()) :
         fun bind(product: PRODUCTO) = with(binding) {
             binding.txtProductName.text = product.nombre
             binding.txtPrice.text = "$" + product.precio.toString()
-            Picasso.get().load(product.imagen).error(R.drawable.load).into(imgProduct)
+
+            if (!product.imagen.isNullOrEmpty()) {
+                Glide.with(binding.root.context)
+                    .load(product.imagen)
+                    .override(300, 300) // Establece el tamaño deseado
+                    .centerCrop()
+                    .placeholder(R.drawable.load)
+                    .into(imgProduct)
+            }
 
             val isProductSelected = ProductHolder.productList.any { it.product?.nombre == product.nombre }
             binding.cbItemBill.isChecked = isProductSelected
