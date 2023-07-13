@@ -52,7 +52,8 @@
                     android:text="$00.00"
                     android:textColor="#C0C0C0"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/btnProfile" />
+                    app:layout_constraintStart_toEndOf="@+id/btnProfile"
+                    app:layout_constraintTop_toBottomOf="@+id/txtProductNameShop" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/btnProfile"
