@@ -128,8 +128,6 @@ class ProductActivity : AppCompatActivity() {
             val intent = Intent(applicationContext, AddProductActivity::class.java).putExtras(bundle)
             startActivity(intent)
         }
-
-        recyclerView.adapter = adapter
     }
 
     fun loadData() {
