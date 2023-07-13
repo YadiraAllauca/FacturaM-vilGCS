@@ -101,9 +101,9 @@ class ProductActivity : AppCompatActivity() {
                             val empleado = childSnapshot.getValue(EMPLEADO::class.java)
                             if (empleado != null) {
                                 shop = empleado.negocio
+                                loadData()
                             }
                         }
-                        loadData()
                     }
                 }
                 override fun onCancelled(databaseError: DatabaseError) {
@@ -119,6 +119,7 @@ class ProductActivity : AppCompatActivity() {
 
         adapter.setOnClickListenerProductDelete = { product ->
             deleteProduct(product)
+            adapter.notifyDataSetChanged()
         }
 
         adapter.setOnClickListenerProductEdit = { product ->
@@ -192,11 +193,6 @@ class ProductActivity : AppCompatActivity() {
     }
 
     fun deleteProduct(producto: PRODUCTO) {
-        val retrofitBuilder = Retrofit.Builder()
-            .baseUrl("https://appfacturador-b516d-default-rtdb.firebaseio.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ProductDao::class.java)
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Eliminar registro")
         builder.setMessage("¿Desea continuar?")
@@ -204,16 +200,16 @@ class ProductActivity : AppCompatActivity() {
             dialog.dismiss()
         })
         builder.setPositiveButton("Aceptar", DialogInterface.OnClickListener { dialog, which ->
-            Executors.newSingleThreadExecutor().execute {
-                val retrofit = retrofitBuilder.deleteProduct(producto.id)
-                retrofit.enqueue(object : Callback<PRODUCTO> {
-                    override fun onResponse(call: Call<PRODUCTO>, response: Response<PRODUCTO>) {}
-                    override fun onFailure(call: Call<PRODUCTO>, t: Throwable) {}
-                })
-                runOnUiThread {
+            val database = FirebaseDatabase.getInstance()
+            val productoRef = database.getReference("Product/${producto.id}")
+
+            productoRef.removeValue()
+                .addOnSuccessListener {
                     Toast.makeText(this, "Registro eliminado", Toast.LENGTH_SHORT).show()
                 }
-            }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Error al eliminar el registro", Toast.LENGTH_SHORT).show()
+                }
         })
         builder.show()
     }
