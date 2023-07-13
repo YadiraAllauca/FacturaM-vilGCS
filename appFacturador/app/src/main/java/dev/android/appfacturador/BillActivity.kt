@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.Window
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -22,7 +21,6 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import dev.android.appfacturador.databinding.ActivityBillBinding
-import dev.android.appfacturador.model.CLIENTE
 import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.model.FACTURA
 import dev.android.appfacturador.utils.Constants
@@ -32,13 +30,13 @@ class BillActivity : AppCompatActivity() {
     lateinit var email: String
     lateinit var shop: String
     lateinit var searchEditText: EditText
-    private var list: MutableList<FACTURA> = ArrayList()
+    private var list: MutableList<FACTURA> = mutableListOf()
     private val adapter: BillAdapter by lazy {
         BillAdapter()
     }
     private lateinit var recyclerView: RecyclerView
-    private val instanceFirebase = Firebase.database
-    private val db = instanceFirebase.getReference("Factura")
+    private val fb = Firebase.database
+    private val dr = fb.getReference("Factura")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,13 +45,17 @@ class BillActivity : AppCompatActivity() {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
-        //usuario y negocio actual
+        searchEditText = binding.edtBuscador
+
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
+        if (email.isEmpty()) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
 
         getShop()
-
-        searchEditText = binding.edtBuscador
+        setupViews()
 
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -64,10 +66,57 @@ class BillActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
+        setupActions()
+
+    }
+
+    private fun getShop() {
+        val user = FirebaseAuth.getInstance().currentUser
+        val email = user?.email
+
+        val usuariosRef = FirebaseDatabase.getInstance().getReference("Empleado")
+
+        usuariosRef.orderByChild("correo_electronico").equalTo(email)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (childSnapshot in dataSnapshot.children) {
+                            val empleado = childSnapshot.getValue(EMPLEADO::class.java)
+                            if (empleado != null) {
+                                shop = empleado.negocio
+                            }
+                        }
+                        loadData()
+                    }
+                }
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Toast.makeText(
+                        this@BillActivity,
+                        "Error en la solicitud: " + databaseError.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
+    }
+
+    fun setupViews(){
         recyclerView = binding.rvBills
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
 
+        adapter.setOnClickListenerBillEdit = {
+            val bundle = Bundle().apply {
+                putSerializable(Constants.KEY_BILL, it)
+            }
+            val intent =
+                Intent(applicationContext, BillDetailActivity::class.java).putExtras(bundle)
+            startActivity(intent)
+        }
+
+        recyclerView.adapter = adapter
+    }
+
+    fun setupActions(){
         binding.btnFilters.setOnClickListener {
             val intent = Intent(this, FilterBillActivity::class.java)
             startActivity(intent)
@@ -106,36 +155,6 @@ class BillActivity : AppCompatActivity() {
         }
     }
 
-    private fun getShop() {
-        val user = FirebaseAuth.getInstance().currentUser
-        val email = user?.email
-        val database = FirebaseDatabase.getInstance()
-        val usuariosRef = database.getReference("Empleado")
-
-        usuariosRef.orderByChild("correo_electronico").equalTo(email)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        for (childSnapshot in dataSnapshot.children) {
-                            val empleado = childSnapshot.getValue(EMPLEADO::class.java)
-                            if (empleado != null) {
-                                shop = empleado.negocio
-                                loadData()
-
-                            }
-                        }
-                    }
-                }
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Toast.makeText(
-                        this@BillActivity,
-                        "Error en la solicitud: " + databaseError.message,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            })
-    }
-
     fun loadData() {
         val listen = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -148,22 +167,12 @@ class BillActivity : AppCompatActivity() {
                     }
                 }
                 adapter.updateListbills(list)
-                recyclerView.adapter = adapter
-
-                adapter.setOnClickListenerBillEdit = {
-                    val bundle = Bundle().apply {
-                        putSerializable(Constants.KEY_BILL, it)
-                    }
-                    val intent =
-                        Intent(applicationContext, BillDetailActivity::class.java).putExtras(bundle)
-                    startActivity(intent)
-                }
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.e("TAG", "messages:onCancelled: ${error.message}")
             }
         }
-        db.addValueEventListener(listen)
+        dr.addValueEventListener(listen)
     }
 
     fun updateBillList(searchTerm: String) {
