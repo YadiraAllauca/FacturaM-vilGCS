@@ -79,7 +79,7 @@
             tools:ignore="MissingConstraints" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/btnProfile1"
+            android:id="@+id/btnUpload"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginEnd="-5dp"
@@ -103,10 +103,10 @@
             android:id="@+id/btnCamera2"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            app:layout_constraintBottom_toBottomOf="@+id/btnProfile1"
-            app:layout_constraintEnd_toEndOf="@+id/btnProfile1"
-            app:layout_constraintStart_toStartOf="@+id/btnProfile1"
-            app:layout_constraintTop_toTopOf="@+id/btnProfile1"
+            app:layout_constraintBottom_toBottomOf="@+id/btnUpload"
+            app:layout_constraintEnd_toEndOf="@+id/btnUpload"
+            app:layout_constraintStart_toStartOf="@+id/btnUpload"
+            app:layout_constraintTop_toTopOf="@+id/btnUpload"
             app:srcCompat="@drawable/ic_baseline_file_upload_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.Window
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import dev.android.appfacturador.databinding.ActivitySignBinding
 
 class SignActivity : AppCompatActivity() {
@@ -23,5 +25,13 @@ class SignActivity : AppCompatActivity() {
         getWindow().setLayout(width, 700)
         getWindow().decorView.setBackgroundResource(android.R.color.transparent)
         getWindow().setGravity(Gravity.BOTTOM)
+
+        val loadImage =
+            registerForActivityResult(ActivityResultContracts.GetContent(), ActivityResultCallback {
+            })
+
+        binding.btnUpload.setOnClickListener {
+            loadImage.launch("*/*")
+        }
     }
 }
