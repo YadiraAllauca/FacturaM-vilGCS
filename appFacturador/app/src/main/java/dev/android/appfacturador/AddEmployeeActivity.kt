@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.Window
 import android.widget.ArrayAdapter
@@ -19,6 +21,7 @@ import dev.android.appfacturador.database.EmployeeDao
 import dev.android.appfacturador.databinding.ActivityAddEmployeeBinding
 import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.utils.Constants
+import dev.android.appfacturador.utils.SpeechToTextUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,6 +36,11 @@ class AddEmployeeActivity : AppCompatActivity() {
     private var id = ""
     private lateinit var spinnerDNI: Spinner
     private lateinit var spinnerType: Spinner
+    private val REQUEST_CODE_SPEECH_TO_TEXT1 = 1
+    private val REQUEST_CODE_SPEECH_TO_TEXT2 = 2
+    private val REQUEST_CODE_SPEECH_TO_TEXT3 = 3
+    private val REQUEST_CODE_SPEECH_TO_TEXT4 = 4
+    private val REQUEST_CODE_SPEECH_TO_TEXT5 = 5
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -168,31 +176,65 @@ class AddEmployeeActivity : AppCompatActivity() {
                 if (employeeData.id.isEmpty()) {
                     addEmployee(employeeData) { employee ->
                         if (employee) {
-                            Toast.makeText(this, "¡Empleado agregado exitosamente!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                "¡Empleado agregado exitosamente!",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             val intent = Intent(this, EmployeeActivity::class.java)
                             startActivity(intent)
                         } else {
-                            Toast.makeText(this, "Correo ya registrado, ingrese uno nuevo", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                "Correo ya registrado, ingrese uno nuevo",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 } else {
                     updateEmployee(employeeData) { employee ->
                         if (employee) {
-                            Toast.makeText(this, "¡Datos actualizados!", Toast.LENGTH_SHORT).show()
                             setResult(RESULT_OK)
-                            finish()
+                            Toast.makeText(this, "Actualizando datos...", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this, EmployeeActivity::class.java)
+                            Handler().postDelayed({
+                                startActivity(intent)
+                            }, 2000)
                         } else {
-                            Toast.makeText(this, "Correo ya registrado, ingrese uno nuevo", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                "Correo ya registrado, ingrese uno nuevo",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
 
             }
         }
+        eventsMicro()
+    }
+
+    private fun eventsMicro() {
+        binding.btnMicEmployeeNames.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this, REQUEST_CODE_SPEECH_TO_TEXT1)
+        }
+        binding.btnMicEmployeeLastNames.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this, REQUEST_CODE_SPEECH_TO_TEXT2)
+        }
+        binding.btnMicIDNumber.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this, REQUEST_CODE_SPEECH_TO_TEXT3)
+        }
+        binding.btnMicEmail.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this, REQUEST_CODE_SPEECH_TO_TEXT4)
+        }
+        binding.btnMicPassword.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this, REQUEST_CODE_SPEECH_TO_TEXT5)
+        }
     }
 
     private fun validateEmail(empleado: EMPLEADO, callback: (Boolean) -> Unit) {
-        if(this.oldEmailEdit != empleado.correo_electronico) {
+        if (this.oldEmailEdit != empleado.correo_electronico) {
             val auth = FirebaseAuth.getInstance()
             auth.fetchSignInMethodsForEmail(empleado.correo_electronico)
                 .addOnCompleteListener { task ->
@@ -206,7 +248,7 @@ class AddEmployeeActivity : AppCompatActivity() {
                     }
 
                 }
-        }else{
+        } else {
             callback(true)
         }
     }
@@ -240,7 +282,10 @@ class AddEmployeeActivity : AppCompatActivity() {
                             callback(false)
                         }
 
-                        override fun onResponse(call: Call<EMPLEADO>, response: Response<EMPLEADO>) {
+                        override fun onResponse(
+                            call: Call<EMPLEADO>,
+                            response: Response<EMPLEADO>
+                        ) {
                             addUser(empleado)
                             Log.d("Agregar", "Empleado agregado con éxito")
                             callback(true)
@@ -252,6 +297,7 @@ class AddEmployeeActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun updateEmployee(empleado: EMPLEADO, callback: (Boolean) -> Unit) {
         validateEmail(empleado) { validated ->
             if (validated) {
@@ -268,7 +314,10 @@ class AddEmployeeActivity : AppCompatActivity() {
                             callback(false)
                         }
 
-                        override fun onResponse(call: Call<EMPLEADO>, response: Response<EMPLEADO>) {
+                        override fun onResponse(
+                            call: Call<EMPLEADO>,
+                            response: Response<EMPLEADO>
+                        ) {
                             addUser(empleado)
                             Log.d("Agregar", "Empleado agregado con éxito")
                             callback(true)
@@ -280,5 +329,54 @@ class AddEmployeeActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE_SPEECH_TO_TEXT1 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        binding.edtNameEmployee.setText(spokenText)
+                    }
+                }
+                REQUEST_CODE_SPEECH_TO_TEXT2 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        binding.edtLastNameEmployee.setText(spokenText)
+                    }
+                }
+                REQUEST_CODE_SPEECH_TO_TEXT3 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        val filteredText = spokenText.replace("\\s".toRegex(), "")
+                        binding.edtNumDNI.setText(filteredText)
+                    }
+                }
+                REQUEST_CODE_SPEECH_TO_TEXT4 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        val filteredText = spokenText.replace("\\s".toRegex(), "")
+                        binding.edtEmailEmployee.setText(filteredText)
+                    }
+                }
+                REQUEST_CODE_SPEECH_TO_TEXT5 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        val filteredText = spokenText.replace("\\s".toRegex(), "")
+                        binding.edtPasswordEmployee.setText(filteredText)
+                    }
+                }
+            }
+        } else {
+            Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
 }

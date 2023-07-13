@@ -4,8 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.FirebaseFirestore
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
 import dev.android.appfacturador.databinding.ItemProductBinding
 import dev.android.appfacturador.model.PRODUCTO
 
@@ -17,15 +16,23 @@ class ProductAdapter(var products: List<PRODUCTO> = emptyList()) :
     inner class ProductAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var binding: ItemProductBinding = ItemProductBinding.bind(itemView)
         fun bind(product: PRODUCTO) = with(binding) {
-            binding.txtProduct.text = product.nombre
-            binding.txtPrice.text = "$" + product.precio.toString()
-            binding.txtIVA.text = product.id_categoria_impuesto + "%"
-            Picasso.get().load(product.imagen).error(R.drawable.load).into(imgProduct)
+            txtProduct.text = product.nombre
+            txtPrice.text = "$" + product.precio.toString()
+            txtIVA.text = product.id_categoria_impuesto + "%"
 
-            binding.btnDeleteProduct.setOnClickListener {
+            if (!product.imagen.isNullOrEmpty()) {
+                Glide.with(binding.root.context)
+                    .load(product.imagen)
+                    .override(300, 300) // Establece el tamaño deseado
+                    .centerCrop()
+                    .placeholder(R.drawable.load)
+                    .into(imgProduct)
+            }
+
+            btnDeleteProduct.setOnClickListener {
                 setOnClickListenerProductDelete(product)
             }
-            binding.btnEditProduct.setOnClickListener {
+            btnEditProduct.setOnClickListener {
                 setOnClickListenerProductEdit(product)
             }
         }

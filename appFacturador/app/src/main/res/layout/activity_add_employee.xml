@@ -259,7 +259,7 @@
         android:background="@drawable/texto_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
-        android:hint="Número de teléfono"
+        android:hint="Clave"
         android:inputType="text"
         android:padding="10dp"
         android:textColor="#787878"
@@ -267,7 +267,7 @@
         android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnMicPhoneNumber"
+        app:layout_constraintEnd_toStartOf="@+id/btnMicPassword"
         app:layout_constraintStart_toEndOf="@+id/textView18"
         app:layout_constraintTop_toBottomOf="@+id/edtEmailEmployee" />
 
@@ -329,7 +329,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toStartOf="@+id/btnMicPhoneNumber"
+        app:layout_constraintEnd_toStartOf="@+id/btnMicPassword"
         app:layout_constraintStart_toStartOf="@+id/edtPasswordEmployee"
         app:layout_constraintTop_toBottomOf="@+id/edtPasswordEmployee" />
 
@@ -374,7 +374,7 @@
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
     <ImageView
-        android:id="@+id/btnMicPhoneNumber"
+        android:id="@+id/btnMicPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dp"

@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.android.appfacturador.databinding.ItemBillBinding
 import dev.android.appfacturador.model.FACTURA
+import dev.android.appfacturador.model.PRODUCTO
 
 class BillAdapter(var bills: List<FACTURA> = emptyList()) :
     RecyclerView.Adapter<BillAdapter.BillAdapterViewHolder>() {
-    //lateinit var setOnClickClient: (FACTURA) -> Unit
+    lateinit var setOnClickListenerBillEdit: (FACTURA) -> Unit
 
     inner class BillAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var binding: ItemBillBinding = ItemBillBinding.bind(itemView)
@@ -19,7 +20,7 @@ class BillAdapter(var bills: List<FACTURA> = emptyList()) :
             binding.txtDate.text = bill.fecha
 
             binding.btnDetalle.setOnClickListener {
-
+                setOnClickListenerBillEdit(bill)
             }
         }
     }

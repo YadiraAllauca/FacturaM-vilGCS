@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -14,23 +15,19 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.zxing.integration.android.IntentIntegrator
 import dev.android.appfacturador.databinding.ActivityAddItemBinding
 import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.model.PRODUCTO
+import dev.android.appfacturador.utils.SpeechToTextUtil
 
 class AddItemActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddItemBinding
     lateinit var email: String
     lateinit var shop: String
-    private val fb = Firebase.database
-    private val dr = fb.getReference("Product")
     private val adapter: ProductItemBillAdapter by lazy {
         ProductItemBillAdapter()
     }
@@ -39,6 +36,10 @@ class AddItemActivity : AppCompatActivity() {
     private var addedList: MutableList<PRODUCTO> = mutableListOf()
     lateinit var searchEditText: EditText
     lateinit var barcode: String
+    private val REQUEST_CODE_SPEECH_TO_TEXT1 = 1
+
+    private val database: FirebaseDatabase = Firebase.database
+    private val productRef: DatabaseReference = database.getReference("Product")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +48,9 @@ class AddItemActivity : AppCompatActivity() {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
-        //usuario y negocio actual
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
 
-        //recycle view
         recyclerView = binding.rvProducts
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
@@ -67,6 +66,7 @@ class AddItemActivity : AppCompatActivity() {
             }
             override fun afterTextChanged(s: Editable?) {}
         })
+
         binding.btnScanner.setOnClickListener {
             initScanner()
         }
@@ -88,14 +88,18 @@ class AddItemActivity : AppCompatActivity() {
             binding.btnAllProducts.background = getDrawable(R.drawable.degradado2)
             binding.btnAllProducts.setTextColor(Color.parseColor("#686868"))
 
-            var pro = ProductHolder.productList.map { it.product }.toMutableList()
-            var filteredProducts = list.filter { pro.contains(it) }.toMutableList()
+            val selectedProducts = ProductHolder.productList.mapNotNull { it.product }
+            val filteredProducts = list.filter { selectedProducts.contains(it) }
             adapter.updateListProducts(filteredProducts)
         }
 
-        binding.btnAddItems.setOnClickListener{
-            val intent = Intent(this, AddBillActivity::class.java).apply {}
+        binding.btnAddItems.setOnClickListener {
+            val intent = Intent(this, AddBillActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.btnMicSearch.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this@AddItemActivity, REQUEST_CODE_SPEECH_TO_TEXT1)
         }
     }
 
@@ -103,7 +107,6 @@ class AddItemActivity : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
         val email = user?.email
 
-        val database = FirebaseDatabase.getInstance()
         val usuariosRef = database.getReference("Empleado")
 
         usuariosRef.orderByChild("correo_electronico").equalTo(email)
@@ -130,26 +133,25 @@ class AddItemActivity : AppCompatActivity() {
             })
     }
 
-    fun loadData() {
-        var listen = object : ValueEventListener {
+    private fun loadData() {
+        productRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 list.clear()
                 snapshot.children.forEach { child ->
                     val negocio = child.child("negocio").value?.toString()
                     if (negocio == shop) {
-                        val product: PRODUCTO? =
-                            child.key?.let {
-                                PRODUCTO(
-                                    child.key.toString(),
-                                    child.child("nombre").value.toString(),
-                                    child.child("precio").value.toString().toFloat(),
-                                    child.child("max_descuento").value.toString().toInt(),
-                                    child.child("id_categoria_impuesto").value.toString(),
-                                    child.child("codigo_barras").value.toString(),
-                                    child.child("imagen").value.toString(),
-                                    child.child("negocio").value.toString()
-                                )
-                            }
+                        val product: PRODUCTO? = child.key?.let {
+                            PRODUCTO(
+                                child.key.toString(),
+                                child.child("nombre").value.toString(),
+                                child.child("precio").value.toString().toFloat(),
+                                child.child("max_descuento").value.toString().toInt(),
+                                child.child("id_categoria_impuesto").value.toString(),
+                                child.child("codigo_barras").value.toString(),
+                                child.child("imagen").value.toString(),
+                                child.child("negocio").value.toString()
+                            )
+                        }
                         product?.let { list.add(it) }
                     }
                 }
@@ -158,27 +160,32 @@ class AddItemActivity : AppCompatActivity() {
 
                 adapter.onCheckedChangeListener = { product, isChecked ->
                     if (isChecked) {
-                        val productItem = ProductHolder.ProductItem(product, 1, product.max_descuento)
+                        val productItem =
+                            ProductHolder.ProductItem(product, 1, product.max_descuento)
                         ProductHolder.productList.add(productItem)
                         addedList.add(product)
                     } else {
                         addedList.remove(product)
-                        val position = ProductHolder.productList.indexOfFirst { it.product?.nombre == product.nombre }
-                        ProductHolder.productList.removeAt(position)
+                        val position =
+                            ProductHolder.productList.indexOfFirst { it.product?.nombre == product.nombre }
+                        if (position != -1) {
+                            ProductHolder.productList.removeAt(position)
+                        }
                     }
                     print(addedList.size)
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 Log.e("TAG", "messages:onCancelled: ${error.message}")
             }
-        }
-        dr.addValueEventListener(listen)
+        })
     }
 
-    fun updateProductList(searchTerm: String) {
+    private fun updateProductList(searchTerm: String) {
         val filteredList = list.filter { product ->
-            product.nombre.contains(searchTerm, ignoreCase = true) || product.codigo_barras.contains(searchTerm, ignoreCase = true)
+            product.nombre.contains(searchTerm, ignoreCase = true)
+                    || product.codigo_barras.contains(searchTerm, ignoreCase = true)
         }
         adapter.updateListProducts(filteredList)
     }
@@ -189,17 +196,32 @@ class AddItemActivity : AppCompatActivity() {
         integrator.setPrompt("Código de Barras")
         integrator.initiateScan()
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
-            if(result.contents == null){
+            if (result.contents == null) {
                 Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show()
-            }else{
+            } else {
                 barcode = result.contents
                 binding.edtBuscador.setText(result.contents)
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
+        }
+
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE_SPEECH_TO_TEXT1 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        binding.edtBuscador.setText(spokenText)
+                    }
+                }
+            }
+        } else {
+            Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
         }
     }
 }

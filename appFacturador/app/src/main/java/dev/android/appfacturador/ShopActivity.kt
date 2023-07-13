@@ -23,7 +23,6 @@ class ShopActivity : AppCompatActivity()  {
     }
     private lateinit var recyclerView: RecyclerView
     private var total: Float = 0f
-    private val productList: MutableList<ProductHolder.ProductItem> = ProductHolder.productList.toMutableList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,37 +32,26 @@ class ShopActivity : AppCompatActivity()  {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
+        initialize()
+        loadData()
+        actions()
+    }
+
+    private fun initialize() {
         recyclerView = binding.rvHistory
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
-
-        loadData()
-
-        binding.btnBack.setOnClickListener {
-            finish()
-        }
-
-        binding.btnFacturar.setOnClickListener {
-            productList.clear()
-            val intent = Intent(this, AddBillActivity::class.java).apply {}
-            startActivity(intent)
-        }
-
-        // Obtener email de usuario
-        val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
-        val email = sharedPreferences.getString("email", "")
-        Toast.makeText(this, "Valor del email: $email", Toast.LENGTH_SHORT).show()
     }
 
     private fun loadData() {
-        total = productList.sumByDouble { ((it.product?.precio ?: 0f) * it.quantity).toDouble() }.toFloat()
+        total = ProductHolder.productList.sumByDouble { ((it.product?.precio ?: 0f) * it.quantity).toDouble() }.toFloat()
 
-        adapter.updateListProducts(productList)
+        adapter.updateListProducts(ProductHolder.productList)
         recyclerView.adapter = adapter
         updateTotalShop()
 
         adapter.setOnClickListenerProductDelete = { product ->
-            productList.removeAll { it.product == product }
+            ProductHolder.productList.removeAll { it.product == product }
             updateTotalShop()
         }
 
@@ -76,17 +64,27 @@ class ShopActivity : AppCompatActivity()  {
             ProductHolder.updateQuantity(position, quantity)
             updateTotalShop()
         }
+    }
+
+    fun actions(){
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
 
         binding.btnClear.setOnClickListener{
             bindingProductBinding.imgFull.visibility = View.GONE
             ProductHolder.productList.clear()
-            productList.clear()
             updateTotalShop()
+        }
+
+        binding.btnFacturar.setOnClickListener {
+            val intent = Intent(this, AddBillActivity::class.java).apply {}
+            startActivity(intent)
         }
     }
 
     fun updateTotalShop(){
-        total = productList.sumByDouble { ((it.product?.precio ?: 0f) * it.quantity).toDouble() }.toFloat()
+        total = ProductHolder.productList.sumByDouble { ((it.product?.precio ?: 0f) * it.quantity).toDouble() }.toFloat()
         adapter.notifyDataSetChanged()
         binding.txtTotalCarrito.text = "$" + String.format("%.2f", total)
     }
