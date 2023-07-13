@@ -28,11 +28,13 @@ class AddItemActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddItemBinding
     lateinit var email: String
     lateinit var shop: String
+    private var list: MutableList<PRODUCTO> = mutableListOf()
     private val adapter: ProductItemBillAdapter by lazy {
         ProductItemBillAdapter()
     }
     private lateinit var recyclerView: RecyclerView
-    private var list: MutableList<PRODUCTO> = ArrayList()
+    private val fb = Firebase.database
+    private val dr = fb.getReference("Product")
     private var addedList: MutableList<PRODUCTO> = mutableListOf()
     lateinit var searchEditText: EditText
     lateinit var barcode: String
@@ -48,16 +50,24 @@ class AddItemActivity : AppCompatActivity() {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
+        searchEditText = binding.edtBuscador
+
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
+        if (email.isEmpty()) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
+        getShop()
 
         recyclerView = binding.rvProducts
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
 
-        getShop()
 
-        searchEditText = binding.edtBuscador
+
+
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
