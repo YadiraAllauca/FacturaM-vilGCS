@@ -49,6 +49,11 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.btnAddSign.setOnClickListener {
+            val intent = Intent(this, SignActivity::class.java)
+            startActivity(intent)
+        }
+
         //obtener email de usuario
 //        val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
 //        val email = sharedPreferences.getString("email", "")
