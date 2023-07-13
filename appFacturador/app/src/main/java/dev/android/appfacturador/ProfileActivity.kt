@@ -39,8 +39,13 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.btnEmployees.setOnClickListener {
+        binding.btnAddEmployees.setOnClickListener {
             val intent = Intent(this, EmployeeActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnInfo.setOnClickListener {
+            val intent = Intent(this, EditInfoActivity::class.java)
             startActivity(intent)
         }
 
