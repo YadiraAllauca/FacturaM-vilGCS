@@ -72,7 +72,7 @@ class AddBillActivity : AppCompatActivity() {
         getShop()
 
         // Configurar listeners
-        setupListeners()
+        setupActions()
     }
 
     private fun initViews() {
@@ -89,7 +89,7 @@ class AddBillActivity : AppCompatActivity() {
         spinner.adapter = adapter
     }
 
-    private fun setupListeners() {
+    private fun setupActions() {
         searchClienteEditText = binding.edtNumeroIdentificacion
         searchClienteEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -185,7 +185,7 @@ class AddBillActivity : AppCompatActivity() {
                             if (cliente != null) {
                                 clienteEncontrado = cliente
                                 binding.edtNumeroIdentificacion.setTextColor(Color.BLACK)
-                                binding.txtClienteName.text = cliente.primer_nombre+""+cliente.apellido_paterno
+                                binding.txtClienteName.text = cliente.primer_nombre+" "+cliente.apellido_paterno
                                 binding.txtClienteName.setTextColor(Color.BLACK)
                                 binding.txtClienteEmail.text = cliente.correo_electronico
                                 binding.txtClienteEmail.setTextColor(Color.BLACK)

@@ -15,9 +15,10 @@ class BillAdapter(var bills: List<FACTURA> = emptyList()) :
     inner class BillAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var binding: ItemBillBinding = ItemBillBinding.bind(itemView)
         fun bind(bill: FACTURA) = with(binding) {
-            binding.txtBillNumber.text = bill.numero_factura
-            binding.txtClienteID.text = bill.cliente?.numero_dni
-            binding.txtDate.text = bill.fecha
+            txtBillNumber.text = "Factura " + bill.numero_factura
+            txtClienteID.text = bill.cliente?.numero_dni
+            txtDate.text = bill.fecha
+            txtBillNumberInitials.text = bill.cliente?.primer_nombre.toString().substring(0,1)+bill.cliente?.apellido_paterno.toString().substring(0,1)
 
             binding.btnDetalle.setOnClickListener {
                 setOnClickListenerBillEdit(bill)
