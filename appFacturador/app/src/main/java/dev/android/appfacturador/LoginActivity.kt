@@ -179,12 +179,14 @@ class LoginActivity : AppCompatActivity() {
             binding.edtEmail.setBackgroundColor(ContextCompat.getColor(this, R.color.blues))
             binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
             binding.txtLogin.setTextColor(Color.parseColor("#ffffff"))
-            val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.accessdark)
+            val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.accessdarkcolor)
             binding.imageView2.setImageDrawable(drawable)
             binding.edtEmail.setBackgroundResource(R.drawable.textodark)
             binding.edtEmail.setTextColor(Color.parseColor("#ffffff"))
             binding.edtPaassword.setBackgroundResource(R.drawable.textodark)
             binding.edtPaassword.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnNext.setBackgroundResource(R.drawable.degradadodark)
+            binding.btnNext.setTextColor(Color.parseColor("#ffffff"))
         }
     }
 }

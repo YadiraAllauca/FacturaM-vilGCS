@@ -1,8 +1,13 @@
 package dev.android.appfacturador
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.text.Editable
@@ -14,9 +19,13 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -60,7 +69,7 @@ class ProductActivity : AppCompatActivity() {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
-        searchEditText = binding.edtBuscador
+        searchEditText = binding.edtSearch
 
         //usuario y negocio actual
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
@@ -72,6 +81,7 @@ class ProductActivity : AppCompatActivity() {
 
         getShop()
         setupViews()
+        darkMode()
 
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -228,7 +238,7 @@ class ProductActivity : AppCompatActivity() {
                 Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show()
             } else {
                 barcode = result.contents
-                binding.edtBuscador.setText(result.contents)
+                binding.edtSearch.setText(result.contents)
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
@@ -240,7 +250,7 @@ class ProductActivity : AppCompatActivity() {
                     val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (!results.isNullOrEmpty()) {
                         val spokenText = results[0]
-                        binding.edtBuscador.setText(spokenText)
+                        binding.edtSearch.setText(spokenText)
                     }
                 }
             }
@@ -248,7 +258,6 @@ class ProductActivity : AppCompatActivity() {
             Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
         }
     }
-
 
     private fun swipeToAddShopCar() {
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
@@ -287,5 +296,24 @@ class ProductActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         shoppingCardActive()
+    }
+
+    @SuppressLint("ResourceAsColor", "ResourceType")
+    fun darkMode () {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
+            binding.edtSearch.setBackgroundResource(R.drawable.searchdark)
+            binding.btnShop.setColorFilter(Color.parseColor("#65696d"))
+            binding.btnMicSearch.setColorFilter(ContextCompat.getColor(this, R.color.white))
+            val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.scanner_dark)
+            binding.btnScanner.setImageDrawable(drawable)
+            binding.btnAddProduct.imageTintList = ColorStateList.valueOf(Color.parseColor("#202427"))
+            binding.btnAddProduct.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#65696d"))
+            binding.btnClose.setCardBackgroundColor(Color.parseColor("#65696d"))
+            binding.btnCloses.setColorFilter(Color.parseColor("#202427"))
+        }
     }
 }
