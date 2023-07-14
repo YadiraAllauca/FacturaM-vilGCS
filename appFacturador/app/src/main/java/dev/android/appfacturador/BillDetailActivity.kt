@@ -1,5 +1,6 @@
 package dev.android.appfacturador
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
@@ -25,6 +26,11 @@ class BillDetailActivity : AppCompatActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
+
+        binding.btnCancelBill.setOnClickListener {
+            val intent = Intent(this, CreditNoteActivity::class.java)
+            startActivity(intent)
+        }
 
         initialize()
         loadData()
