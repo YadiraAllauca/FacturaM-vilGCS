@@ -7,7 +7,7 @@
     tools:context=".BillDetailActivity">
 
     <Button
-        android:id="@+id/btnGenerateBill"
+        android:id="@+id/btnCancelBill"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -169,7 +169,7 @@
         android:text="Total"
         android:textColor="#000000"
         android:textSize="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnGenerateBill"
+        app:layout_constraintBottom_toTopOf="@+id/btnCancelBill"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView

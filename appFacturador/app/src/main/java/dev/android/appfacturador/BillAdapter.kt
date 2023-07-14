@@ -20,7 +20,7 @@ class BillAdapter(var bills: List<FACTURA> = emptyList()) :
             txtDate.text = bill.fecha
             txtBillNumberInitials.text = bill.cliente?.primer_nombre.toString().substring(0,1)+bill.cliente?.apellido_paterno.toString().substring(0,1)
 
-            binding.btnDetalle.setOnClickListener {
+            binding.btnBillInfo.setOnClickListener {
                 setOnClickListenerBillEdit(bill)
             }
         }
