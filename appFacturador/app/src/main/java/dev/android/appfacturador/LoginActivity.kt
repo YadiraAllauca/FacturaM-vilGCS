@@ -38,7 +38,7 @@ class LoginActivity : AppCompatActivity() {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         checkSession()
-        hiddeVisiblePassword()
+        hiddeVisiblePassword("light")
         db = FirebaseDatabase.getInstance()
         login()
         session()
@@ -53,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
         }, 1000)
     }
 
-    private fun hiddeVisiblePassword() {
+    private fun hiddeVisiblePassword(mode: String) {
         var passwordHidden = false
         binding.btnHide.setOnClickListener {
             if (passwordHidden) {
@@ -65,7 +65,11 @@ class LoginActivity : AppCompatActivity() {
                 binding.edtPaassword.transformationMethod =
                     HideReturnsTransformationMethod.getInstance()
                 passwordHidden = true
-                binding.btnHide.setColorFilter(ContextCompat.getColor(this, R.color.blues))
+                if (mode == "light") {
+                    binding.btnHide.setColorFilter(ContextCompat.getColor(this, R.color.blues))
+                } else {
+                    binding.btnHide.setColorFilter(Color.parseColor("#ffffff"))
+                }
             }
         }
     }
@@ -175,6 +179,7 @@ class LoginActivity : AppCompatActivity() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            hiddeVisiblePassword("dark")
             // El modo actual es dark
             binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
             binding.txtLogin.setTextColor(Color.parseColor("#ffffff"))
