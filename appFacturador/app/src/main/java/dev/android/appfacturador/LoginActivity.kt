@@ -42,7 +42,7 @@ class LoginActivity : AppCompatActivity() {
         db = FirebaseDatabase.getInstance()
         login()
         session()
-        modePhone()
+        darkMode()
     }
 
     private fun checkSession() {
@@ -171,7 +171,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     @SuppressLint("ResourceAsColor")
-    fun modePhone () {
+    fun darkMode () {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
@@ -182,7 +182,9 @@ class LoginActivity : AppCompatActivity() {
             val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.accessdark)
             binding.imageView2.setImageDrawable(drawable)
             binding.edtEmail.setBackgroundResource(R.drawable.textodark)
+            binding.edtEmail.setTextColor(Color.parseColor("#ffffff"))
             binding.edtPaassword.setBackgroundResource(R.drawable.textodark)
+            binding.edtPaassword.setTextColor(Color.parseColor("#ffffff"))
         }
     }
 }
