@@ -7,7 +7,7 @@
     tools:context=".AddProductActivity">
 
     <TextView
-        android:id="@+id/txtTittleRegister"
+        android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -24,9 +24,9 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/txtTittleRegister"
+        app:layout_constraintBottom_toBottomOf="@+id/txtTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txtTittleRegister"
+        app:layout_constraintTop_toTopOf="@+id/txtTitle"
         app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
 
     <Button
@@ -51,13 +51,13 @@
         android:layout_marginTop="52dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTittleRegister">
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/btnImageProduct"
             android:layout_width="130dp"
             android:layout_height="130dp"
-            app:cardBackgroundColor="#EFEFEF"
+            app:cardBackgroundColor="#ffffff"
             app:cardCornerRadius="25dp"
             app:cardElevation="0dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -111,7 +111,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/textView18"
+        android:id="@+id/txtProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -125,7 +125,7 @@
         app:layout_constraintTop_toTopOf="@+id/edtProduct" />
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/txtCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -134,12 +134,12 @@
         android:text="Código:"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtCodigoBarras"
+        app:layout_constraintBottom_toBottomOf="@+id/edtBarCode"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtCodigoBarras" />
+        app:layout_constraintTop_toTopOf="@+id/edtBarCode" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/txtIVA"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -152,7 +152,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view4" />
 
     <TextView
-        android:id="@+id/textView22"
+        android:id="@+id/txtDiscount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="200dp"
@@ -165,7 +165,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view4" />
 
     <TextView
-        android:id="@+id/textView20"
+        android:id="@+id/txtPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -220,14 +220,13 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnMicProduct"
-        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintStart_toEndOf="@+id/txtProduct"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <EditText
-        android:id="@+id/edtCodigoBarras"
+        android:id="@+id/edtBarCode"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="3dp"
         android:background="@drawable/texto_info"
@@ -241,7 +240,7 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnScanner"
-        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintStart_toStartOf="@+id/edtPrice"
         app:layout_constraintTop_toBottomOf="@+id/view3" />
 
     <EditText
@@ -263,13 +262,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnMicDiscount"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView21" />
+        app:layout_constraintTop_toBottomOf="@+id/txtIVA" />
 
     <EditText
         android:id="@+id/edtPrice"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginStart="30dp"
         android:layout_marginEnd="3dp"
         android:background="@drawable/texto_info"
         android:drawablePadding="10dp"
@@ -283,7 +281,7 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnMicPrice"
-        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintStart_toStartOf="@+id/edtProduct"
         app:layout_constraintTop_toBottomOf="@+id/edtProduct" />
 
     <Spinner
@@ -296,7 +294,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/edtDiscount"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView21" />
+        app:layout_constraintTop_toBottomOf="@+id/txtIVA" />
 
     <ImageView
         android:id="@+id/btnMicProduct"
@@ -334,9 +332,9 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtCodigoBarras"
+        app:layout_constraintBottom_toBottomOf="@+id/edtBarCode"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtCodigoBarras"
+        app:layout_constraintTop_toTopOf="@+id/edtBarCode"
         app:srcCompat="@drawable/scanner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
