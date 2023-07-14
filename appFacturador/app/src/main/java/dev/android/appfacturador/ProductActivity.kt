@@ -311,14 +311,14 @@ class ProductActivity : AppCompatActivity() {
             binding.imgFull.setColorFilter(Color.parseColor("#ffffff"))
             binding.edtSearch.setBackgroundResource(R.drawable.searchdark)
             binding.edtSearch.outlineSpotShadowColor = Color.parseColor("#ffffff")
-            binding.btnShop.setColorFilter(Color.parseColor("#65696d"))
+            binding.btnShop.setColorFilter(Color.parseColor("#47484a"))
             binding.btnMicSearch.setColorFilter(ContextCompat.getColor(this, R.color.white))
             val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.scanner_dark)
             binding.btnScanner.setImageDrawable(drawable)
-            binding.btnAddProduct.imageTintList = ColorStateList.valueOf(Color.parseColor("#202427"))
-            binding.btnAddProduct.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#65696d"))
-            binding.btnClose.setCardBackgroundColor(Color.parseColor("#65696d"))
-            binding.btnCloses.setColorFilter(Color.parseColor("#202427"))
+            binding.btnAddProduct.imageTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
+            binding.btnAddProduct.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#47484a"))
+            binding.btnClose.setCardBackgroundColor(Color.parseColor("#47484a"))
+            binding.btnCloses.setColorFilter(Color.parseColor("#121212"))
         }
     }
 
