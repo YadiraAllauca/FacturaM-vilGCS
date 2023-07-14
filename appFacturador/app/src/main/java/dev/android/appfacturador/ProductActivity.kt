@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -26,7 +25,6 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.zxing.integration.android.IntentIntegrator
-import dev.android.appfacturador.ProductHolder.productList
 import dev.android.appfacturador.database.ProductDao
 import dev.android.appfacturador.databinding.ActivityProductBinding
 import dev.android.appfacturador.model.EMPLEADO
@@ -84,7 +82,7 @@ class ProductActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        actions()
+        setupActions()
         swipeToAddShopCar()
         shoppingCardActive()
     }
@@ -136,7 +134,6 @@ class ProductActivity : AppCompatActivity() {
         var listen = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val productList: MutableList<PRODUCTO> = mutableListOf()
-                //list.clear()
                 snapshot.children.forEach { child ->
                     val negocio = child.child("negocio").value?.toString()
                     if (negocio == shop) {
@@ -146,7 +143,6 @@ class ProductActivity : AppCompatActivity() {
                 }
                 list = productList
                 adapter.updateListProducts(list)
-                //recyclerView.adapter = adapter
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -156,7 +152,7 @@ class ProductActivity : AppCompatActivity() {
         dr.addValueEventListener(listen)
     }
 
-    fun actions(){
+    fun setupActions(){
         binding.btnCloses.setOnClickListener {
             val intent = Intent(this, MenuActivity::class.java).apply {
                 putExtra("option", "product")
