@@ -64,7 +64,6 @@ class AddProductActivity : AppCompatActivity() {
         }
         getShop()
         initialize()
-
         setupActions()
         eventsMicro()
     }
