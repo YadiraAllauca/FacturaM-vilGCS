@@ -1,19 +1,24 @@
 package dev.android.appfacturador
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.view.Window
 import android.content.Context
-import android.content.SharedPreferences
-import com.google.firebase.auth.FirebaseAuth
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.res.ColorStateList
+import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.os.Bundle
 import android.os.Handler
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -37,6 +42,7 @@ class LoginActivity : AppCompatActivity() {
         db = FirebaseDatabase.getInstance()
         login()
         session()
+        modePhone()
     }
 
     private fun checkSession() {
@@ -51,12 +57,12 @@ class LoginActivity : AppCompatActivity() {
         var passwordHidden = false
         binding.btnHide.setOnClickListener {
             if (passwordHidden) {
-                binding.txtPaassword.transformationMethod =
+                binding.edtPaassword.transformationMethod =
                     PasswordTransformationMethod.getInstance()
                 passwordHidden = false
                 binding.btnHide.setColorFilter(ContextCompat.getColor(this, R.color.gray))
             } else {
-                binding.txtPaassword.transformationMethod =
+                binding.edtPaassword.transformationMethod =
                     HideReturnsTransformationMethod.getInstance()
                 passwordHidden = true
                 binding.btnHide.setColorFilter(ContextCompat.getColor(this, R.color.blues))
@@ -66,11 +72,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun login() {
         binding.btnNext.setOnClickListener {
-            if (binding.edtEmail.text.isNotEmpty() && binding.txtPaassword.text.isNotEmpty()) {
+            if (binding.edtEmail.text.isNotEmpty() && binding.edtPaassword.text.isNotEmpty()) {
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(
                     binding.edtEmail.text.toString(),
 
-                    binding.txtPaassword.text.toString()
+                    binding.edtPaassword.text.toString()
                 ).addOnCompleteListener {
                     if (it.isSuccessful) {
                         val email = binding.edtEmail.text.toString()
@@ -161,6 +167,22 @@ class LoginActivity : AppCompatActivity() {
         val email: String? = preferences.getString("email", null)
         if (email != null) {
             showNewActivity(email)
+        }
+    }
+
+    @SuppressLint("ResourceAsColor")
+    fun modePhone () {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            binding.edtEmail.setBackgroundColor(ContextCompat.getColor(this, R.color.blues))
+            binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtLogin.setTextColor(Color.parseColor("#ffffff"))
+            val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.accessdark)
+            binding.imageView2.setImageDrawable(drawable)
+            binding.edtEmail.setBackgroundResource(R.drawable.textodark)
+            binding.edtPaassword.setBackgroundResource(R.drawable.textodark)
         }
     }
 }
