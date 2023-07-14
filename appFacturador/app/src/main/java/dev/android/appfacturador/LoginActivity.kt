@@ -176,7 +176,6 @@ class LoginActivity : AppCompatActivity() {
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
             // El modo actual es dark
-            binding.edtEmail.setBackgroundColor(ContextCompat.getColor(this, R.color.blues))
             binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
             binding.txtLogin.setTextColor(Color.parseColor("#ffffff"))
             val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.accessdarkcolor)
@@ -186,7 +185,7 @@ class LoginActivity : AppCompatActivity() {
             binding.edtPaassword.setBackgroundResource(R.drawable.textodark)
             binding.edtPaassword.setTextColor(Color.parseColor("#ffffff"))
             binding.btnNext.setBackgroundResource(R.drawable.degradadodark)
-            binding.btnNext.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnNext.setTextColor(Color.parseColor("#121212"))
         }
     }
 }

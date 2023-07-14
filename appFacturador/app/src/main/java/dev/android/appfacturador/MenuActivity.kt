@@ -47,20 +47,24 @@ class MenuActivity : AppCompatActivity() {
         binding.btnProducts.setOnClickListener {
             val intent = Intent(this, ProductActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         binding.btnClients.setOnClickListener {
             val intent = Intent(this, ClientActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         binding.btnBills.setOnClickListener {
             val intent = Intent(this, BillActivity::class.java)
             startActivity(intent)
+            finish()
         }
         binding.btnProfiles.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         val window = DisplayMetrics()

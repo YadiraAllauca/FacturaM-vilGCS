@@ -8,6 +8,7 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.text.Editable
@@ -17,6 +18,7 @@ import android.view.View
 import android.view.Window
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -298,6 +300,7 @@ class ProductActivity : AppCompatActivity() {
         shoppingCardActive()
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     @SuppressLint("ResourceAsColor", "ResourceType")
     fun darkMode () {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
@@ -305,7 +308,9 @@ class ProductActivity : AppCompatActivity() {
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
             // El modo actual es dark
             binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
+            binding.imgFull.setColorFilter(Color.parseColor("#ffffff"))
             binding.edtSearch.setBackgroundResource(R.drawable.searchdark)
+            binding.edtSearch.outlineSpotShadowColor = Color.parseColor("#ffffff")
             binding.btnShop.setColorFilter(Color.parseColor("#65696d"))
             binding.btnMicSearch.setColorFilter(ContextCompat.getColor(this, R.color.white))
             val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.scanner_dark)
@@ -315,5 +320,10 @@ class ProductActivity : AppCompatActivity() {
             binding.btnClose.setCardBackgroundColor(Color.parseColor("#65696d"))
             binding.btnCloses.setColorFilter(Color.parseColor("#202427"))
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
     }
 }

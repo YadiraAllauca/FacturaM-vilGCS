@@ -1,8 +1,12 @@
 package dev.android.appfacturador
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -14,6 +18,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -66,6 +71,7 @@ class AddProductActivity : AppCompatActivity() {
         initialize()
         setupActions()
         eventsMicro()
+        darkMode()
     }
 
     private fun eventsMicro() {
@@ -91,11 +97,11 @@ class AddProductActivity : AppCompatActivity() {
             val product = bundle.getSerializable(Constants.KEY_PRODUCT) as PRODUCTO
             id = product.id
             binding.btnAdd.text = "ACTUALIZAR"
-            binding.txtTittleRegister.text = "Editar producto"
+            binding.txtTitle.text = "Editar producto"
             binding.edtProduct.setText(product.nombre)
             binding.edtPrice.setText(product.precio.toString())
             binding.edtDiscount.setText(product.max_descuento.toString())
-            binding.edtCodigoBarras.setText(product.codigo_barras.toString())
+            binding.edtBarCode.setText(product.codigo_barras.toString())
             if (!product.imagen.isNullOrEmpty()) {
                 Glide.with(binding.root.context)
                     .load(product.imagen)
@@ -113,7 +119,7 @@ class AddProductActivity : AppCompatActivity() {
             binding.edtProduct.setText("")
             binding.edtPrice.setText("")
             binding.edtDiscount.setText("")
-            binding.edtCodigoBarras.setText("")
+            binding.edtBarCode.setText("")
             binding.imgProduct.setImageResource(load)
         }
         binding.edtProduct.requestFocus()
@@ -180,7 +186,7 @@ class AddProductActivity : AppCompatActivity() {
             val price = binding.edtPrice.text.toString()
             val iva = spinner.selectedItem.toString()
             val discount = binding.edtDiscount.text.toString()
-            val barcode = binding.edtCodigoBarras.text.toString()
+            val barcode = binding.edtBarCode.text.toString()
             var img = ""
 
             if (product.isEmpty() || price.isEmpty() || iva.isEmpty() || discount.isEmpty() || barcode.isEmpty() || (image == null && imageStorage.isEmpty())) {
@@ -322,10 +328,46 @@ class AddProductActivity : AppCompatActivity() {
                 Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show()
             } else {
                 codigoBarras = result.contents
-                binding.edtCodigoBarras.setText(result.contents)
+                binding.edtBarCode.setText(result.contents)
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    @SuppressLint("ResourceAsColor", "Range")
+    fun darkMode () {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            if (id == "") {
+                val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.loaddark)
+                binding.imgProduct.setImageDrawable(drawable)
+            }
+            binding.imgProduct.alpha = 0.6f
+            binding.btnEditImage.setCardBackgroundColor(Color.parseColor("#121212"))
+//            binding.btnCamera.setColorFilter(Color.parseColor("#65696d"))
+            binding.btnCamera.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnBack.setColorFilter(Color.parseColor("#ffffff"))
+            binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtProduct.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtPrice.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtIVA.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtDiscount.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtCode.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnMicProduct.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicPrice.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicDiscount.setColorFilter(Color.parseColor("#ffffff"))
+            val drawableScannr: Drawable? = ContextCompat.getDrawable(this, R.drawable.scanner_white)
+            binding.btnScanner.setImageDrawable(drawableScannr)
+            binding.edtProduct.setBackgroundResource(R.drawable.texto_info_dark)
+            binding.edtPrice.setBackgroundResource(R.drawable.texto_info_dark)
+            binding.edtDiscount.setBackgroundResource(R.drawable.texto_info_dark)
+            binding.edtBarCode.setBackgroundResource(R.drawable.texto_info_dark)
+            binding.btnAdd.setBackgroundResource(R.drawable.degradadodark)
+            binding.btnAdd.setTextColor(Color.parseColor("#121212"))
+            binding.btnImageProduct.setCardBackgroundColor(Color.parseColor("#121212"))
         }
     }
 }

@@ -4,9 +4,11 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -20,6 +22,7 @@ class ProductAdapter(var products: List<PRODUCTO> = emptyList()) :
 
     inner class ProductAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var binding: ItemProductBinding = ItemProductBinding.bind(itemView)
+        @RequiresApi(Build.VERSION_CODES.P)
         fun bind(product: PRODUCTO) = with(binding) {
             txtProduct.text = product.nombre
             txtPrice.text = "$" + product.precio.toString()
@@ -39,19 +42,20 @@ class ProductAdapter(var products: List<PRODUCTO> = emptyList()) :
             // Comprueba el modo actual
             if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
                 // El modo actual es dark
-                btnProductInfo.setCardBackgroundColor(Color.parseColor("#202427"))
-                btnEditProduct.setCardBackgroundColor(Color.parseColor("#202427"))
-                btnEdit.setColorFilter(Color.parseColor("#ffffff"))
+//                btnProductInfo.setCardBackgroundColor(Color.parseColor("#202427"))
+                btnProductInfo.setCardBackgroundColor(Color.parseColor("#121212"))
+//                cardProduct.outlineSpotShadowColor = Color.TRANSPARENT
                 txtProduct.setTextColor(Color.parseColor("#ffffff"))
                 txtPrice.setTextColor(Color.parseColor("#ffffff"))
                 btnDeleteProduct.setColorFilter(Color.parseColor("#ffffff"))
                 imgProduct.alpha = 0.6f
+                cardProduct.outlineSpotShadowColor = Color.parseColor("#ffffff")
             }
 
             btnDeleteProduct.setOnClickListener {
                 setOnClickListenerProductDelete(product)
             }
-            btnEditProduct.setOnClickListener {
+            root.setOnClickListener {
                 setOnClickListenerProductEdit(product)
             }
         }
@@ -65,6 +69,7 @@ class ProductAdapter(var products: List<PRODUCTO> = emptyList()) :
         return ProductAdapterViewHolder(view)
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: ProductAdapterViewHolder, position: Int) {
         val membership: PRODUCTO = products[position]
         holder.bind(membership)
@@ -77,15 +82,6 @@ class ProductAdapter(var products: List<PRODUCTO> = emptyList()) :
     fun updateListProducts(products: List<PRODUCTO>) {
         this.products = products
         notifyDataSetChanged()
-    }
-
-    fun darkModeProduct (resources: Resources) {
-        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        // Comprueba el modo actual
-        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
-            // El modo actual es dark
-
-        }
     }
 
 }
