@@ -7,7 +7,7 @@
     tools:context=".ProductActivity">
 
     <TextView
-        android:id="@+id/txtTittleRegister"
+        android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -24,13 +24,13 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/txtTittleRegister"
+        app:layout_constraintBottom_toBottomOf="@+id/txtTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txtTittleRegister"
+        app:layout_constraintTop_toTopOf="@+id/txtTitle"
         app:srcCompat="@drawable/ic_baseline_shopping_cart_24" />
 
     <EditText
-        android:id="@+id/edtBuscador"
+        android:id="@+id/edtSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -52,16 +52,16 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTittleRegister" />
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
 
     <ImageView
         android:id="@+id/btnMicSearch"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtBuscador"
-        app:layout_constraintStart_toEndOf="@+id/edtBuscador"
-        app:layout_constraintTop_toTopOf="@+id/edtBuscador"
+        app:layout_constraintBottom_toBottomOf="@+id/edtSearch"
+        app:layout_constraintStart_toEndOf="@+id/edtSearch"
+        app:layout_constraintTop_toTopOf="@+id/edtSearch"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
     <ImageView
@@ -69,9 +69,9 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtBuscador"
+        app:layout_constraintBottom_toBottomOf="@+id/edtSearch"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtBuscador"
+        app:layout_constraintTop_toTopOf="@+id/edtSearch"
         app:srcCompat="@drawable/scanner_black" />
 
     <androidx.cardview.widget.CardView
@@ -117,7 +117,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtBuscador"
+        app:layout_constraintTop_toBottomOf="@+id/edtSearch"
         app:spanCount="1"
         tools:listitem="@layout/item_product" />
 

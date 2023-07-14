@@ -14,7 +14,7 @@
         android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/btnFrequency"
+            android:id="@+id/btnProductInfo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:cardBackgroundColor="#fff"
@@ -61,7 +61,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    app:cardBackgroundColor="#EFEFEF"
+                    app:cardBackgroundColor="#000000"
                     app:cardCornerRadius="15dp"
                     app:cardElevation="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -104,7 +104,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <ImageView
-                    android:id="@+id/btnCamera"
+                    android:id="@+id/btnEdit"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     app:layout_constraintBottom_toBottomOf="@+id/btnEditProduct"
