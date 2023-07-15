@@ -3,6 +3,7 @@ package dev.android.appfacturador
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
@@ -17,6 +18,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
@@ -368,5 +370,25 @@ class AddProductActivity : AppCompatActivity() {
             binding.btnAdd.setTextColor(Color.parseColor("#121212"))
             binding.btnImageProduct.setCardBackgroundColor(Color.parseColor("#121212"))
         }
+    }
+
+    private fun showExitConfirmationDialog() {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setTitle("Advertencia")
+        alertDialogBuilder.setMessage("Todos los cambios se perderán. ¿Desea continuar?")
+        alertDialogBuilder.setPositiveButton("Salir") { dialogInterface: DialogInterface, _: Int ->
+            // Salir de la aplicación
+            finish()
+        }
+        alertDialogBuilder.setNegativeButton("Cancelar") { dialogInterface: DialogInterface, _: Int ->
+            // Cancelar la acción de salida
+            dialogInterface.dismiss()
+        }
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
+
+    override fun onBackPressed() {
+        showExitConfirmationDialog()
     }
 }
