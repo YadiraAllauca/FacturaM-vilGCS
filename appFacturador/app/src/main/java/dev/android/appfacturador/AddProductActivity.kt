@@ -104,8 +104,7 @@ class AddProductActivity : AppCompatActivity() {
             binding.edtBarCode.setText(product.codigo_barras.toString())
             if (!product.imagen.isNullOrEmpty()) {
                 Glide.with(binding.root.context)
-                    .load(product.imagen)
-                    .override(300, 300) // Establece el tamaño deseado
+                    .load(product.imagen) // Establece el tamaño deseado
                     .centerCrop()
                     .placeholder(R.drawable.load)
                     .into(binding.imgProduct)
