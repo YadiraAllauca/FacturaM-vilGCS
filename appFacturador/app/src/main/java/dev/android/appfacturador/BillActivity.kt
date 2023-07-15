@@ -75,6 +75,7 @@ class BillActivity : AppCompatActivity() {
         })
 
         setupActions()
+        binding.btnAddBill.imageTintList = ColorStateList.valueOf(Color.parseColor("#ffffff"))
 
     }
 

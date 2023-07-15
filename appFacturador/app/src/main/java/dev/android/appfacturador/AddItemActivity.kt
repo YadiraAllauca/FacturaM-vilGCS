@@ -2,6 +2,7 @@ package dev.android.appfacturador
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -48,6 +49,7 @@ class AddItemActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         searchEditText = binding.edtBuscador
+        binding.btnAddItems.imageTintList = ColorStateList.valueOf(Color.parseColor("#ffffff"))
 
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
