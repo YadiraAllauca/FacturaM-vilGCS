@@ -53,6 +53,7 @@ class ClientAdapter(var clients: List<CLIENTE> = emptyList()) :
         return ClientAdapterViewHolder(view)
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: ClientAdapterViewHolder, position: Int) {
         val membership: CLIENTE = clients[position]
         holder.bind(membership)
