@@ -1,7 +1,11 @@
 package dev.android.appfacturador
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -10,6 +14,7 @@ import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -52,6 +57,7 @@ class AddClientActivity : AppCompatActivity() {
         email = sharedPreferences.getString("email", "").toString()
         getShop()
         events()
+        darkMode()
     }
 
     private fun initialize() {
@@ -63,7 +69,7 @@ class AddClientActivity : AppCompatActivity() {
         bundle?.let {
             val client = it.getSerializable(KEY_CLIENT) as CLIENTE
             id = client.id
-            binding.textView8.text =
+            binding.txtInitials.text =
                 client.primer_nombre.first().toString() + client.apellido_paterno.first().toString()
             binding.btnAdd.text = "ACTUALIZAR"
             binding.edtNameClient.setText(client.primer_nombre + " " + client.segundo_nombre)
@@ -285,5 +291,38 @@ class AddClientActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("ResourceAsColor", "Range")
+    fun darkMode () {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            binding.btnNewClient.setCardBackgroundColor(Color.parseColor("#47484a"))
+            binding.txtInitials.setTextColor(Color.parseColor("#121212"))
+            binding.btnBack.setColorFilter(Color.parseColor("#ffffff"))
+            binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtClientName.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtLastClientName.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtDNI.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtDNINumber.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtEmail.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtPhone.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtAddress.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnMicClientNames.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicClientLastNames.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicIDNumber.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicEmail.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicPhoneNumber.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicAddres.setColorFilter(Color.parseColor("#ffffff"))
+            binding.edtNameClient.setBackgroundResource(R.drawable.texto_info_dark)
+            binding.edtLastNameClient.setBackgroundResource(R.drawable.texto_info_dark)
+            binding.edtNumDNI.setBackgroundResource(R.drawable.texto_info_dark)
+            binding.edtEmailClient.setBackgroundResource(R.drawable.texto_info_dark)
+            binding.edtPhoneClient.setBackgroundResource(R.drawable.texto_info_dark)
+            binding.edtAddressClient.setBackgroundResource(R.drawable.texto_info_dark)
+            binding.btnAdd.setBackgroundResource(R.drawable.degradadodark)
+            binding.btnAdd.setTextColor(Color.parseColor("#121212"))
+        }
+    }
 
 }
