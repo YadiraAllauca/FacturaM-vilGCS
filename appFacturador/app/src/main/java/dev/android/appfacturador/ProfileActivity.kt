@@ -54,10 +54,6 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        //obtener email de usuario
-//        val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
-//        val email = sharedPreferences.getString("email", "")
-//        Toast.makeText(this, "Valor del email: $email", Toast.LENGTH_SHORT).show()
         cerrarSesion()
     }
 
