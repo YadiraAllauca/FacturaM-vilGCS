@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -14,7 +13,6 @@ import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -314,13 +312,13 @@ class AddClientActivity : AppCompatActivity() {
             binding.btnMicEmail.setColorFilter(Color.parseColor("#ffffff"))
             binding.btnMicPhoneNumber.setColorFilter(Color.parseColor("#ffffff"))
             binding.btnMicAddres.setColorFilter(Color.parseColor("#ffffff"))
-            binding.edtNameClient.setBackgroundResource(R.drawable.texto_info_dark)
-            binding.edtLastNameClient.setBackgroundResource(R.drawable.texto_info_dark)
-            binding.edtNumDNI.setBackgroundResource(R.drawable.texto_info_dark)
-            binding.edtEmailClient.setBackgroundResource(R.drawable.texto_info_dark)
-            binding.edtPhoneClient.setBackgroundResource(R.drawable.texto_info_dark)
-            binding.edtAddressClient.setBackgroundResource(R.drawable.texto_info_dark)
-            binding.btnAdd.setBackgroundResource(R.drawable.degradadodark)
+            binding.edtNameClient.setBackgroundResource(R.drawable.text_info_dark)
+            binding.edtLastNameClient.setBackgroundResource(R.drawable.text_info_dark)
+            binding.edtNumDNI.setBackgroundResource(R.drawable.text_info_dark)
+            binding.edtEmailClient.setBackgroundResource(R.drawable.text_info_dark)
+            binding.edtPhoneClient.setBackgroundResource(R.drawable.text_info_dark)
+            binding.edtAddressClient.setBackgroundResource(R.drawable.text_info_dark)
+            binding.btnAdd.setBackgroundResource(R.drawable.gradientdark)
             binding.btnAdd.setTextColor(Color.parseColor("#121212"))
         }
     }
