@@ -51,6 +51,7 @@ class BillDetailActivity : AppCompatActivity() {
 
             if (bill.estado.equals("-1")){
                 binding.btnCancelBill.isEnabled = false
+                binding.btnCancelBill.text = "FACTURA ANULADA"
             }
 
         }
