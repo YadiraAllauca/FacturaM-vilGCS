@@ -39,7 +39,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/txtClienteName"
+        android:id="@+id/txtClientName"
         android:layout_width="wrap_content"
         android:layout_height="22dp"
         android:layout_marginStart="30dp"
@@ -49,10 +49,10 @@
         android:textColor="#000000"
         android:textSize="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtNumeroIdentificacion" />
+        app:layout_constraintTop_toBottomOf="@+id/edtID" />
 
     <TextView
-        android:id="@+id/txtClienteEmail"
+        android:id="@+id/txtClientEmail"
         android:layout_width="wrap_content"
         android:layout_height="22dp"
         android:layout_marginStart="30dp"
@@ -61,10 +61,10 @@
         android:textColor="#A8A8A8"
         android:textSize="14dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtClienteName" />
+        app:layout_constraintTop_toBottomOf="@+id/txtClientName" />
 
     <TextView
-        android:id="@+id/txtProduct4"
+        android:id="@+id/txtDetail"
         android:layout_width="0dp"
         android:layout_height="22dp"
         android:layout_marginStart="30dp"
@@ -75,7 +75,7 @@
         android:textColor="#A8A8A8"
         android:textSize="14dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view6" />
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <TextView
         android:id="@+id/txtProduct5"
@@ -91,7 +91,7 @@
 
     <TextView
         android:id="@+id/txtSubtotal"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="22dp"
         android:layout_marginEnd="30dp"
         android:fontFamily="@font/roboto_bold"
@@ -105,36 +105,33 @@
         android:id="@+id/txtTotalBill"
         android:layout_width="wrap_content"
         android:layout_height="22dp"
-        android:layout_marginEnd="30dp"
         android:fontFamily="@font/roboto_bold"
         android:text="$00.00"
         android:textColor="#577FF9"
         android:textSize="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/txtSubtotal"
         app:layout_constraintTop_toBottomOf="@+id/spinnerPay" />
 
     <TextView
         android:id="@+id/txtIva"
         android:layout_width="wrap_content"
         android:layout_height="22dp"
-        android:layout_marginEnd="30dp"
         android:fontFamily="@font/roboto_bold"
         android:text="0"
         android:textColor="#000000"
         android:textSize="14dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/txtSubtotal"
         app:layout_constraintTop_toBottomOf="@+id/txtSubtotal" />
 
     <TextView
         android:id="@+id/txtDiscount"
         android:layout_width="wrap_content"
         android:layout_height="22dp"
-        android:layout_marginEnd="30dp"
         android:fontFamily="@font/roboto_bold"
         android:text="0"
         android:textColor="#000000"
         android:textSize="14dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/txtSubtotal"
         app:layout_constraintTop_toBottomOf="@+id/txtIva" />
 
     <TextView
@@ -198,7 +195,7 @@
         app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
 
     <EditText
-        android:id="@+id/edtNumeroIdentificacion"
+        android:id="@+id/edtID"
         android:layout_width="0dp"
         android:layout_height="51dp"
         android:layout_marginStart="30dp"
@@ -224,20 +221,20 @@
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginEnd="35dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtNumeroIdentificacion"
+        app:layout_constraintBottom_toBottomOf="@+id/edtID"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtNumeroIdentificacion"
+        app:layout_constraintTop_toTopOf="@+id/edtID"
         app:srcCompat="@drawable/ic_baseline_add_circle_24" />
 
     <View
-        android:id="@+id/view6"
+        android:id="@+id/divider"
         android:layout_width="wrap_content"
         android:layout_height="5dp"
         android:layout_marginTop="10dp"
         android:background="#F1F1F1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtClienteEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/txtClientEmail" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvProducts"
@@ -253,7 +250,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtProduct4"
+        app:layout_constraintTop_toBottomOf="@+id/txtDetail"
         app:spanCount="1"
         tools:itemCount="5"
         tools:listitem="@layout/item_bill_products" />

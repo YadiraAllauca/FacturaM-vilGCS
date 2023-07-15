@@ -1,5 +1,7 @@
 package dev.android.appfacturador
 
+import android.content.res.Configuration
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +22,19 @@ class ProductBillAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
             val product = productItem.product
             val quantity = productItem.quantity
             val discount = productItem.discount
+
+            val resources = root.resources
+            val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            // Comprueba el modo actual
+            if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+                // El modo actual es dark
+                btnProductInfo.setCardBackgroundColor(Color.parseColor("#121212"))
+                txtProductNameBill.setTextColor(Color.parseColor("#ffffff"))
+                txtTotal.setTextColor(Color.parseColor("#ffffff"))
+                edtAmount.setBackgroundResource(R.drawable.text_info_dark)
+                edtDiscount.setBackgroundResource(R.drawable.text_info_dark)
+                cardProduct.setCardBackgroundColor(Color.TRANSPARENT)
+            }
 
             binding.edtAmount.isEnabled = areFieldsEnabled
             binding.edtDiscount.isEnabled = areFieldsEnabled

@@ -1,8 +1,10 @@
 package dev.android.appfacturador
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -68,6 +70,7 @@ class AddBillActivity : AppCompatActivity() {
 
         // Configurar listeners
         setupActions()
+        darkMode()
     }
 
     private fun initViews() {
@@ -85,7 +88,7 @@ class AddBillActivity : AppCompatActivity() {
     }
 
     private fun setupActions() {
-        searchClienteEditText = binding.edtNumeroIdentificacion
+        searchClienteEditText = binding.edtID
         searchClienteEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -180,19 +183,20 @@ class AddBillActivity : AppCompatActivity() {
                             val cliente = childSnapshot.getValue(CLIENTE::class.java)
                             if (cliente != null) {
                                 clienteEncontrado = cliente
-                                binding.edtNumeroIdentificacion.setTextColor(Color.BLACK)
-                                binding.txtClienteName.text = cliente.primer_nombre+" "+cliente.apellido_paterno
-                                binding.txtClienteName.setTextColor(Color.BLACK)
-                                binding.txtClienteEmail.text = cliente.correo_electronico
-                                binding.txtClienteEmail.setTextColor(Color.BLACK)
+                                binding.edtID.setTextColor(Color.BLACK)
+                                binding.txtClientName.text = cliente.primer_nombre+" "+cliente.apellido_paterno
+                                binding.txtClientName.setTextColor(Color.BLACK)
+                                binding.txtClientEmail.text = cliente.correo_electronico
+                                binding.txtClientEmail.setTextColor(Color.BLACK)
+                                darkMode()
                             }
                         }
                     } else {
-                        binding.edtNumeroIdentificacion.setTextColor(Color.RED)
-                        binding.txtClienteName.text = "Cliente no Identificado"
-                        binding.txtClienteName.setTextColor(Color.RED)
-                        binding.txtClienteEmail.text = "---"
-                        binding.txtClienteEmail.setTextColor(Color.RED)
+                        binding.edtID.setTextColor(Color.RED)
+                        binding.txtClientName.text = "Cliente no Identificado"
+                        binding.txtClientName.setTextColor(Color.RED)
+                        binding.txtClientEmail.text = "---"
+                        binding.txtClientEmail.setTextColor(Color.RED)
                     }
                 }
 
@@ -339,6 +343,30 @@ class AddBillActivity : AppCompatActivity() {
 
     private fun calculateTotalBill(): Float {
         return calculateSubtotal() + calculateTotalIVA() - calculateTotalDiscount()
+    }
+
+    @SuppressLint("ResourceAsColor", "Range")
+    fun darkMode () {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            binding.btnBack.setColorFilter(Color.parseColor("#ffffff"))
+            binding.edtID.setTextColor(Color.parseColor("#ffffff"))
+            binding.edtID.setBackgroundResource(R.drawable.textdark)
+            binding.btnAddClient.setColorFilter(Color.parseColor("#47484a"))
+            binding.txtClientName.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtClientEmail.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnAddItem.setTextColor(Color.parseColor("#121212"))
+            binding.btnAddItem.setBackgroundResource(R.drawable.gradientdark)
+            binding.txtSubtotal.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtIva.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtDiscount.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtTotalBill.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnGenerateBill.setBackgroundResource(R.drawable.textdark)
+            binding.btnGenerateBill.setTextColor(Color.parseColor("#ffffff"))
+            binding.divider.setBackgroundColor(Color.parseColor("#242424"))
+        }
     }
 
     private fun showExitConfirmationDialog() {
