@@ -47,6 +47,8 @@ class BillActivity : AppCompatActivity() {
     private val dr = fb.getReference("Factura")
     private var filter = ""
     private var bundle: Bundle? = null
+    var filteredList: List<FACTURA> = emptyList()
+    private var stateButton = ""
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +60,7 @@ class BillActivity : AppCompatActivity() {
 
         searchEditText = binding.edtSearch
         bundle = intent.extras
+        filter = bundle?.getString("filter").toString()
         binding.txtResult.visibility = View.GONE
 
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
@@ -71,25 +74,22 @@ class BillActivity : AppCompatActivity() {
         setupViews()
         darkMode()
 
+        setupActions()
+        binding.btnAddBill.imageTintList = ColorStateList.valueOf(Color.parseColor("#ffffff"))
+
+        filterResult("", stateButton)
+        typing()
+    }
+
+    fun typing () {
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val searchTerm = s.toString().trim()
-                val filteredList = list.filter { factura ->
-                    factura.numero_factura.contains(searchTerm, ignoreCase = true)
-                }
-                adapter.updateListbills(filteredList)
-                if (adapter.bills.isEmpty()) {
-                    binding.txtResult.visibility = View.VISIBLE
-                    binding.txtResult.text = "¡No hay resultados con ese número de factura!"
-                }
+                filterResult(searchTerm, stateButton)
             }
             override fun afterTextChanged(s: Editable?) {}
         })
-
-        setupActions()
-        binding.btnAddBill.imageTintList = ColorStateList.valueOf(Color.parseColor("#ffffff"))
-
     }
 
     private fun getShop() {
@@ -168,6 +168,7 @@ class BillActivity : AppCompatActivity() {
             binding.btnAllBills.setTextColor(Color.parseColor("#ffffff"))
             buttonsDarkMode(binding.btnAllBills, binding.btnCanceledBills)
             adapter.updateListbills(list)
+            stateButton = ""
         }
 
         binding.btnCanceledBills.setOnClickListener {
@@ -178,6 +179,7 @@ class BillActivity : AppCompatActivity() {
             buttonsDarkMode(binding.btnCanceledBills, binding.btnAllBills)
             val anuladasList = list.filter { factura -> factura.estado == "-1" }
             adapter.updateListbills(anuladasList)
+            stateButton = "-1"
         }
     }
 
@@ -201,62 +203,49 @@ class BillActivity : AppCompatActivity() {
         dr.addValueEventListener(listen)
     }
 
-//    fun updateBillList(searchTerm: String) {
-//        val filteredList = list.filter { factura ->
-//            factura.numero_factura.contains(searchTerm, ignoreCase = true) ||
-//                    factura.cliente?.numero_dni?.contains(searchTerm, ignoreCase = true) == true ||
-//                    factura.fecha.contains(searchTerm, ignoreCase = true)
-//        }
-//        adapter.updateListbills(filteredList)
-//    }
-
     companion object {
         const val REQUEST_CODE = 1 // Código de solicitud, puedes elegir cualquier número entero
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
+        filter = data?.getStringExtra("filter").toString()
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            val extraValue = data?.getStringExtra("filter")
-            var filteredList: List<FACTURA> = emptyList()
-            binding.edtSearch.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val searchTerm = s.toString().trim()
-                    if (extraValue != null && extraValue == "number") {
-                        filteredList = list.filter { factura ->
-                            factura.numero_factura.contains(searchTerm, ignoreCase = true)
-                        }
-                        if (filteredList.isEmpty()) {
-                            binding.txtResult.visibility = View.VISIBLE
-                            binding.txtResult.text = "¡No hay resultados con ese número de factura!"
-                        }
-                    }
-                    if (extraValue != null && extraValue == "date") {
-                        filteredList = list.filter { factura ->
-                            factura.fecha.contains(searchTerm, ignoreCase = true)
-                        }
-                        if (filteredList.isEmpty()) {
-                            binding.txtResult.visibility = View.VISIBLE
-                            binding.txtResult.text = "¡No hay resultados con esa fecha!"
-                        }
-                    }
-                    if (extraValue != null && extraValue == "id") {
-                        filteredList = list.filter { factura ->
-                            factura.cliente?.numero_dni?.contains(searchTerm, ignoreCase = true) == true
-                        }
-                        if (filteredList.isEmpty()) {
-                            binding.txtResult.visibility = View.VISIBLE
-                            binding.txtResult.text = "¡No hay resultados con ese número de identificación!"
-                        }
-                    }
-                    adapter.updateListbills(filteredList)
-                }
-
-                override fun afterTextChanged(s: Editable?) {}
-            })
+            typing()
         }
+    }
+
+    fun filterResult(searchTerm: String, state: String) {
+        var message = ""
+        if (filter != null) {
+            if (filter == "id") {
+                filteredList = list.filter { factura ->
+                    factura.cliente?.numero_dni?.contains(
+                        searchTerm,
+                        ignoreCase = true
+                    ) == true && factura.estado.contains(state)
+                }
+                message = "¡No hay resultados con clientes que tengan ese número de identificación"
+            } else if (filter == "date") {
+                filteredList = list.filter { factura ->
+                    factura.fecha.contains(searchTerm, ignoreCase = true) && factura.estado.contains(state)
+                }
+                message = "¡No hay resultados de fechas creadas en esa fecha!"
+            } else {
+                filteredList = list.filter { factura ->
+                    factura.numero_factura.contains(
+                        searchTerm,
+                        ignoreCase = true
+                    ) && factura.estado.contains(state)
+                }
+                message = "¡No hay resultados con es número de factura!"
+            }
+        }
+        if (filteredList.isEmpty()) {
+            binding.txtResult.visibility = View.VISIBLE
+            binding.txtResult.text = message
+        }
+        adapter.updateListbills(filteredList)
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -292,12 +281,6 @@ class BillActivity : AppCompatActivity() {
             buttonClicked.background = getDrawable(R.drawable.gradientdarkwhite)
             buttonClicked.setTextColor(Color.parseColor("#121212"))
         }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onRestart() {
-        super.onRestart()
-        filter = bundle?.getString("filter").toString()
     }
 
     override fun onBackPressed() {
