@@ -154,6 +154,7 @@ class AddItemActivity : AppCompatActivity() {
         binding.btnAddItems.setOnClickListener {
             val intent = Intent(this, AddBillActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         binding.btnMicSearch.setOnClickListener {
@@ -224,5 +225,8 @@ class AddItemActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onBackPressed() {
     }
 }

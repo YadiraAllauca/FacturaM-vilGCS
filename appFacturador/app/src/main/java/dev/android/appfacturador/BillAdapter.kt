@@ -52,6 +52,7 @@ class BillAdapter(var bills: List<FACTURA> = emptyList()) :
         return BillAdapterViewHolder(view)
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: BillAdapterViewHolder, position: Int) {
         val membership: FACTURA = bills[position]
         holder.bind(membership)
