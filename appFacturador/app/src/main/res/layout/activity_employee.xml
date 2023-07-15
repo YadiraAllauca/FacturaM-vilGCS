@@ -7,7 +7,7 @@
     tools:context=".EmployeeActivity">
 
     <TextView
-        android:id="@+id/txtTittleRegister"
+        android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -24,9 +24,9 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/txtTittleRegister"
+        app:layout_constraintBottom_toBottomOf="@+id/txtTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txtTittleRegister"
+        app:layout_constraintTop_toTopOf="@+id/txtTitle"
         app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
 
     <EditText
@@ -52,7 +52,7 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toStartOf="@+id/btnMicSearch"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTittleRegister" />
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
 
     <ImageView
         android:id="@+id/btnMicSearch"
