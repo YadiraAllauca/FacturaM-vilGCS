@@ -1,6 +1,7 @@
 package dev.android.appfacturador
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -12,6 +13,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
@@ -43,6 +45,8 @@ class BillActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private val fb = Firebase.database
     private val dr = fb.getReference("Factura")
+    private var filter = ""
+    private var bundle: Bundle? = null
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +57,8 @@ class BillActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         searchEditText = binding.edtSearch
+        bundle = intent.extras
+        binding.txtResult.visibility = View.GONE
 
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
@@ -69,7 +75,14 @@ class BillActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val searchTerm = s.toString().trim()
-                updateBillList(searchTerm)
+                val filteredList = list.filter { factura ->
+                    factura.numero_factura.contains(searchTerm, ignoreCase = true)
+                }
+                adapter.updateListbills(filteredList)
+                if (adapter.bills.isEmpty()) {
+                    binding.txtResult.visibility = View.VISIBLE
+                    binding.txtResult.text = "¡No hay resultados con ese número de factura!"
+                }
             }
             override fun afterTextChanged(s: Editable?) {}
         })
@@ -128,7 +141,7 @@ class BillActivity : AppCompatActivity() {
     fun setupActions(){
         binding.btnFilters.setOnClickListener {
             val intent = Intent(this, FilterBillActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE)
         }
 
         binding.btnCloses.setOnClickListener {
@@ -188,13 +201,62 @@ class BillActivity : AppCompatActivity() {
         dr.addValueEventListener(listen)
     }
 
-    fun updateBillList(searchTerm: String) {
-        val filteredList = list.filter { factura ->
-            factura.numero_factura.contains(searchTerm, ignoreCase = true) ||
-                    factura.cliente?.numero_dni?.contains(searchTerm, ignoreCase = true) == true ||
-                    factura.fecha.contains(searchTerm, ignoreCase = true)
+//    fun updateBillList(searchTerm: String) {
+//        val filteredList = list.filter { factura ->
+//            factura.numero_factura.contains(searchTerm, ignoreCase = true) ||
+//                    factura.cliente?.numero_dni?.contains(searchTerm, ignoreCase = true) == true ||
+//                    factura.fecha.contains(searchTerm, ignoreCase = true)
+//        }
+//        adapter.updateListbills(filteredList)
+//    }
+
+    companion object {
+        const val REQUEST_CODE = 1 // Código de solicitud, puedes elegir cualquier número entero
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val extraValue = data?.getStringExtra("filter")
+            var filteredList: List<FACTURA> = emptyList()
+            binding.edtSearch.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val searchTerm = s.toString().trim()
+                    if (extraValue != null && extraValue == "number") {
+                        filteredList = list.filter { factura ->
+                            factura.numero_factura.contains(searchTerm, ignoreCase = true)
+                        }
+                        if (filteredList.isEmpty()) {
+                            binding.txtResult.visibility = View.VISIBLE
+                            binding.txtResult.text = "¡No hay resultados con ese número de factura!"
+                        }
+                    }
+                    if (extraValue != null && extraValue == "date") {
+                        filteredList = list.filter { factura ->
+                            factura.fecha.contains(searchTerm, ignoreCase = true)
+                        }
+                        if (filteredList.isEmpty()) {
+                            binding.txtResult.visibility = View.VISIBLE
+                            binding.txtResult.text = "¡No hay resultados con esa fecha!"
+                        }
+                    }
+                    if (extraValue != null && extraValue == "id") {
+                        filteredList = list.filter { factura ->
+                            factura.cliente?.numero_dni?.contains(searchTerm, ignoreCase = true) == true
+                        }
+                        if (filteredList.isEmpty()) {
+                            binding.txtResult.visibility = View.VISIBLE
+                            binding.txtResult.text = "¡No hay resultados con ese número de identificación!"
+                        }
+                    }
+                    adapter.updateListbills(filteredList)
+                }
+
+                override fun afterTextChanged(s: Editable?) {}
+            })
         }
-        adapter.updateListbills(filteredList)
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -230,6 +292,12 @@ class BillActivity : AppCompatActivity() {
             buttonClicked.background = getDrawable(R.drawable.gradientdarkwhite)
             buttonClicked.setTextColor(Color.parseColor("#121212"))
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onRestart() {
+        super.onRestart()
+        filter = bundle?.getString("filter").toString()
     }
 
     override fun onBackPressed() {
