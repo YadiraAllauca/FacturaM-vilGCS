@@ -89,6 +89,7 @@ class ShopActivity : AppCompatActivity()  {
         binding.btnBill.setOnClickListener {
             val intent = Intent(this, AddBillActivity::class.java).apply {}
             startActivity(intent)
+            finish()
         }
     }
 

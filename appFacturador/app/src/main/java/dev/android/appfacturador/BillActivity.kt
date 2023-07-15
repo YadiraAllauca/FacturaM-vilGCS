@@ -185,8 +185,6 @@ class BillActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        finishAffinity()
     }
 
 }

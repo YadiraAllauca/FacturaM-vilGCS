@@ -14,7 +14,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView27"
+            android:id="@+id/txtSignName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -44,7 +44,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/imgBus"
+                    android:id="@+id/imgSign"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
@@ -75,7 +75,7 @@
             android:layout_height="50dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView27"
+            app:layout_constraintTop_toBottomOf="@+id/txtSignName"
             tools:ignore="MissingConstraints" />
 
         <androidx.cardview.widget.CardView
