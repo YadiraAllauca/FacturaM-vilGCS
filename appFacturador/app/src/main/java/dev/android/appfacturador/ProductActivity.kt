@@ -73,6 +73,7 @@ class ProductActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         searchEditText = binding.edtSearch
+        binding.btnAddProduct.imageTintList = ColorStateList.valueOf(Color.parseColor("#ffffff"))
 
         //usuario y negocio actual
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)

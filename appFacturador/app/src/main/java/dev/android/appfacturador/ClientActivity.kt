@@ -62,6 +62,7 @@ class ClientActivity : AppCompatActivity() {
         recyclerView = binding.rvClients
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
+        binding.btnAddClient.imageTintList = ColorStateList.valueOf(Color.parseColor("#ffffff"))
 
     }
 
