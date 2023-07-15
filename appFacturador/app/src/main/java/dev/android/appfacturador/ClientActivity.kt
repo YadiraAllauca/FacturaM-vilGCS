@@ -212,6 +212,7 @@ class ClientActivity : AppCompatActivity() {
             // El modo actual es dark
             binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
             binding.edtSearchClient.setBackgroundResource(R.drawable.searchdark)
+            binding.edtSearchClient.setTextColor(Color.parseColor("#ffffff"))
             binding.edtSearchClient.outlineSpotShadowColor = Color.parseColor("#ffffff")
             binding.btnMicSearch.setColorFilter(Color.parseColor("#47484a"))
             binding.btnAddClient.imageTintList = ColorStateList.valueOf(Color.parseColor("#121212"))

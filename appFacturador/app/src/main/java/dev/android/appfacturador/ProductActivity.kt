@@ -311,6 +311,7 @@ class ProductActivity : AppCompatActivity() {
             binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
             binding.imgFull.setColorFilter(Color.parseColor("#47484a"))
             binding.edtSearch.setBackgroundResource(R.drawable.searchdark)
+            binding.edtSearch.setTextColor(Color.parseColor("#ffffff"))
             binding.edtSearch.outlineSpotShadowColor = Color.parseColor("#ffffff")
             binding.btnShop.setColorFilter(Color.parseColor("#ffffff"))
             binding.btnMicSearch.setColorFilter(Color.parseColor("#47484a"))

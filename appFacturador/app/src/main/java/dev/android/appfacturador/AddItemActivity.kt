@@ -129,21 +129,21 @@ class AddItemActivity : AppCompatActivity() {
             initScanner()
         }
 
-        binding.btnAddedProducts.background = getDrawable(R.drawable.degradado2)
+        binding.btnAddedProducts.background = getDrawable(R.drawable.gradienttwo)
         binding.btnAddedProducts.setTextColor(Color.parseColor("#686868"))
 
         binding.btnAllProducts.setOnClickListener {
-            binding.btnAddedProducts.background = getDrawable(R.drawable.degradado2)
+            binding.btnAddedProducts.background = getDrawable(R.drawable.gradienttwo)
             binding.btnAddedProducts.setTextColor(Color.parseColor("#686868"))
-            binding.btnAllProducts.background = getDrawable(R.drawable.degradado)
+            binding.btnAllProducts.background = getDrawable(R.drawable.gradient)
             binding.btnAllProducts.setTextColor(Color.parseColor("#ffffff"))
             adapter.updateListProducts(list)
         }
 
         binding.btnAddedProducts.setOnClickListener {
-            binding.btnAddedProducts.background = getDrawable(R.drawable.degradado)
+            binding.btnAddedProducts.background = getDrawable(R.drawable.gradient)
             binding.btnAddedProducts.setTextColor(Color.parseColor("#ffffff"))
-            binding.btnAllProducts.background = getDrawable(R.drawable.degradado2)
+            binding.btnAllProducts.background = getDrawable(R.drawable.gradienttwo)
             binding.btnAllProducts.setTextColor(Color.parseColor("#686868"))
 
             val selectedProducts = ProductHolder.productList.mapNotNull { it.product }

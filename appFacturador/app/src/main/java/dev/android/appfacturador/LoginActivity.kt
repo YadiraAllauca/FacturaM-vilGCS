@@ -5,7 +5,6 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -185,11 +184,11 @@ class LoginActivity : AppCompatActivity() {
             binding.txtLogin.setTextColor(Color.parseColor("#ffffff"))
             val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.accessdarkcolor)
             binding.imageView2.setImageDrawable(drawable)
-            binding.edtEmail.setBackgroundResource(R.drawable.textodark)
+            binding.edtEmail.setBackgroundResource(R.drawable.textdark)
             binding.edtEmail.setTextColor(Color.parseColor("#ffffff"))
-            binding.edtPaassword.setBackgroundResource(R.drawable.textodark)
+            binding.edtPaassword.setBackgroundResource(R.drawable.textdark)
             binding.edtPaassword.setTextColor(Color.parseColor("#ffffff"))
-            binding.btnNext.setBackgroundResource(R.drawable.degradadodark)
+            binding.btnNext.setBackgroundResource(R.drawable.gradientdark)
             binding.btnNext.setTextColor(Color.parseColor("#121212"))
         }
     }
