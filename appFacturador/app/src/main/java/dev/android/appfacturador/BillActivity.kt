@@ -177,9 +177,8 @@ class BillActivity : AppCompatActivity() {
             binding.btnAllBills.background = getDrawable(R.drawable.gradienttwo)
             binding.btnAllBills.setTextColor(Color.parseColor("#686868"))
             buttonsDarkMode(binding.btnCanceledBills, binding.btnAllBills)
-            val anuladasList = list.filter { factura -> factura.estado == "-1" }
-            adapter.updateListbills(anuladasList)
             stateButton = "-1"
+            filterResult("", stateButton)
         }
     }
 
