@@ -184,4 +184,9 @@ class BillActivity : AppCompatActivity() {
         adapter.updateListbills(filteredList)
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
+    }
+
 }
