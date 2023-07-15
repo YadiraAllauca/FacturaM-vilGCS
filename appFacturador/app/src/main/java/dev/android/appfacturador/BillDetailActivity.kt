@@ -6,10 +6,8 @@ import android.os.Bundle
 import android.view.Window
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import dev.android.appfacturador.ProductHolder.productList
 import dev.android.appfacturador.databinding.ActivityBillDetailBinding
 import dev.android.appfacturador.model.FACTURA
-import dev.android.appfacturador.model.PRODUCTO
 import dev.android.appfacturador.utils.Constants
 
 class BillDetailActivity : AppCompatActivity() {
@@ -34,7 +32,7 @@ class BillDetailActivity : AppCompatActivity() {
 
         initialize()
         loadData()
-        actions()
+        setupActions()
     }
 
     fun initialize(){
@@ -50,6 +48,12 @@ class BillDetailActivity : AppCompatActivity() {
             binding.txtDiscount.text = "$"+String.format("%.2f", bill.descuento)
             binding.spinnerPay.text = bill.forma_pago
             binding.txtTotalBill.text = "$"+String.format("%.2f", bill.total)
+
+            if (bill.estado.equals("-1")){
+                binding.btnCancelBill.isEnabled = false
+                binding.btnCancelBill.text = "FACTURA ANULADA"
+            }
+
         }
     }
 
@@ -65,9 +69,21 @@ class BillDetailActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    fun actions(){
+    fun setupActions(){
+        val bundle = intent.extras
+
         binding.btnBack.setOnClickListener {
             finish()
+        }
+
+        binding.btnCancelBill.setOnClickListener {
+            val intent =
+                bundle?.let { it ->
+                    Intent(applicationContext, CreditNoteActivity::class.java).putExtras(
+                        it
+                    )
+                }
+            startActivity(intent)
         }
     }
 }

@@ -150,7 +150,7 @@ class BillActivity : AppCompatActivity() {
             binding.btnCanceledBills.setTextColor(Color.parseColor("#ffffff"))
             binding.btnAllBills.background = getDrawable(R.drawable.degradado2)
             binding.btnAllBills.setTextColor(Color.parseColor("#686868"))
-            val anuladasList = list.filter { factura -> factura.estado == "Anuladas" }
+            val anuladasList = list.filter { factura -> factura.estado == "-1" }
             adapter.updateListbills(anuladasList)
         }
     }
