@@ -1,13 +1,20 @@
 package dev.android.appfacturador
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dev.android.appfacturador.ProductHolder.productList
@@ -24,6 +31,7 @@ class ShopActivity : AppCompatActivity()  {
     private lateinit var recyclerView: RecyclerView
     private var total: Float = 0f
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityShopBinding.inflate(layoutInflater)
@@ -35,6 +43,7 @@ class ShopActivity : AppCompatActivity()  {
         initialize()
         loadData()
         actions()
+        darkMode()
     }
 
     private fun initialize() {
@@ -77,7 +86,7 @@ class ShopActivity : AppCompatActivity()  {
             updateTotalShop()
         }
 
-        binding.btnFacturar.setOnClickListener {
+        binding.btnBill.setOnClickListener {
             val intent = Intent(this, AddBillActivity::class.java).apply {}
             startActivity(intent)
         }
@@ -86,6 +95,24 @@ class ShopActivity : AppCompatActivity()  {
     fun updateTotalShop(){
         total = ProductHolder.productList.sumByDouble { ((it.product?.precio ?: 0f) * it.quantity).toDouble() }.toFloat()
         adapter.notifyDataSetChanged()
-        binding.txtTotalCarrito.text = "$" + String.format("%.2f", total)
+        binding.txtTotalShop.text = "$" + String.format("%.2f", total)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    @SuppressLint("ResourceAsColor", "Range")
+    fun darkMode () {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            binding.btnContainerTotal.setCardBackgroundColor(Color.parseColor("#121212"))
+            binding.btnContainerTotal.outlineSpotShadowColor = Color.parseColor("#ffffff")
+            binding.btnBill.setBackgroundResource(R.drawable.degradadodark)
+            binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnBack.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnClear.setColorFilter(Color.parseColor("#ffffff"))
+            binding.txtTotal.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtTotalShop.setTextColor(Color.parseColor("#ffffff"))
+        }
     }
 }

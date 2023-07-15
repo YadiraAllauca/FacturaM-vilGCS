@@ -1,8 +1,12 @@
 package dev.android.appfacturador
 
+import android.content.res.Configuration
+import android.graphics.Color
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
@@ -19,11 +23,12 @@ class ProductShopAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
     inner class ProductShopAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var binding: ItemShopBinding = ItemShopBinding.bind(itemView)
 
+        @RequiresApi(Build.VERSION_CODES.P)
         fun bind(productItem: ProductHolder.ProductItem, position: Int) = with(binding) {
             val product = productItem.product
             val quantity = productItem.quantity
 
-            binding.txtAmount.setText(quantity.toString())
+            binding.txtAmount.text = quantity.toString()
             binding.txtProductNameShop.text = product?.nombre
             if (product != null) {
                 binding.txtPriceShop.text = "$" + String.format("%.2f", product.precio * quantity)
@@ -37,6 +42,24 @@ class ProductShopAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
                 }
             }
 
+            val resources = root.resources
+            val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            // Comprueba el modo actual
+            if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+                // El modo actual es dark
+                btnProductInfo.setCardBackgroundColor(Color.parseColor("#121212"))
+                txtProductNameShop.setTextColor(Color.parseColor("#ffffff"))
+                btnQuitProduct.setColorFilter(Color.parseColor("#ffffff"))
+                txtAmount.setTextColor(Color.parseColor("#ffffff"))
+                imgProductShop.alpha = 0.6f
+                cardProduct.outlineSpotShadowColor = Color.parseColor("#ffffff")
+                btnLess.setCardBackgroundColor(Color.parseColor("#121212"))
+                txtLess.setTextColor(Color.parseColor("#ffffff"))
+                btnMore.setCardBackgroundColor(Color.parseColor("#121212"))
+                txtMore.setTextColor(Color.parseColor("#ffffff"))
+                btnImage.setCardBackgroundColor(Color.parseColor("#121212"))
+            }
+
             binding.btnQuitProduct.setOnClickListener {
                 if (product != null) {
                     setOnClickListenerProductDelete(product)
@@ -46,9 +69,9 @@ class ProductShopAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
             binding.btnLess.setOnClickListener {
                 if (quantity > 1) {
                     val updatedQuantity = quantity - 1
-                    txtAmount.setText(updatedQuantity.toString())
+                    txtAmount.text = updatedQuantity.toString()
                     if (product != null) {
-                        txtPriceShop.setText("$" + (product.precio * updatedQuantity).toString())
+                        txtPriceShop.text = "$" + (product.precio * updatedQuantity).toString()
                     }
                     setOnClickListenerProductQuit(position, updatedQuantity)
                 }
@@ -56,7 +79,7 @@ class ProductShopAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
 
             binding.btnMore.setOnClickListener {
                 val updatedQuantity = quantity + 1
-                txtAmount.setText(updatedQuantity.toString())
+                txtAmount.text = updatedQuantity.toString()
                 if (product != null) {
                     txtPriceShop.setText("$" + (product.precio * updatedQuantity).toString())
                 }

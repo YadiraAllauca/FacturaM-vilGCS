@@ -64,6 +64,7 @@ class ProductActivity : AppCompatActivity() {
     lateinit var barcode: String
     private val REQUEST_CODE_SPEECH_TO_TEXT1 = 1
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProductBinding.inflate(layoutInflater)
@@ -308,12 +309,12 @@ class ProductActivity : AppCompatActivity() {
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
             // El modo actual es dark
             binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
-            binding.imgFull.setColorFilter(Color.parseColor("#ffffff"))
+            binding.imgFull.setColorFilter(Color.parseColor("#47484a"))
             binding.edtSearch.setBackgroundResource(R.drawable.searchdark)
             binding.edtSearch.outlineSpotShadowColor = Color.parseColor("#ffffff")
-            binding.btnShop.setColorFilter(Color.parseColor("#47484a"))
-            binding.btnMicSearch.setColorFilter(ContextCompat.getColor(this, R.color.white))
-            val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.scanner_dark)
+            binding.btnShop.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicSearch.setColorFilter(Color.parseColor("#47484a"))
+            val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.scanner_white)
             binding.btnScanner.setImageDrawable(drawable)
             binding.btnAddProduct.imageTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
             binding.btnAddProduct.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#47484a"))
