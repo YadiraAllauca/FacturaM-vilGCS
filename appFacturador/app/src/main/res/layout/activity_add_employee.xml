@@ -7,7 +7,7 @@
     tools:context=".AddEmployeeActivity">
 
     <TextView
-        android:id="@+id/txtTittleRegister"
+        android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -24,9 +24,9 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/txtTittleRegister"
+        app:layout_constraintBottom_toBottomOf="@+id/txtTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txtTittleRegister"
+        app:layout_constraintTop_toTopOf="@+id/txtTitle"
         app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
 
     <Button
@@ -51,10 +51,10 @@
         android:layout_marginTop="52dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTittleRegister">
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/btnImageProduct"
+            android:id="@+id/btnContainer"
             android:layout_width="130dp"
             android:layout_height="130dp"
             app:cardBackgroundColor="#F2F5FC"
@@ -69,7 +69,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/txtInitials"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
@@ -88,7 +88,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/textView18"
+        android:id="@+id/txtEmployeeName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -102,7 +102,7 @@
         app:layout_constraintTop_toTopOf="@+id/edtNameEmployee" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/txtEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -116,7 +116,7 @@
         app:layout_constraintTop_toTopOf="@+id/edtEmailEmployee" />
 
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/txtPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -129,7 +129,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edtEmailEmployee" />
 
     <TextView
-        android:id="@+id/textView14"
+        android:id="@+id/txtType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -143,7 +143,7 @@
         app:layout_constraintTop_toTopOf="@+id/spnType" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/txtDNI"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -156,7 +156,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view4" />
 
     <TextView
-        android:id="@+id/textView22"
+        android:id="@+id/txtDNINumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="200dp"
@@ -169,7 +169,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view4" />
 
     <TextView
-        android:id="@+id/textView20"
+        android:id="@+id/txtEmployeeLastName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -225,7 +225,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnMicEmployeeNames"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintStart_toEndOf="@+id/txtEmployeeName"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <EditText
@@ -247,7 +247,7 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnMicEmail"
-        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintStart_toEndOf="@+id/txtEmployeeName"
         app:layout_constraintTop_toBottomOf="@+id/view2" />
 
     <EditText
@@ -268,7 +268,7 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnMicPassword"
-        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintStart_toEndOf="@+id/txtEmployeeName"
         app:layout_constraintTop_toBottomOf="@+id/edtEmailEmployee" />
 
     <EditText
@@ -290,7 +290,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnMicIDNumber"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView21" />
+        app:layout_constraintTop_toBottomOf="@+id/txtDNI" />
 
     <EditText
         android:id="@+id/edtLastNameEmployee"
@@ -310,7 +310,7 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnMicEmployeeLastNames"
-        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintStart_toEndOf="@+id/txtEmployeeName"
         app:layout_constraintTop_toBottomOf="@+id/edtNameEmployee" />
 
     <Spinner
@@ -322,7 +322,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/edtNumDNI"
         app:layout_constraintEnd_toStartOf="@+id/edtNumDNI"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView21" />
+        app:layout_constraintTop_toBottomOf="@+id/txtDNI" />
 
     <Spinner
         android:id="@+id/spnType"

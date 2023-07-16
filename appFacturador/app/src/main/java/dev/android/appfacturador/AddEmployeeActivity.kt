@@ -1,9 +1,12 @@
 package dev.android.appfacturador
 
 import android.R
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -55,7 +58,7 @@ class AddEmployeeActivity : AppCompatActivity() {
         email = sharedPreferences.getString("email", "").toString()
         getShop()
         events()
-
+        darkMode()
     }
 
     private fun initialize() {
@@ -71,7 +74,7 @@ class AddEmployeeActivity : AppCompatActivity() {
         bundle?.let {
             val employee = it.getSerializable(Constants.KEY_EMPLOYEE) as EMPLEADO
             id = employee.id
-            binding.textView8.text =
+            binding.txtInitials.text =
                 employee.primer_nombre.first().toString() + employee.apellido_paterno.first()
                     .toString()
             binding.edtNameEmployee.setText(employee.primer_nombre + " " + employee.segundo_nombre)
@@ -394,6 +397,38 @@ class AddEmployeeActivity : AppCompatActivity() {
         }
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
+    }
+
+    @SuppressLint("ResourceAsColor", "Range")
+    fun darkMode () {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            binding.btnContainer.setCardBackgroundColor(Color.parseColor("#47484a"))
+            binding.txtInitials.setTextColor(Color.parseColor("#121212"))
+            binding.btnBack.setColorFilter(Color.parseColor("#ffffff"))
+            binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtEmployeeName.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtEmployeeLastName.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtDNI.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtDNINumber.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtEmail.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtPassword.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtType.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnMicEmployeeNames.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicEmployeeLastNames.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicIDNumber.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicEmail.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicPassword.setColorFilter(Color.parseColor("#ffffff"))
+            binding.edtNameEmployee.setBackgroundResource(dev.android.appfacturador.R.drawable.text_info_dark)
+            binding.edtLastNameEmployee.setBackgroundResource(dev.android.appfacturador.R.drawable.text_info_dark)
+            binding.edtNumDNI.setBackgroundResource(dev.android.appfacturador.R.drawable.text_info_dark)
+            binding.edtEmailEmployee.setBackgroundResource(dev.android.appfacturador.R.drawable.text_info_dark)
+            binding.edtPasswordEmployee.setBackgroundResource(dev.android.appfacturador.R.drawable.text_info_dark)
+            binding.btnAdd.setBackgroundResource(dev.android.appfacturador.R.drawable.gradientdark)
+            binding.btnAdd.setTextColor(Color.parseColor("#121212"))
+        }
     }
 
     override fun onBackPressed() {
