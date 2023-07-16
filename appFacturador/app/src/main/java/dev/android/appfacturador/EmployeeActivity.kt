@@ -1,8 +1,13 @@
 package dev.android.appfacturador
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.content.res.Configuration
+import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -12,6 +17,7 @@ import android.util.Log
 import android.view.Window
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -50,6 +56,7 @@ class EmployeeActivity : AppCompatActivity() {
     private val db = instanceFirebase.getReference("Empleado")
     private val REQUEST_CODE_SPEECH_TO_TEXT1 = 1
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEmployeeBinding.inflate(layoutInflater)
@@ -63,6 +70,7 @@ class EmployeeActivity : AppCompatActivity() {
         recyclerView = binding.rvEmployees
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
+        darkMode()
 
     }
 
@@ -231,6 +239,24 @@ class EmployeeActivity : AppCompatActivity() {
             }
         } else {
             Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    @SuppressLint("ResourceAsColor", "ResourceType")
+    fun darkMode () {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnBack.setColorFilter(Color.parseColor("#ffffff"))
+            binding.edtSearchEmployee.setBackgroundResource(R.drawable.searchdark)
+            binding.edtSearchEmployee.setTextColor(Color.parseColor("#ffffff"))
+            binding.edtSearchEmployee.outlineSpotShadowColor = Color.parseColor("#ffffff")
+            binding.btnMicSearch.setColorFilter(Color.parseColor("#47484a"))
+            binding.btnAddEmployee.imageTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
+            binding.btnAddEmployee.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#47484a"))
         }
     }
 
