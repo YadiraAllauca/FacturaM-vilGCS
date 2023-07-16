@@ -88,6 +88,7 @@ class BillDetailActivity : AppCompatActivity() {
                     )
                 }
             startActivity(intent)
+            finish()
         }
     }
 
