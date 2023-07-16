@@ -62,6 +62,7 @@ class BillActivity : AppCompatActivity() {
         bundle = intent.extras
         filter = bundle?.getString("filter").toString()
         binding.txtResult.visibility = View.GONE
+        binding.btnAddBill.imageTintList = ColorStateList.valueOf(Color.parseColor("#ffffff"))
 
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
@@ -75,7 +76,6 @@ class BillActivity : AppCompatActivity() {
         darkMode()
 
         setupActions()
-        binding.btnAddBill.imageTintList = ColorStateList.valueOf(Color.parseColor("#ffffff"))
 
         filterResult("", stateButton)
         typing()
