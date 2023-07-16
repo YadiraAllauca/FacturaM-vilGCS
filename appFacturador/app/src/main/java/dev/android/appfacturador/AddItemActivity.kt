@@ -1,9 +1,13 @@
 package dev.android.appfacturador
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -11,8 +15,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Window
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -41,6 +48,8 @@ class AddItemActivity : AppCompatActivity() {
     lateinit var barcode: String
     private val REQUEST_CODE_SPEECH_TO_TEXT1 = 1
 
+    @RequiresApi(Build.VERSION_CODES.P)
+    @SuppressLint("ResourceAsColor", "ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddItemBinding.inflate(layoutInflater)
@@ -48,7 +57,7 @@ class AddItemActivity : AppCompatActivity() {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
-        searchEditText = binding.edtBuscador
+        searchEditText = binding.edtSearch
         binding.btnAddItems.imageTintList = ColorStateList.valueOf(Color.parseColor("#ffffff"))
 
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
@@ -71,6 +80,7 @@ class AddItemActivity : AppCompatActivity() {
         })
 
         setupActions()
+        darkMode()
     }
 
     private fun getShop() {
@@ -140,6 +150,7 @@ class AddItemActivity : AppCompatActivity() {
             binding.btnAllProducts.background = getDrawable(R.drawable.gradient)
             binding.btnAllProducts.setTextColor(Color.parseColor("#ffffff"))
             adapter.updateListProducts(list)
+            buttonsDarkMode(binding.btnAllProducts, binding.btnAddedProducts)
         }
 
         binding.btnAddedProducts.setOnClickListener {
@@ -151,6 +162,7 @@ class AddItemActivity : AppCompatActivity() {
             val selectedProducts = ProductHolder.productList.mapNotNull { it.product }
             val filteredProducts = list.filter { selectedProducts.contains(it) }
             adapter.updateListProducts(filteredProducts)
+            buttonsDarkMode(binding.btnAddedProducts, binding.btnAllProducts)
         }
 
         binding.btnAddItems.setOnClickListener {
@@ -208,7 +220,7 @@ class AddItemActivity : AppCompatActivity() {
                 Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show()
             } else {
                 barcode = result.contents
-                binding.edtBuscador.setText(result.contents)
+                binding.edtSearch.setText(result.contents)
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
@@ -220,12 +232,48 @@ class AddItemActivity : AppCompatActivity() {
                     val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (!results.isNullOrEmpty()) {
                         val spokenText = results[0]
-                        binding.edtBuscador.setText(spokenText)
+                        binding.edtSearch.setText(spokenText)
                     }
                 }
             }
         } else {
             Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    @SuppressLint("ResourceAsColor", "ResourceType")
+    fun darkMode () {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnBack.setColorFilter(Color.parseColor("#ffffff"))
+            binding.edtSearch.setBackgroundResource(R.drawable.searchdark)
+            binding.edtSearch.setTextColor(Color.parseColor("#ffffff"))
+            binding.edtSearch.outlineSpotShadowColor = Color.parseColor("#ffffff")
+            binding.btnMicSearch.setColorFilter(Color.parseColor("#47484a"))
+            val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.scanner_white)
+            binding.btnScanner.setImageDrawable(drawable)
+            binding.btnAddItems.imageTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
+            binding.btnAddItems.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#47484a"))
+            binding.btnAllProducts.setTextColor(Color.parseColor("#121212"))
+            binding.btnAllProducts.setBackgroundResource(R.drawable.gradientdarkwhite)
+            binding.btnAddedProducts.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnAddedProducts.setBackgroundResource(R.drawable.gradientdark)
+            binding.divider.setBackgroundColor(Color.parseColor("#242424"))
+        }
+    }
+
+    fun buttonsDarkMode (buttonClicked: Button, buttonNotClicked: Button){
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            buttonNotClicked.background = getDrawable(R.drawable.gradientdark)
+            buttonNotClicked.setTextColor(Color.parseColor("#ffffff"))
+            buttonClicked.background = getDrawable(R.drawable.gradientdarkwhite)
+            buttonClicked.setTextColor(Color.parseColor("#121212"))
         }
     }
 

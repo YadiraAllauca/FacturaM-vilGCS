@@ -56,14 +56,14 @@ class ClientActivity : AppCompatActivity() {
         setContentView(binding.root)
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
+        binding.btnAddClient.imageTintList = ColorStateList.valueOf(Color.parseColor("#ffffff"))
+
         getShop()
         events()
         darkMode()
         recyclerView = binding.rvClients
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
-        binding.btnAddClient.imageTintList = ColorStateList.valueOf(Color.parseColor("#ffffff"))
-
     }
 
     private fun getShop() {
