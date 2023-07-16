@@ -1,6 +1,9 @@
 package dev.android.appfacturador
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
@@ -33,15 +36,16 @@ class BillDetailActivity : AppCompatActivity() {
         initialize()
         loadData()
         setupActions()
+        darkMode()
     }
 
     fun initialize(){
         val bundle = intent.extras
         bundle?.let{
             val bill = bundle.getSerializable(Constants.KEY_BILL) as FACTURA
-            binding.edtNumeroIdentificacion.setText(bill.cliente?.numero_dni.toString())
-            binding.txtClienteName.text = bill.cliente?.primer_nombre + " " + bill.cliente?.apellido_paterno
-            binding.txtClienteEmail.text = bill.cliente?.correo_electronico
+            binding.edtID.setText(bill.cliente?.numero_dni.toString())
+            binding.txtClientName.text = bill.cliente?.primer_nombre + " " + bill.cliente?.apellido_paterno
+            binding.txtClientEmail.text = bill.cliente?.correo_electronico
             productList = bill.items!!
             binding.txtSubtotal.text = "$"+String.format("%.2f", bill.subtotal)
             binding.txtIva.text = "$"+String.format("%.2f", bill.iva)
@@ -84,6 +88,26 @@ class BillDetailActivity : AppCompatActivity() {
                     )
                 }
             startActivity(intent)
+        }
+    }
+
+    @SuppressLint("ResourceAsColor", "Range")
+    fun darkMode () {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            binding.btnBack.setColorFilter(Color.parseColor("#ffffff"))
+            binding.edtID.setTextColor(Color.parseColor("#ffffff"))
+            binding.edtID.setBackgroundResource(R.drawable.textdark)
+            binding.txtClientName.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtSubtotal.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtIva.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtDiscount.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtTotalBill.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnCancelBill.setBackgroundResource(R.drawable.textdark)
+            binding.btnCancelBill.setTextColor(Color.parseColor("#ffffff"))
+            binding.divider.setBackgroundColor(Color.parseColor("#242424"))
         }
     }
 }

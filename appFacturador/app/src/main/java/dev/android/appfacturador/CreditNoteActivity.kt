@@ -1,5 +1,8 @@
 package dev.android.appfacturador
 
+import android.annotation.SuppressLint
+import android.content.res.Configuration
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -39,6 +42,7 @@ class CreditNoteActivity : AppCompatActivity() {
 
         initialize()
         setupActions()
+        darkMode()
     }
 
     fun initialize(){
@@ -104,8 +108,38 @@ class CreditNoteActivity : AppCompatActivity() {
             }
     }
 
-
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    @SuppressLint("ResourceAsColor", "Range")
+    fun darkMode () {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            binding.btnBack.setColorFilter(Color.parseColor("#ffffff"))
+            binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtClientName.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtBillNumber.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtReason.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtPrice.setTextColor(Color.parseColor("#ffffff"))
+            binding.edtClient.setTextColor(Color.parseColor("#ffffff"))
+            binding.edtClient.setBackgroundResource(R.drawable.text_info_dark)
+            binding.edtBill.setTextColor(Color.parseColor("#ffffff"))
+            binding.edtBill.setBackgroundResource(R.drawable.text_info_dark)
+            binding.edtPrice2.setTextColor(Color.parseColor("#ffffff"))
+            binding.edtPrice2.setBackgroundResource(R.drawable.text_info_dark)
+            binding.edtReason.setTextColor(Color.parseColor("#ffffff"))
+            binding.edtReason.setBackgroundResource(R.drawable.text_info_dark)
+            binding.btnMicPrice.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicReason.setColorFilter(Color.parseColor("#ffffff"))
+            binding.txtSubtotal.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtIva.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtDiscount.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtTotalBill.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnCreditNote.setBackgroundResource(R.drawable.textdark)
+            binding.btnCreditNote.setTextColor(Color.parseColor("#ffffff"))
+        }
     }
 }
