@@ -20,6 +20,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -58,7 +59,7 @@ class ClientActivity : AppCompatActivity() {
         email = sharedPreferences.getString("email", "").toString()
         binding.btnAddClient.imageTintList = ColorStateList.valueOf(Color.parseColor("#ffffff"))
 
-        getShop()
+        getUserData()
         events()
         darkMode()
         recyclerView = binding.rvClients
@@ -66,7 +67,7 @@ class ClientActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true)
     }
 
-    private fun getShop() {
+    private fun getUserData() {
         val user = FirebaseAuth.getInstance().currentUser
         val email = user?.email
 
@@ -81,6 +82,9 @@ class ClientActivity : AppCompatActivity() {
                             if (empleado != null) {
                                 shop = empleado.negocio
                                 loadData()
+                                if (empleado.tipo_empleado == "V") {
+                                    binding.btnAddClient.isVisible = false
+                                }
                             }
                         }
                     }
@@ -149,6 +153,7 @@ class ClientActivity : AppCompatActivity() {
                         client?.let { list.add(it) }
                     }
                 }
+                adapter.setCurrentUserEmailClient(email)
                 adapter.updateListClients(list)
                 recyclerView.adapter = adapter
             }

@@ -102,48 +102,22 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun showNewActivity(email: String) {
-
         val usuariosRef = db.getReference("Empleado")
 
         usuariosRef.orderByChild("correo_electronico").equalTo(email)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        for (childSnapshot in dataSnapshot.children) {
-                            val empleado = childSnapshot.getValue(EMPLEADO::class.java)
-                            if (empleado != null) {
-                                if (empleado.tipo_empleado == "A") {
-                                    val preferences: SharedPreferences.Editor =
-                                        getSharedPreferences(
-                                            "PREFERENCE_FILE_KEY",
-                                            Context.MODE_PRIVATE
-                                        ).edit()
-                                    preferences.putString("email", email)
-                                    preferences.apply()
-                                    val intent =
-                                        Intent(this@LoginActivity, ProductActivity::class.java)
-                                    startActivity(intent)
-                                } else if (empleado.tipo_empleado == "V") {
-                                    val preferences: SharedPreferences.Editor =
-                                        getSharedPreferences(
-                                            "PREFERENCE_FILE_KEY",
-                                            Context.MODE_PRIVATE
-                                        ).edit()
-                                    preferences.putString("email", email)
-                                    preferences.apply()
-                                    val intent =
-                                        Intent(this@LoginActivity, ProductActivity::class.java)
-                                    startActivity(intent)
-                                } else {
-                                    Toast.makeText(
-                                        this@LoginActivity,
-                                        "Usuario no encontrado",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                break
-                            }
-                        }
+                        val preferences: SharedPreferences.Editor =
+                            getSharedPreferences(
+                                "PREFERENCE_FILE_KEY",
+                                Context.MODE_PRIVATE
+                            ).edit()
+                        preferences.putString("email", email)
+                        preferences.apply()
+
+                        val intent = Intent(this@LoginActivity, ProductActivity::class.java)
+                        startActivity(intent)
                     } else {
                         Toast.makeText(
                             this@LoginActivity,
@@ -174,7 +148,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     @SuppressLint("ResourceAsColor")
-    fun darkMode () {
+    fun darkMode() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {

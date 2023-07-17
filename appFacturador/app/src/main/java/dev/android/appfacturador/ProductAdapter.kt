@@ -8,17 +8,26 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import dev.android.appfacturador.databinding.ItemProductBinding
+import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.model.PRODUCTO
 
 class ProductAdapter(var products: List<PRODUCTO> = emptyList()) :
     RecyclerView.Adapter<ProductAdapter.ProductAdapterViewHolder>() {
     lateinit var setOnClickListenerProductDelete: (PRODUCTO) -> Unit
     lateinit var setOnClickListenerProductEdit: (PRODUCTO) -> Unit
+    private var currentUserEmail: String = ""
 
     inner class ProductAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var binding: ItemProductBinding = ItemProductBinding.bind(itemView)
@@ -50,6 +59,28 @@ class ProductAdapter(var products: List<PRODUCTO> = emptyList()) :
                 btnDeleteProduct.setColorFilter(Color.parseColor("#ffffff"))
                 imgProduct.alpha = 0.6f
                 cardProduct.outlineSpotShadowColor = Color.parseColor("#ffffff")
+            }
+            if (currentUserEmail.isNotEmpty()) {
+                val usuariosRef = FirebaseDatabase.getInstance().getReference("Empleado")
+
+                usuariosRef.orderByChild("correo_electronico").equalTo(currentUserEmail)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                for (childSnapshot in dataSnapshot.children) {
+                                    val empleado = childSnapshot.getValue(EMPLEADO::class.java)
+                                    if (empleado != null && empleado.tipo_empleado == "V") {
+                                        root.isClickable = false
+                                        btnDeleteProduct.isVisible = false
+                                    }
+                                    break
+                                }
+                            }
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+                        }
+                    })
             }
 
             btnDeleteProduct.setOnClickListener {
@@ -83,5 +114,10 @@ class ProductAdapter(var products: List<PRODUCTO> = emptyList()) :
         this.products = products
         notifyDataSetChanged()
     }
+    fun setCurrentUserEmailProduct(email: String) {
+        this.currentUserEmail = email
+        notifyDataSetChanged()
+    }
+
 
 }

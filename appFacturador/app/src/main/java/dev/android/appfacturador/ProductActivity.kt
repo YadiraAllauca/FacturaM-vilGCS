@@ -23,6 +23,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -83,7 +84,7 @@ class ProductActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        getShop()
+        getUserData()
         setupViews()
         darkMode()
 
@@ -101,7 +102,7 @@ class ProductActivity : AppCompatActivity() {
         shoppingCardActive()
     }
 
-    private fun getShop() {
+    private fun getUserData() {
         val user = FirebaseAuth.getInstance().currentUser
         val email = user?.email
 
@@ -116,6 +117,9 @@ class ProductActivity : AppCompatActivity() {
                             if (empleado != null) {
                                 shop = empleado.negocio
                                 loadData()
+                                if (empleado.tipo_empleado == "V") {
+                                    binding.btnAddProduct.isVisible = false
+                                }
                             }
                         }
                     }
@@ -158,6 +162,7 @@ class ProductActivity : AppCompatActivity() {
                         product?.let { productList.add(it) }
                     }
                 }
+                adapter.setCurrentUserEmailProduct(email)
                 list = productList
                 adapter.updateListProducts(list)
             }

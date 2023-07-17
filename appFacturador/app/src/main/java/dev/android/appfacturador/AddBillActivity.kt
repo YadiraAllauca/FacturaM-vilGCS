@@ -16,6 +16,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -40,7 +41,8 @@ class AddBillActivity : AppCompatActivity() {
         ProductBillAdapter()
     }
     private lateinit var recyclerView: RecyclerView
-    val productList: MutableList<ProductHolder.ProductItem> = ProductHolder.productList.toMutableList()
+    val productList: MutableList<ProductHolder.ProductItem> =
+        ProductHolder.productList.toMutableList()
     lateinit var searchClienteEditText: EditText
     private var clienteEncontrado: CLIENTE? = null
     private var empleadoEncontrado: EMPLEADO? = null
@@ -65,8 +67,7 @@ class AddBillActivity : AppCompatActivity() {
         // Inicializar vistas
         initViews()
 
-        // Obtener negocio y cargar datos
-        getShop()
+        getUserData()
 
         // Configurar listeners
         setupActions()
@@ -95,6 +96,7 @@ class AddBillActivity : AppCompatActivity() {
                 val searchTerm = s.toString().trim()
                 getClienteData(searchTerm)
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
 
@@ -125,7 +127,7 @@ class AddBillActivity : AppCompatActivity() {
         }
     }
 
-    private fun getShop() {
+    private fun getUserData() {
         val user = FirebaseAuth.getInstance().currentUser
         val email = user?.email
         val database = FirebaseDatabase.getInstance()
@@ -142,10 +144,14 @@ class AddBillActivity : AppCompatActivity() {
                                 shop = empleado.negocio
                                 loadData()
                                 getShopCounter(shop)
+                                if (empleado.tipo_empleado == "V") {
+                                    binding.btnAddClient.isVisible = false
+                                }
                             }
                         }
                     }
                 }
+
                 override fun onCancelled(databaseError: DatabaseError) {
                     Toast.makeText(
                         this@AddBillActivity,
@@ -184,7 +190,8 @@ class AddBillActivity : AppCompatActivity() {
                             if (cliente != null) {
                                 clienteEncontrado = cliente
                                 binding.edtID.setTextColor(Color.BLACK)
-                                binding.txtClientName.text = cliente.primer_nombre+" "+cliente.apellido_paterno
+                                binding.txtClientName.text =
+                                    cliente.primer_nombre + " " + cliente.apellido_paterno
                                 binding.txtClientName.setTextColor(Color.BLACK)
                                 binding.txtClientEmail.text = cliente.correo_electronico
                                 binding.txtClientEmail.setTextColor(Color.BLACK)
@@ -250,12 +257,20 @@ class AddBillActivity : AppCompatActivity() {
                 ProductHolder.productList.clear()
                 clienteEncontrado = null
                 updateShopCounter()
-                Toast.makeText(this@AddBillActivity, "¡Factura registrada exitosamente!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@AddBillActivity,
+                    "¡Factura registrada exitosamente!",
+                    Toast.LENGTH_SHORT
+                ).show()
                 val intent = Intent(this@AddBillActivity, BillActivity::class.java)
                 startActivity(intent)
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(this@AddBillActivity, "Error al agregar la factura: ${exception.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@AddBillActivity,
+                    "Error al agregar la factura: ${exception.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 
@@ -263,55 +278,61 @@ class AddBillActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance()
         val negocioRef = database.getReference("Negocios")
 
-        negocioRef.child(shopId).child("contador").addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val contador = dataSnapshot.getValue(Long::class.java)?.toInt()
-                if (contador != null) {
-                    contadorNegocio = contador+1
+        negocioRef.child(shopId).child("contador")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val contador = dataSnapshot.getValue(Long::class.java)?.toInt()
+                    if (contador != null) {
+                        contadorNegocio = contador + 1
+                    }
                 }
-            }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Toast.makeText(
-                    this@AddBillActivity,
-                    "Error en la solicitud: " + databaseError.message,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Toast.makeText(
+                        this@AddBillActivity,
+                        "Error en la solicitud: " + databaseError.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
     }
 
     private fun updateShopCounter() {
         val database = FirebaseDatabase.getInstance()
         val negocioRef = database.getReference("Negocios")
 
-        negocioRef.child(shop).child("contador").addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val contador = dataSnapshot.getValue(Long::class.java)?.toInt() ?: 0
-                negocioRef.child(shop).child("contador").setValue(contador + 1)
-                    .addOnSuccessListener {
-                        // Éxito al actualizar el contador del negocio
-                    }
-                    .addOnFailureListener { exception ->
-                        Toast.makeText(this@AddBillActivity, "Error al actualizar el contador del negocio: ${exception.message}", Toast.LENGTH_SHORT).show()
-                    }
-            }
+        negocioRef.child(shop).child("contador")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val contador = dataSnapshot.getValue(Long::class.java)?.toInt() ?: 0
+                    negocioRef.child(shop).child("contador").setValue(contador + 1)
+                        .addOnSuccessListener {
+                            // Éxito al actualizar el contador del negocio
+                        }
+                        .addOnFailureListener { exception ->
+                            Toast.makeText(
+                                this@AddBillActivity,
+                                "Error al actualizar el contador del negocio: ${exception.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Toast.makeText(
-                    this@AddBillActivity,
-                    "Error en la solicitud: " + databaseError.message,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Toast.makeText(
+                        this@AddBillActivity,
+                        "Error en la solicitud: " + databaseError.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
     }
 
     private fun updateValues() {
-        binding.txtDiscount.text = "$"+String.format("%.2f", calculateTotalDiscount())
-        binding.txtSubtotal.text = "$"+String.format("%.2f", calculateSubtotal())
-        binding.txtIva.text = "$"+String.format("%.2f", calculateTotalIVA())
-        binding.txtTotalBill.text = "$"+String.format("%.2f", calculateTotalBill())
+        binding.txtDiscount.text = "$" + String.format("%.2f", calculateTotalDiscount())
+        binding.txtSubtotal.text = "$" + String.format("%.2f", calculateSubtotal())
+        binding.txtIva.text = "$" + String.format("%.2f", calculateTotalIVA())
+        binding.txtTotalBill.text = "$" + String.format("%.2f", calculateTotalBill())
     }
 
     private fun calculateSubtotal(): Float {
@@ -326,7 +347,8 @@ class AddBillActivity : AppCompatActivity() {
     private fun calculateTotalDiscount(): Float {
         var totalDiscount = 0f
         for (product in ProductHolder.productList) {
-            val discount = ((product.product?.precio ?: 0f) * product.discount / 100) * product.quantity
+            val discount =
+                ((product.product?.precio ?: 0f) * product.discount / 100) * product.quantity
             totalDiscount += discount
         }
         return totalDiscount
@@ -335,7 +357,9 @@ class AddBillActivity : AppCompatActivity() {
     private fun calculateTotalIVA(): Float {
         var totalIVA = 0f
         for (product in ProductHolder.productList) {
-            val iva = (product.product?.id_categoria_impuesto?.toFloat() ?: 0f) * (product.product?.precio ?: 0f) / 100
+            val iva =
+                (product.product?.id_categoria_impuesto?.toFloat() ?: 0f) * (product.product?.precio
+                    ?: 0f) / 100
             totalIVA += iva
         }
         return totalIVA
@@ -346,7 +370,7 @@ class AddBillActivity : AppCompatActivity() {
     }
 
     @SuppressLint("ResourceAsColor", "Range")
-    fun darkMode () {
+    fun darkMode() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
