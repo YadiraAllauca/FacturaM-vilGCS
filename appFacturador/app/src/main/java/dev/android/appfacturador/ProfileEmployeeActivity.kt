@@ -75,7 +75,7 @@ class ProfileEmployeeActivity : AppCompatActivity() {
                                     empleado.id,
                                     empleado.apellido_materno,
                                     empleado.apellido_paterno,
-                                    empleado.clave,
+                                    "******",
                                     empleado.correo_electronico,
                                     empleado.numero_dni,
                                     empleado.primer_nombre,
