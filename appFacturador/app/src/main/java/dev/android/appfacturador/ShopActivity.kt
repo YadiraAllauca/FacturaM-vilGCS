@@ -1,26 +1,19 @@
 package dev.android.appfacturador
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.Window
-import android.widget.ImageView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import dev.android.appfacturador.ProductHolder.productList
 import dev.android.appfacturador.databinding.ActivityProductBinding
 import dev.android.appfacturador.databinding.ActivityShopBinding
-import dev.android.appfacturador.model.PRODUCTO
 
 class ShopActivity : AppCompatActivity()  {
     lateinit var binding: ActivityShopBinding
@@ -89,6 +82,7 @@ class ShopActivity : AppCompatActivity()  {
         binding.btnBill.setOnClickListener {
             val intent = Intent(this, AddBillActivity::class.java).apply {}
             startActivity(intent)
+            finish()
         }
     }
 
@@ -107,7 +101,7 @@ class ShopActivity : AppCompatActivity()  {
             // El modo actual es dark
             binding.btnContainerTotal.setCardBackgroundColor(Color.parseColor("#121212"))
             binding.btnContainerTotal.outlineSpotShadowColor = Color.parseColor("#ffffff")
-            binding.btnBill.setBackgroundResource(R.drawable.degradadodark)
+            binding.btnBill.setBackgroundResource(R.drawable.gradientdark)
             binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
             binding.btnBack.setColorFilter(Color.parseColor("#ffffff"))
             binding.btnClear.setColorFilter(Color.parseColor("#ffffff"))

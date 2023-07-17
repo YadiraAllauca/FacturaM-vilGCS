@@ -56,13 +56,14 @@ class ClientActivity : AppCompatActivity() {
         setContentView(binding.root)
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
+        binding.btnAddClient.imageTintList = ColorStateList.valueOf(Color.parseColor("#ffffff"))
+
         getShop()
         events()
         darkMode()
         recyclerView = binding.rvClients
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
-
     }
 
     private fun getShop() {
@@ -212,6 +213,7 @@ class ClientActivity : AppCompatActivity() {
             // El modo actual es dark
             binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
             binding.edtSearchClient.setBackgroundResource(R.drawable.searchdark)
+            binding.edtSearchClient.setTextColor(Color.parseColor("#ffffff"))
             binding.edtSearchClient.outlineSpotShadowColor = Color.parseColor("#ffffff")
             binding.btnMicSearch.setColorFilter(Color.parseColor("#47484a"))
             binding.btnAddClient.imageTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
@@ -222,8 +224,6 @@ class ClientActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        finishAffinity()
     }
 
 }

@@ -1,7 +1,11 @@
 package dev.android.appfacturador
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -10,6 +14,7 @@ import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -52,6 +57,7 @@ class AddClientActivity : AppCompatActivity() {
         email = sharedPreferences.getString("email", "").toString()
         getShop()
         events()
+        darkMode()
     }
 
     private fun initialize() {
@@ -63,7 +69,7 @@ class AddClientActivity : AppCompatActivity() {
         bundle?.let {
             val client = it.getSerializable(KEY_CLIENT) as CLIENTE
             id = client.id
-            binding.textView8.text =
+            binding.txtInitials.text =
                 client.primer_nombre.first().toString() + client.apellido_paterno.first().toString()
             binding.btnAdd.text = "ACTUALIZAR"
             binding.edtNameClient.setText(client.primer_nombre + " " + client.segundo_nombre)
@@ -285,5 +291,57 @@ class AddClientActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("ResourceAsColor", "Range")
+    fun darkMode () {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            binding.btnNewClient.setCardBackgroundColor(Color.parseColor("#47484a"))
+            binding.txtInitials.setTextColor(Color.parseColor("#121212"))
+            binding.btnBack.setColorFilter(Color.parseColor("#ffffff"))
+            binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtClientName.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtLastClientName.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtDNI.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtDNINumber.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtEmail.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtPhone.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtAddress.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnMicClientNames.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicClientLastNames.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicIDNumber.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicEmail.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicPhoneNumber.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicAddres.setColorFilter(Color.parseColor("#ffffff"))
+            binding.edtNameClient.setBackgroundResource(R.drawable.text_info_dark)
+            binding.edtLastNameClient.setBackgroundResource(R.drawable.text_info_dark)
+            binding.edtNumDNI.setBackgroundResource(R.drawable.text_info_dark)
+            binding.edtEmailClient.setBackgroundResource(R.drawable.text_info_dark)
+            binding.edtPhoneClient.setBackgroundResource(R.drawable.text_info_dark)
+            binding.edtAddressClient.setBackgroundResource(R.drawable.text_info_dark)
+            binding.btnAdd.setBackgroundResource(R.drawable.gradientdark)
+            binding.btnAdd.setTextColor(Color.parseColor("#121212"))
+        }
+    }
 
+    private fun showExitConfirmationDialog() {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setTitle("Advertencia")
+        alertDialogBuilder.setMessage("Todos los cambios se perderán. ¿Desea continuar?")
+        alertDialogBuilder.setPositiveButton("Salir") { dialogInterface: DialogInterface, _: Int ->
+            // Salir de la aplicación
+            finish()
+        }
+        alertDialogBuilder.setNegativeButton("Cancelar") { dialogInterface: DialogInterface, _: Int ->
+            // Cancelar la acción de salida
+            dialogInterface.dismiss()
+        }
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
+
+    override fun onBackPressed() {
+        showExitConfirmationDialog()
+    }
 }

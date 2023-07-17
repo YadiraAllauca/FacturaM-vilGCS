@@ -7,7 +7,7 @@
     tools:context=".EditInfoActivity">
 
     <TextView
-        android:id="@+id/txtTittleRegister"
+        android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -24,9 +24,9 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/txtTittleRegister"
+        app:layout_constraintBottom_toBottomOf="@+id/txtTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txtTittleRegister"
+        app:layout_constraintTop_toTopOf="@+id/txtTitle"
         app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
 
     <Button
@@ -36,7 +36,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/degradado"
+        android:background="@drawable/gradient"
         android:fontFamily="@font/roboto_bold"
         android:text="CREAR"
         app:backgroundTint="@null"
@@ -51,7 +51,7 @@
         android:layout_marginTop="52dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTittleRegister">
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/btnImageProduct"
@@ -85,21 +85,21 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/textView18"
+        android:id="@+id/txtName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginBottom="3dp"
         android:fontFamily="@font/roboto_bold"
-        android:text="Nombres"
+        android:text="Nombre"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtNameClient"
+        app:layout_constraintBottom_toBottomOf="@+id/edtName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtNameClient" />
+        app:layout_constraintTop_toTopOf="@+id/edtName" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/txtEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -108,12 +108,12 @@
         android:text="Email"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtEmailClient"
+        app:layout_constraintBottom_toBottomOf="@+id/edtEmail"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtEmailClient" />
+        app:layout_constraintTop_toTopOf="@+id/edtEmail" />
 
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/txtPhone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -121,12 +121,12 @@
         android:text="Celular"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtPhoneClient"
+        app:layout_constraintBottom_toBottomOf="@+id/edtPhone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtEmailClient" />
+        app:layout_constraintTop_toBottomOf="@+id/edtEmail" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/txtAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -134,12 +134,12 @@
         android:text="Dirección"
         android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtAddressClient"
+        app:layout_constraintBottom_toBottomOf="@+id/edtAddress"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtAddressClient" />
+        app:layout_constraintTop_toTopOf="@+id/edtAddress" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/txtDNI"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -152,7 +152,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view4" />
 
     <TextView
-        android:id="@+id/textView22"
+        android:id="@+id/txtDNINumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="200dp"
@@ -174,7 +174,7 @@
         android:background="#D3D3D3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtNameClient" />
+        app:layout_constraintTop_toBottomOf="@+id/edtName" />
 
     <View
         android:id="@+id/view2"
@@ -189,13 +189,13 @@
         app:layout_constraintTop_toBottomOf="@+id/edtNumDNI" />
 
     <EditText
-        android:id="@+id/edtNameClient"
+        android:id="@+id/edtName"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="3dp"
-        android:background="@drawable/texto_info"
+        android:background="@drawable/text_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
         android:hint="Nombre"
@@ -204,18 +204,17 @@
         android:textColorHint="#B3B3B3"
         android:textSize="16sp"
         app:backgroundTint="@null"
-        app:layout_constraintEnd_toStartOf="@+id/btnMicClientNames"
-        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintEnd_toStartOf="@+id/btnMicName"
+        app:layout_constraintStart_toEndOf="@+id/txtName"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <EditText
-        android:id="@+id/edtEmailClient"
+        android:id="@+id/edtEmail"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="3dp"
-        android:background="@drawable/texto_info"
+        android:background="@drawable/text_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
         android:hint="Correo electrónico"
@@ -227,16 +226,15 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnMicEmail"
-        app:layout_constraintStart_toEndOf="@+id/textView18"
+        app:layout_constraintStart_toStartOf="@+id/edtName"
         app:layout_constraintTop_toBottomOf="@+id/view2" />
 
     <EditText
-        android:id="@+id/edtPhoneClient"
+        android:id="@+id/edtPhone"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginStart="30dp"
         android:layout_marginEnd="3dp"
-        android:background="@drawable/texto_info"
+        android:background="@drawable/text_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
         android:hint="Número de teléfono"
@@ -248,16 +246,15 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnMicPhoneNumber"
-        app:layout_constraintStart_toEndOf="@+id/textView18"
-        app:layout_constraintTop_toBottomOf="@+id/edtEmailClient" />
+        app:layout_constraintStart_toStartOf="@+id/edtName"
+        app:layout_constraintTop_toBottomOf="@+id/edtEmail" />
 
     <EditText
-        android:id="@+id/edtAddressClient"
+        android:id="@+id/edtAddress"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginStart="30dp"
         android:layout_marginEnd="3dp"
-        android:background="@drawable/texto_info"
+        android:background="@drawable/text_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
         android:hint="Ciudad/ Calles"
@@ -269,8 +266,8 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnMicAddres"
-        app:layout_constraintStart_toEndOf="@+id/textView18"
-        app:layout_constraintTop_toBottomOf="@+id/edtPhoneClient" />
+        app:layout_constraintStart_toStartOf="@+id/edtName"
+        app:layout_constraintTop_toBottomOf="@+id/edtPhone" />
 
     <EditText
         android:id="@+id/edtNumDNI"
@@ -278,7 +275,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="200dp"
         android:layout_marginEnd="3dp"
-        android:background="@drawable/texto_info"
+        android:background="@drawable/text_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
         android:hint="Identificación"
@@ -291,7 +288,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnMicIDNumber"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView21" />
+        app:layout_constraintTop_toBottomOf="@+id/txtDNI" />
 
     <Spinner
         android:id="@+id/spnDNI"
@@ -302,16 +299,16 @@
         app:layout_constraintBottom_toBottomOf="@+id/edtNumDNI"
         app:layout_constraintEnd_toStartOf="@+id/edtNumDNI"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView21" />
+        app:layout_constraintTop_toBottomOf="@+id/txtDNI" />
 
     <ImageView
-        android:id="@+id/btnMicClientNames"
+        android:id="@+id/btnMicName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtNameClient"
+        app:layout_constraintBottom_toBottomOf="@+id/edtName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtNameClient"
+        app:layout_constraintTop_toTopOf="@+id/edtName"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
     <ImageView
@@ -329,9 +326,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtEmailClient"
+        app:layout_constraintBottom_toBottomOf="@+id/edtEmail"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtEmailClient"
+        app:layout_constraintTop_toTopOf="@+id/edtEmail"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
     <ImageView
@@ -339,9 +336,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtPhoneClient"
+        app:layout_constraintBottom_toBottomOf="@+id/edtPhone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtPhoneClient"
+        app:layout_constraintTop_toTopOf="@+id/edtPhone"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
     <ImageView
@@ -349,9 +346,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtAddressClient"
+        app:layout_constraintBottom_toBottomOf="@+id/edtAddress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtAddressClient"
+        app:layout_constraintTop_toTopOf="@+id/edtAddress"
         app:srcCompat="@drawable/ic_baseline_mic_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

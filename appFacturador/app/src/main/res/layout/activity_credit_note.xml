@@ -31,7 +31,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginEnd="3dp"
-        android:background="@drawable/texto_info"
+        android:background="@drawable/text_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
         android:hint="Valor $"
@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edtReason" />
 
     <TextView
-        android:id="@+id/txtTittleRegister"
+        android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -64,13 +64,13 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginStart="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/txtTittleRegister"
+        app:layout_constraintBottom_toBottomOf="@+id/txtTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/txtTittleRegister"
+        app:layout_constraintTop_toTopOf="@+id/txtTitle"
         app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
 
     <View
-        android:id="@+id/view11"
+        android:id="@+id/divider"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="30dp"
@@ -82,7 +82,7 @@
         app:layout_constraintTop_toBottomOf="@+id/edtBill" />
 
     <View
-        android:id="@+id/view12"
+        android:id="@+id/dividerTwo"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="30dp"
@@ -94,7 +94,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/txtClientName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -107,7 +107,7 @@
         app:layout_constraintTop_toTopOf="@+id/edtClient" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/txtBillNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -120,7 +120,7 @@
         app:layout_constraintTop_toTopOf="@+id/edtBill" />
 
     <TextView
-        android:id="@+id/textView26"
+        android:id="@+id/txtReason"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -133,7 +133,7 @@
         app:layout_constraintTop_toTopOf="@+id/edtReason" />
 
     <TextView
-        android:id="@+id/textView28"
+        android:id="@+id/txtPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -152,8 +152,9 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
-        android:background="@drawable/texto_info"
+        android:background="@drawable/text_info"
         android:drawablePadding="10dp"
+        android:editable="false"
         android:fontFamily="@font/roboto_bold"
         android:hint="Número de identificación"
         android:padding="10dp"
@@ -162,8 +163,8 @@
         android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/txtTittleRegister" />
+        app:layout_constraintStart_toEndOf="@+id/txtClientName"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
 
     <EditText
         android:id="@+id/edtReason"
@@ -171,7 +172,7 @@
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="3dp"
-        android:background="@drawable/texto_info"
+        android:background="@drawable/text_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
         android:hint="Razón de modificación"
@@ -182,15 +183,16 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toStartOf="@+id/btnMicReason"
         app:layout_constraintStart_toStartOf="@+id/edtBill"
-        app:layout_constraintTop_toBottomOf="@+id/view11" />
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <EditText
         android:id="@+id/edtBill"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginEnd="30dp"
-        android:background="@drawable/texto_info"
+        android:background="@drawable/text_info"
         android:drawablePadding="10dp"
+        android:editable="false"
         android:fontFamily="@font/roboto_bold"
         android:hint="Número de factura"
         android:inputType="text"
@@ -210,7 +212,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/boton"
+        android:background="@drawable/button"
         android:fontFamily="@font/roboto_bold"
         android:stateListAnimator="@null"
         android:text="GENERAR NOTA DE CRÉDITO"

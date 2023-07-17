@@ -1,15 +1,21 @@
 package dev.android.appfacturador
 
-import android.R
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Window
+import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -17,21 +23,12 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import dev.android.appfacturador.*
 import dev.android.appfacturador.databinding.ActivityAddBillBinding
 import dev.android.appfacturador.model.CLIENTE
 import dev.android.appfacturador.model.EMPLEADO
-import android.graphics.Color
-import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import dev.android.appfacturador.database.BillDao
 import dev.android.appfacturador.model.FACTURA
 import dev.android.appfacturador.utils.Constants
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,7 +44,7 @@ class AddBillActivity : AppCompatActivity() {
     lateinit var searchClienteEditText: EditText
     private var clienteEncontrado: CLIENTE? = null
     private var empleadoEncontrado: EMPLEADO? = null
-    lateinit var spinner: Spinner
+    private lateinit var spinner: Spinner
     var contadorNegocio = 0
 
     val calendar = Calendar.getInstance()
@@ -73,6 +70,7 @@ class AddBillActivity : AppCompatActivity() {
 
         // Configurar listeners
         setupActions()
+        darkMode()
     }
 
     private fun initViews() {
@@ -84,13 +82,13 @@ class AddBillActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         spinner = binding.spinnerPay
-        val adapter = ArrayAdapter(this, R.layout.simple_spinner_item, Constants.TYPE_PAY)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Constants.TYPE_PAY)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
     }
 
     private fun setupActions() {
-        searchClienteEditText = binding.edtNumeroIdentificacion
+        searchClienteEditText = binding.edtID
         searchClienteEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -113,6 +111,7 @@ class AddBillActivity : AppCompatActivity() {
         binding.btnAddItem.setOnClickListener {
             val intent = Intent(this, AddItemActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         binding.btnGenerateBill.setOnClickListener {
@@ -184,19 +183,20 @@ class AddBillActivity : AppCompatActivity() {
                             val cliente = childSnapshot.getValue(CLIENTE::class.java)
                             if (cliente != null) {
                                 clienteEncontrado = cliente
-                                binding.edtNumeroIdentificacion.setTextColor(Color.BLACK)
-                                binding.txtClienteName.text = cliente.primer_nombre+" "+cliente.apellido_paterno
-                                binding.txtClienteName.setTextColor(Color.BLACK)
-                                binding.txtClienteEmail.text = cliente.correo_electronico
-                                binding.txtClienteEmail.setTextColor(Color.BLACK)
+                                binding.edtID.setTextColor(Color.BLACK)
+                                binding.txtClientName.text = cliente.primer_nombre+" "+cliente.apellido_paterno
+                                binding.txtClientName.setTextColor(Color.BLACK)
+                                binding.txtClientEmail.text = cliente.correo_electronico
+                                binding.txtClientEmail.setTextColor(Color.BLACK)
+                                darkMode()
                             }
                         }
                     } else {
-                        binding.edtNumeroIdentificacion.setTextColor(Color.RED)
-                        binding.txtClienteName.text = "Cliente no Identificado"
-                        binding.txtClienteName.setTextColor(Color.RED)
-                        binding.txtClienteEmail.text = "---"
-                        binding.txtClienteEmail.setTextColor(Color.RED)
+                        binding.edtID.setTextColor(Color.RED)
+                        binding.txtClientName.text = "Cliente no Identificado"
+                        binding.txtClientName.setTextColor(Color.RED)
+                        binding.txtClientEmail.text = "---"
+                        binding.txtClientEmail.setTextColor(Color.RED)
                     }
                 }
 
@@ -238,42 +238,24 @@ class AddBillActivity : AppCompatActivity() {
     }
 
     private fun addBill(bill: FACTURA) {
-        val retrofitBuilder = Retrofit.Builder()
-            .baseUrl("https://appfacturador-b516d-default-rtdb.firebaseio.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(BillDao::class.java)
-        val retrofit = retrofitBuilder.addBill(bill)
-        retrofit.enqueue(
-            object : Callback<FACTURA> {
-                override fun onFailure(call: Call<FACTURA>, t: Throwable) {
-                    Log.d("Agregar", "Error al agregar la factura")
-                }
-                override fun onResponse(call: Call<FACTURA>, response: Response<FACTURA>) {
-                    if (response.isSuccessful) {
-                        ProductHolder.productList.clear()
-                        clienteEncontrado = null
-                        updateShopCounter(contadorNegocio)
-                        Log.d("Agregar", "Factura agregada con éxito")
-                        Toast.makeText(this@AddBillActivity, "¡Factura registrada exitosamente!", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(baseContext, BillActivity::class.java)
-                        startActivity(intent)
-                    } else {
-                        Log.d("Agregar", "Error al agregar la factura")
-                    }
-                }
-            }
-        )
-    }
-
-    private fun updateShopCounter(counter: Int) {
         val database = FirebaseDatabase.getInstance()
-        val negocioRef = database.getReference("Negocios")
+        val billsRef = database.getReference("Factura")
 
-        negocioRef.child(shop).child("contador").setValue(counter)
-            .addOnSuccessListener {}
-            .addOnFailureListener { error ->
-                print(error)
+        val newBillRef = billsRef.push()
+        val newBillId = newBillRef.key
+        bill.id = newBillId.toString()
+
+        newBillRef.setValue(bill)
+            .addOnSuccessListener {
+                ProductHolder.productList.clear()
+                clienteEncontrado = null
+                updateShopCounter()
+                Toast.makeText(this@AddBillActivity, "¡Factura registrada exitosamente!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this@AddBillActivity, BillActivity::class.java)
+                startActivity(intent)
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this@AddBillActivity, "Error al agregar la factura: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -287,6 +269,32 @@ class AddBillActivity : AppCompatActivity() {
                 if (contador != null) {
                     contadorNegocio = contador+1
                 }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Toast.makeText(
+                    this@AddBillActivity,
+                    "Error en la solicitud: " + databaseError.message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+    }
+
+    private fun updateShopCounter() {
+        val database = FirebaseDatabase.getInstance()
+        val negocioRef = database.getReference("Negocios")
+
+        negocioRef.child(shop).child("contador").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val contador = dataSnapshot.getValue(Long::class.java)?.toInt() ?: 0
+                negocioRef.child(shop).child("contador").setValue(contador + 1)
+                    .addOnSuccessListener {
+                        // Éxito al actualizar el contador del negocio
+                    }
+                    .addOnFailureListener { exception ->
+                        Toast.makeText(this@AddBillActivity, "Error al actualizar el contador del negocio: ${exception.message}", Toast.LENGTH_SHORT).show()
+                    }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -335,5 +343,49 @@ class AddBillActivity : AppCompatActivity() {
 
     private fun calculateTotalBill(): Float {
         return calculateSubtotal() + calculateTotalIVA() - calculateTotalDiscount()
+    }
+
+    @SuppressLint("ResourceAsColor", "Range")
+    fun darkMode () {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            binding.btnBack.setColorFilter(Color.parseColor("#ffffff"))
+            binding.edtID.setTextColor(Color.parseColor("#ffffff"))
+            binding.edtID.setBackgroundResource(R.drawable.textdark)
+            binding.btnAddClient.setColorFilter(Color.parseColor("#47484a"))
+            binding.txtClientName.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtClientEmail.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnAddItem.setTextColor(Color.parseColor("#121212"))
+            binding.btnAddItem.setBackgroundResource(R.drawable.gradientdark)
+            binding.txtSubtotal.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtIva.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtDiscount.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtTotalBill.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnGenerateBill.setBackgroundResource(R.drawable.textdark)
+            binding.btnGenerateBill.setTextColor(Color.parseColor("#ffffff"))
+            binding.divider.setBackgroundColor(Color.parseColor("#242424"))
+        }
+    }
+
+    private fun showExitConfirmationDialog() {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setTitle("Advertencia")
+        alertDialogBuilder.setMessage("Todos los cambios se perderán. ¿Desea continuar?")
+        alertDialogBuilder.setPositiveButton("Salir") { dialogInterface: DialogInterface, _: Int ->
+            // Salir de la aplicación
+            finish()
+        }
+        alertDialogBuilder.setNegativeButton("Cancelar") { dialogInterface: DialogInterface, _: Int ->
+            // Cancelar la acción de salida
+            dialogInterface.dismiss()
+        }
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
+
+    override fun onBackPressed() {
+        showExitConfirmationDialog()
     }
 }
