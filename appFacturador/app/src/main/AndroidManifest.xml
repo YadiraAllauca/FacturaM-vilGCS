@@ -24,140 +24,147 @@
         android:theme="@style/Theme.AppFacturador"
         tools:targetApi="31">
         <activity
-            android:name=".CreditNoteActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:name=".ProfileEmployeeActivity"
             android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".CreditNoteActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".SignActivity"
-            android:windowSoftInputMode="adjustPan"
             android:exported="false"
-            android:theme="@style/PopUp">
+            android:theme="@style/PopUp"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".EditInfoActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".ProductDetailActivity"
-            android:windowSoftInputMode="adjustPan"
             android:exported="false"
-            android:theme="@style/PopUp">
+            android:theme="@style/PopUp"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".BillDetailActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".AddItemActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".AddBillActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".FilterBillActivity"
-            android:windowSoftInputMode="adjustPan"
             android:exported="false"
-            android:theme="@style/PopUp">
+            android:theme="@style/PopUp"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".BillActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".AddEmployeeActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".EmployeeActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".AddClientActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".ClientActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".AddProductActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".ShopActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".ProductActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -170,25 +177,25 @@
         </activity>
         <activity
             android:name=".MenuActivity"
-            android:windowSoftInputMode="adjustPan"
             android:exported="false"
-            android:theme="@style/PopUp">
+            android:theme="@style/PopUp"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".ProfileActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false">
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

@@ -8,15 +8,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import dev.android.appfacturador.databinding.ItemClientBinding
 import dev.android.appfacturador.model.CLIENTE
+import dev.android.appfacturador.model.EMPLEADO
 
 class ClientAdapter(var clients: List<CLIENTE> = emptyList()) :
     RecyclerView.Adapter<ClientAdapter.ClientAdapterViewHolder>() {
     lateinit var setOnClickClient: (CLIENTE) -> Unit
+    var currentUserEmail: String = ""
 
     inner class ClientAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var binding: ItemClientBinding = ItemClientBinding.bind(itemView)
+
         @RequiresApi(Build.VERSION_CODES.P)
         fun bind(client: CLIENTE) = with(binding) {
             binding.txtInitials.text =
@@ -26,7 +33,8 @@ class ClientAdapter(var clients: List<CLIENTE> = emptyList()) :
             binding.txtID.text = client.numero_dni
 
             val resources = root.resources
-            val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            val currentNightMode =
+                resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
             // Comprueba el modo actual
             if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
                 // El modo actual es dark
@@ -36,6 +44,29 @@ class ClientAdapter(var clients: List<CLIENTE> = emptyList()) :
                 btnContainer.setCardBackgroundColor(Color.parseColor("#47484a"))
                 cardProduct.outlineSpotShadowColor = Color.parseColor("#ffffff")
             }
+            if (currentUserEmail.isNotEmpty()) {
+                val usuariosRef = FirebaseDatabase.getInstance().getReference("Empleado")
+
+                usuariosRef.orderByChild("correo_electronico").equalTo(currentUserEmail)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                for (childSnapshot in dataSnapshot.children) {
+                                    val empleado = childSnapshot.getValue(EMPLEADO::class.java)
+                                    if (empleado != null && empleado.tipo_empleado == "V") {
+                                        itemView.isClickable = false
+                                    }
+                                    break
+                                }
+                            }
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+
+                        }
+                    })
+            }
+
 
             itemView.setOnClickListener {
                 setOnClickClient(client)
@@ -65,6 +96,11 @@ class ClientAdapter(var clients: List<CLIENTE> = emptyList()) :
 
     fun updateListClients(clients: List<CLIENTE>) {
         this.clients = clients
+        notifyDataSetChanged()
+    }
+
+    fun setCurrentUserEmailClient(email: String) {
+        currentUserEmail = email
         notifyDataSetChanged()
     }
 

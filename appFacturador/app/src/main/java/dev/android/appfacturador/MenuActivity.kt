@@ -17,10 +17,20 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import dev.android.appfacturador.databinding.ActivityMenuBinding
+import dev.android.appfacturador.model.EMPLEADO
 
 class MenuActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMenuBinding
+    private var isSeller  = false
+    private val instanceFirebase = Firebase.database
 
     @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +39,7 @@ class MenuActivity : AppCompatActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
-
+        checkTypeEmployee()
         darkMode()
 
         binding.btnArrow.setOnClickListener {
@@ -75,7 +85,12 @@ class MenuActivity : AppCompatActivity() {
             finish()
         }
         binding.btnProfiles.setOnClickListener {
-            val intent = Intent(this, ProfileActivity::class.java)
+            val intent: Intent
+            if(isSeller){
+                intent = Intent(this, ProfileEmployeeActivity::class.java)
+            }else {
+                intent = Intent(this, ProfileActivity::class.java)
+            }
             startActivity(intent)
             finish()
         }
@@ -117,4 +132,36 @@ class MenuActivity : AppCompatActivity() {
             icon.setColorFilter(Color.parseColor("#ffffff"))
         }
     }
+
+    private fun checkTypeEmployee() {
+        val user = FirebaseAuth.getInstance().currentUser
+        val email = user?.email
+
+        val usuariosRef = instanceFirebase.getReference("Empleado")
+
+        usuariosRef.orderByChild("correo_electronico").equalTo(email)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (childSnapshot in dataSnapshot.children) {
+                            val empleado = childSnapshot.getValue(EMPLEADO::class.java)
+                            if (empleado != null) {
+                                if (empleado.tipo_empleado == "V") {
+                                    isSeller = true
+                                }
+                            }
+                        }
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Toast.makeText(
+                        this@MenuActivity,
+                        "Error en la solicitud: " + databaseError.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
+    }
+
 }
