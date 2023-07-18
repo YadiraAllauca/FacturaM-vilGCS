@@ -10,7 +10,6 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import dev.android.appfacturador.databinding.ItemBillBinding
 import dev.android.appfacturador.model.FACTURA
-import dev.android.appfacturador.model.PRODUCTO
 
 class BillAdapter(var bills: List<FACTURA> = emptyList()) :
     RecyclerView.Adapter<BillAdapter.BillAdapterViewHolder>() {
@@ -18,15 +17,18 @@ class BillAdapter(var bills: List<FACTURA> = emptyList()) :
 
     inner class BillAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var binding: ItemBillBinding = ItemBillBinding.bind(itemView)
+
         @RequiresApi(Build.VERSION_CODES.P)
         fun bind(bill: FACTURA) = with(binding) {
             txtBillNumber.text = "Factura " + bill.numero_factura
             txtClientID.text = bill.cliente?.numero_dni
             txtDate.text = bill.fecha
-            txtBillNumberInitials.text = bill.cliente?.primer_nombre.toString().substring(0,1)+bill.cliente?.apellido_paterno.toString().substring(0,1)
+            txtBillNumberInitials.text = bill.cliente?.primer_nombre.toString()
+                .substring(0, 1) + bill.cliente?.apellido_paterno.toString().substring(0, 1)
 
             val resources = root.resources
-            val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            val currentNightMode =
+                resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
             // Comprueba el modo actual
             if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
                 // El modo actual es dark

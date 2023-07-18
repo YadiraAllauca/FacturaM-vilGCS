@@ -57,7 +57,6 @@ class AddProductActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddProductBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
@@ -163,7 +162,7 @@ class AddProductActivity : AppCompatActivity() {
             })
     }
 
-    fun setupActions(){
+    fun setupActions() {
         val loadImage =
             registerForActivityResult(ActivityResultContracts.GetContent(), ActivityResultCallback {
                 if (it != null) {
@@ -200,11 +199,21 @@ class AddProductActivity : AppCompatActivity() {
                     img = "null"
                 }
 
-                var productData = PRODUCTO(id,product,price.toFloat(),discount.toInt(),iva,barcode,img,shop)
+                var productData = PRODUCTO(
+                    id,
+                    product,
+                    price.toFloat(),
+                    discount.toInt(),
+                    iva,
+                    barcode,
+                    img,
+                    shop
+                )
 
                 if (id.isEmpty()) {
                     addNewProduct(productData)
-                    Toast.makeText(this, "¡Producto agregado exitosamente!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "¡Producto agregado exitosamente!", Toast.LENGTH_SHORT)
+                        .show()
                 } else {
                     if (!imageStorage.isEmpty() && image != null) {
                         uploadImage(image!!, productData.id)
@@ -337,7 +346,7 @@ class AddProductActivity : AppCompatActivity() {
     }
 
     @SuppressLint("ResourceAsColor", "Range")
-    fun darkMode () {
+    fun darkMode() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
@@ -360,7 +369,8 @@ class AddProductActivity : AppCompatActivity() {
             binding.btnMicProduct.setColorFilter(Color.parseColor("#ffffff"))
             binding.btnMicPrice.setColorFilter(Color.parseColor("#ffffff"))
             binding.btnMicDiscount.setColorFilter(Color.parseColor("#ffffff"))
-            val drawableScannr: Drawable? = ContextCompat.getDrawable(this, R.drawable.scanner_white)
+            val drawableScannr: Drawable? =
+                ContextCompat.getDrawable(this, R.drawable.scanner_white)
             binding.btnScanner.setImageDrawable(drawableScannr)
             binding.edtProduct.setBackgroundResource(R.drawable.text_info_dark)
             binding.edtPrice.setBackgroundResource(R.drawable.text_info_dark)

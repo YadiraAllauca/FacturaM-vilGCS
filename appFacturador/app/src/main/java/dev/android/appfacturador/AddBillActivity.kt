@@ -24,7 +24,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import dev.android.appfacturador.*
 import dev.android.appfacturador.databinding.ActivityAddBillBinding
 import dev.android.appfacturador.model.CLIENTE
 import dev.android.appfacturador.model.EMPLEADO
@@ -37,9 +36,11 @@ class AddBillActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddBillBinding
     lateinit var email: String
     lateinit var shop: String
+
     private val adapter: ProductBillAdapter by lazy {
         ProductBillAdapter()
     }
+
     private lateinit var recyclerView: RecyclerView
     val productList: MutableList<ProductHolder.ProductItem> =
         ProductHolder.productList.toMutableList()
@@ -56,7 +57,6 @@ class AddBillActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddBillBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 

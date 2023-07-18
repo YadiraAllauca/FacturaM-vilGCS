@@ -35,7 +35,6 @@ class EditInfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditInfoBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
@@ -55,7 +54,7 @@ class EditInfoActivity : AppCompatActivity() {
     }
 
     @SuppressLint("ResourceAsColor", "Range")
-    fun darkMode () {
+    fun darkMode() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
@@ -68,11 +67,6 @@ class EditInfoActivity : AppCompatActivity() {
             binding.txtEmail.setTextColor(Color.parseColor("#ffffff"))
             binding.txtPhone.setTextColor(Color.parseColor("#ffffff"))
             binding.txtAddress.setTextColor(Color.parseColor("#ffffff"))
-            binding.btnMicName.setColorFilter(Color.parseColor("#ffffff"))
-            binding.btnMicIDNumber.setColorFilter(Color.parseColor("#ffffff"))
-            binding.btnMicEmail.setColorFilter(Color.parseColor("#ffffff"))
-            binding.btnMicPhoneNumber.setColorFilter(Color.parseColor("#ffffff"))
-            binding.btnMicAddres.setColorFilter(Color.parseColor("#ffffff"))
             binding.edtName.setBackgroundResource(dev.android.appfacturador.R.drawable.text_info_dark)
             binding.edtNumDNI.setBackgroundResource(dev.android.appfacturador.R.drawable.text_info_dark)
             binding.edtEmail.setBackgroundResource(dev.android.appfacturador.R.drawable.text_info_dark)
@@ -121,6 +115,7 @@ class EditInfoActivity : AppCompatActivity() {
                         }
                     }
                 }
+
                 override fun onCancelled(databaseError: DatabaseError) {
                     Toast.makeText(
                         this@EditInfoActivity,
@@ -131,7 +126,7 @@ class EditInfoActivity : AppCompatActivity() {
             })
     }
 
-    fun setupActions(){
+    fun setupActions() {
         binding.btnBack.setOnClickListener {
             finish()
         }
@@ -156,8 +151,10 @@ class EditInfoActivity : AppCompatActivity() {
                         binding.edtAddress.setText(tienda.direccion)
                         binding.edtPhone.setText(tienda.celular)
                     }
-                } else {}
+                } else {
+                }
             }
+
             override fun onCancelled(databaseError: DatabaseError) {
                 Toast.makeText(
                     this@EditInfoActivity,

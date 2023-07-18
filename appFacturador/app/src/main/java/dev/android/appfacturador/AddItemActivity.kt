@@ -53,7 +53,6 @@ class AddItemActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddItemBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
@@ -76,6 +75,7 @@ class AddItemActivity : AppCompatActivity() {
                 val searchTerm = s.toString().trim()
                 updateProductList(searchTerm)
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
 
@@ -102,6 +102,7 @@ class AddItemActivity : AppCompatActivity() {
                         loadData()
                     }
                 }
+
                 override fun onCancelled(databaseError: DatabaseError) {
                     Toast.makeText(
                         this@AddItemActivity,
@@ -112,7 +113,7 @@ class AddItemActivity : AppCompatActivity() {
             })
     }
 
-    fun setupViews(){
+    fun setupViews() {
         recyclerView = binding.rvProducts
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
@@ -127,6 +128,7 @@ class AddItemActivity : AppCompatActivity() {
                 addedList.remove(product)
                 val position =
                     ProductHolder.productList.indexOfFirst { it.product?.nombre == product.nombre }
+
                 if (position != -1) {
                     ProductHolder.productList.removeAt(position)
                 }
@@ -136,7 +138,7 @@ class AddItemActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
     }
 
-    fun setupActions(){
+    fun setupActions() {
         binding.btnScanner.setOnClickListener {
             initScanner()
         }
@@ -243,7 +245,7 @@ class AddItemActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.P)
     @SuppressLint("ResourceAsColor", "ResourceType")
-    fun darkMode () {
+    fun darkMode() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
@@ -257,7 +259,8 @@ class AddItemActivity : AppCompatActivity() {
             val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.scanner_white)
             binding.btnScanner.setImageDrawable(drawable)
             binding.btnAddItems.imageTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
-            binding.btnAddItems.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#47484a"))
+            binding.btnAddItems.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#47484a"))
             binding.btnAllProducts.setTextColor(Color.parseColor("#121212"))
             binding.btnAllProducts.setBackgroundResource(R.drawable.gradientdarkwhite)
             binding.btnAddedProducts.setTextColor(Color.parseColor("#ffffff"))
@@ -266,7 +269,7 @@ class AddItemActivity : AppCompatActivity() {
         }
     }
 
-    fun buttonsDarkMode (buttonClicked: Button, buttonNotClicked: Button){
+    fun buttonsDarkMode(buttonClicked: Button, buttonNotClicked: Button) {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {

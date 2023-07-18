@@ -3,7 +3,6 @@ package dev.android.appfacturador
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Context
-import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.database.Cursor
 import android.graphics.Color
@@ -30,11 +29,11 @@ class SignActivity : AppCompatActivity() {
     private lateinit var storageReference: StorageReference
     private val storage_path = "firma/*"
     private val progressDialog: ProgressDialog? = null
+
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
@@ -94,16 +93,17 @@ class SignActivity : AppCompatActivity() {
                 val cursor: Cursor? = context.contentResolver.query(uri, null, null, null, null)
                 try {
                     if (cursor != null && cursor.moveToFirst()) {
-                        result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                        result =
+                            cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
                     }
-                }finally {
+                } finally {
                     cursor?.close()
                 }
-                if(result == null) {
+                if (result == null) {
                     result = uri.path.toString()
                     val cutt = result.lastIndexOf('/')
-                    if(cutt != -1) {
-                        result = result.substring(cutt +1)
+                    if (cutt != -1) {
+                        result = result.substring(cutt + 1)
                     }
                 }
             }
@@ -113,7 +113,7 @@ class SignActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.P)
     @SuppressLint("ResourceAsColor", "ResourceType")
-    fun darkMode () {
+    fun darkMode() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {

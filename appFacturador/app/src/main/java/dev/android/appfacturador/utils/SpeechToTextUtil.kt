@@ -1,10 +1,7 @@
 package dev.android.appfacturador.utils
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.speech.RecognizerIntent
-import android.widget.EditText
-import androidx.core.app.ActivityCompat.startActivityForResult
 
 object SpeechToTextUtil {
     fun startSpeechToText(activity: Activity, requestCode: Int) {

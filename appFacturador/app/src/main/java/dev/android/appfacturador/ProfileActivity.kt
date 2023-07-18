@@ -10,7 +10,6 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.Window
-import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -26,7 +25,6 @@ class ProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
@@ -79,7 +77,7 @@ class ProfileActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.P)
     @SuppressLint("ResourceAsColor", "Range")
-    fun darkMode () {
+    fun darkMode() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {

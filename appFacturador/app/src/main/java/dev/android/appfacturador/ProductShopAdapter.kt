@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.squareup.picasso.Picasso
 import dev.android.appfacturador.databinding.ItemShopBinding
 import dev.android.appfacturador.model.PRODUCTO
 
@@ -43,7 +42,8 @@ class ProductShopAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
             }
 
             val resources = root.resources
-            val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            val currentNightMode =
+                resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
             // Comprueba el modo actual
             if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
                 // El modo actual es dark
@@ -96,6 +96,7 @@ class ProductShopAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
         return ProductShopAdapterViewHolder(view)
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: ProductShopAdapterViewHolder, position: Int) {
         val productItem = products[position]
         holder.bind(productItem, position)

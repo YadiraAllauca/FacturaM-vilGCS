@@ -22,13 +22,10 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
-import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -37,18 +34,11 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.zxing.integration.android.IntentIntegrator
-import dev.android.appfacturador.database.ProductDao
 import dev.android.appfacturador.databinding.ActivityProductBinding
 import dev.android.appfacturador.model.EMPLEADO
 import dev.android.appfacturador.model.PRODUCTO
 import dev.android.appfacturador.utils.Constants
 import dev.android.appfacturador.utils.SpeechToTextUtil
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.Executors
 
 class ProductActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProductBinding
@@ -69,7 +59,6 @@ class ProductActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProductBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
@@ -94,6 +83,7 @@ class ProductActivity : AppCompatActivity() {
                 val searchTerm = s.toString().trim()
                 updateProductList(searchTerm)
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
 
@@ -124,8 +114,13 @@ class ProductActivity : AppCompatActivity() {
                         }
                     }
                 }
+
                 override fun onCancelled(databaseError: DatabaseError) {
-                    Toast.makeText(this@ProductActivity,"Error en la solicitud: " + databaseError.message,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@ProductActivity,
+                        "Error en la solicitud: " + databaseError.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             })
     }
@@ -144,7 +139,8 @@ class ProductActivity : AppCompatActivity() {
             val bundle = Bundle().apply {
                 putSerializable(Constants.KEY_PRODUCT, product)
             }
-            val intent = Intent(applicationContext, AddProductActivity::class.java).putExtras(bundle)
+            val intent =
+                Intent(applicationContext, AddProductActivity::class.java).putExtras(bundle)
             startActivity(intent)
         }
 
@@ -174,7 +170,7 @@ class ProductActivity : AppCompatActivity() {
         dr.addValueEventListener(listen)
     }
 
-    fun setupActions(){
+    fun setupActions() {
         binding.btnCloses.setOnClickListener {
             val intent = Intent(this, MenuActivity::class.java).apply {
                 putExtra("option", "product")
@@ -299,7 +295,8 @@ class ProductActivity : AppCompatActivity() {
     }
 
     private fun shoppingCardActive() {
-        binding.imgFull.visibility = if (ProductHolder.productList.isEmpty()) View.GONE else View.VISIBLE
+        binding.imgFull.visibility =
+            if (ProductHolder.productList.isEmpty()) View.GONE else View.VISIBLE
     }
 
     override fun onRestart() {
@@ -309,7 +306,7 @@ class ProductActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.P)
     @SuppressLint("ResourceAsColor", "ResourceType")
-    fun darkMode () {
+    fun darkMode() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
@@ -323,8 +320,10 @@ class ProductActivity : AppCompatActivity() {
             binding.btnMicSearch.setColorFilter(Color.parseColor("#47484a"))
             val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.scanner_white)
             binding.btnScanner.setImageDrawable(drawable)
-            binding.btnAddProduct.imageTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
-            binding.btnAddProduct.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#47484a"))
+            binding.btnAddProduct.imageTintList =
+                ColorStateList.valueOf(Color.parseColor("#121212"))
+            binding.btnAddProduct.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#47484a"))
             binding.btnClose.setCardBackgroundColor(Color.parseColor("#47484a"))
             binding.btnCloses.setColorFilter(Color.parseColor("#121212"))
         }

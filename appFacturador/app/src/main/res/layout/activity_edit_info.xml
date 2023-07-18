@@ -62,22 +62,22 @@
             app:cardElevation="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" >
+            tools:ignore="MissingConstraints">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <ImageView
-                android:id="@+id/imgProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/whole_foods_market_vancouver_broadway_store_interior_2018" />
+                    android:id="@+id/imgProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/whole_foods_market_vancouver_broadway_store_interior_2018" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
@@ -194,7 +194,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="50dp"
-        android:layout_marginEnd="3dp"
+        android:layout_marginEnd="30dp"
         android:background="@drawable/text_info"
         android:drawablePadding="10dp"
         android:editable="false"
@@ -205,7 +205,7 @@
         android:textColorHint="#B3B3B3"
         android:textSize="16sp"
         app:backgroundTint="@null"
-        app:layout_constraintEnd_toStartOf="@+id/btnMicName"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txtName"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
@@ -214,7 +214,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="3dp"
+        android:layout_marginEnd="30dp"
         android:background="@drawable/text_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
@@ -226,7 +226,6 @@
         android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnMicEmail"
         app:layout_constraintStart_toStartOf="@+id/edtName"
         app:layout_constraintTop_toBottomOf="@+id/view2" />
 
@@ -234,7 +233,7 @@
         android:id="@+id/edtPhone"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="3dp"
+        android:layout_marginEnd="30dp"
         android:background="@drawable/text_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
@@ -246,7 +245,6 @@
         android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnMicPhoneNumber"
         app:layout_constraintStart_toStartOf="@+id/edtName"
         app:layout_constraintTop_toBottomOf="@+id/edtEmail" />
 
@@ -254,7 +252,7 @@
         android:id="@+id/edtAddress"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="3dp"
+        android:layout_marginEnd="30dp"
         android:background="@drawable/text_info"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
@@ -266,7 +264,6 @@
         android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnMicAddres"
         app:layout_constraintStart_toStartOf="@+id/edtName"
         app:layout_constraintTop_toBottomOf="@+id/edtPhone" />
 
@@ -274,8 +271,7 @@
         android:id="@+id/edtNumDNI"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginStart="200dp"
-        android:layout_marginEnd="3dp"
+        android:layout_marginEnd="30dp"
         android:background="@drawable/text_info"
         android:drawablePadding="10dp"
         android:enabled="false"
@@ -288,8 +284,7 @@
         android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnMicIDNumber"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/txtDNINumber"
         app:layout_constraintTop_toBottomOf="@+id/txtDNI" />
 
     <Spinner
@@ -304,55 +299,5 @@
         app:layout_constraintEnd_toStartOf="@+id/edtNumDNI"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtDNI" />
-
-    <ImageView
-        android:id="@+id/btnMicName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtName"
-        app:srcCompat="@drawable/ic_baseline_mic_24" />
-
-    <ImageView
-        android:id="@+id/btnMicIDNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtNumDNI"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtNumDNI"
-        app:srcCompat="@drawable/ic_baseline_mic_24" />
-
-    <ImageView
-        android:id="@+id/btnMicEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtEmail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtEmail"
-        app:srcCompat="@drawable/ic_baseline_mic_24" />
-
-    <ImageView
-        android:id="@+id/btnMicPhoneNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtPhone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtPhone"
-        app:srcCompat="@drawable/ic_baseline_mic_24" />
-
-    <ImageView
-        android:id="@+id/btnMicAddres"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtAddress"
-        app:srcCompat="@drawable/ic_baseline_mic_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -54,7 +54,6 @@ class BillActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBillBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
@@ -81,13 +80,14 @@ class BillActivity : AppCompatActivity() {
         typing()
     }
 
-    fun typing () {
+    fun typing() {
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val searchTerm = s.toString().trim()
                 filterResult(searchTerm, stateButton)
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
     }
@@ -111,6 +111,7 @@ class BillActivity : AppCompatActivity() {
                         loadData()
                     }
                 }
+
                 override fun onCancelled(databaseError: DatabaseError) {
                     Toast.makeText(
                         this@BillActivity,
@@ -121,7 +122,7 @@ class BillActivity : AppCompatActivity() {
             })
     }
 
-    fun setupViews(){
+    fun setupViews() {
         recyclerView = binding.rvBills
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
@@ -138,7 +139,7 @@ class BillActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
     }
 
-    fun setupActions(){
+    fun setupActions() {
         binding.btnFilters.setOnClickListener {
             val intent = Intent(this, FilterBillActivity::class.java)
             startActivityForResult(intent, REQUEST_CODE)
@@ -195,6 +196,7 @@ class BillActivity : AppCompatActivity() {
                 }
                 adapter.updateListbills(list)
             }
+
             override fun onCancelled(error: DatabaseError) {
                 Log.e("TAG", "messages:onCancelled: ${error.message}")
             }
@@ -227,7 +229,10 @@ class BillActivity : AppCompatActivity() {
                 message = "¡No hay resultados con clientes que tengan ese número de identificación"
             } else if (filter == "date") {
                 filteredList = list.filter { factura ->
-                    factura.fecha.contains(searchTerm, ignoreCase = true) && factura.estado.contains(state)
+                    factura.fecha.contains(
+                        searchTerm,
+                        ignoreCase = true
+                    ) && factura.estado.contains(state)
                 }
                 message = "¡No hay resultados de fechas creadas en esa fecha!"
             } else {
@@ -240,6 +245,7 @@ class BillActivity : AppCompatActivity() {
                 message = "¡No hay resultados con es número de factura!"
             }
         }
+
         if (filteredList.isEmpty()) {
             binding.txtResult.visibility = View.VISIBLE
             binding.txtResult.text = message
@@ -249,7 +255,7 @@ class BillActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.P)
     @SuppressLint("ResourceAsColor", "ResourceType")
-    fun darkMode () {
+    fun darkMode() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
@@ -260,7 +266,8 @@ class BillActivity : AppCompatActivity() {
             binding.edtSearch.outlineSpotShadowColor = Color.parseColor("#ffffff")
             binding.btnFilters.setColorFilter(Color.parseColor("#47484a"))
             binding.btnAddBill.imageTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
-            binding.btnAddBill.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#47484a"))
+            binding.btnAddBill.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#47484a"))
             binding.btnClose.setCardBackgroundColor(Color.parseColor("#47484a"))
             binding.btnCloses.setColorFilter(Color.parseColor("#121212"))
             binding.btnAllBills.setTextColor(Color.parseColor("#121212"))
@@ -271,7 +278,7 @@ class BillActivity : AppCompatActivity() {
         }
     }
 
-    fun buttonsDarkMode (buttonClicked: Button, buttonNotClicked: Button){
+    fun buttonsDarkMode(buttonClicked: Button, buttonNotClicked: Button) {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {

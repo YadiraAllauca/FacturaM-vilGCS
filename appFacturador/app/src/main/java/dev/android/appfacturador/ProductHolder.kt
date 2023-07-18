@@ -1,16 +1,13 @@
 package dev.android.appfacturador
 
-import android.view.View
 import androidx.databinding.BaseObservable
-import androidx.databinding.Bindable
-import dev.android.appfacturador.databinding.ActivityProductBinding
 import dev.android.appfacturador.model.PRODUCTO
 import java.io.Serializable
 
-object ProductHolder: BaseObservable() {
-    data class ProductItem(val product: PRODUCTO?, var quantity: Int, var discount: Int):
+object ProductHolder : BaseObservable() {
+    data class ProductItem(val product: PRODUCTO?, var quantity: Int, var discount: Int) :
         Serializable {
-        constructor(): this(null, 0,0)
+        constructor() : this(null, 0, 0)
     }
 
     var productList: MutableList<ProductItem> = mutableListOf()
