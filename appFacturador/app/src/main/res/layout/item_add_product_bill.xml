@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardProduct"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
@@ -14,7 +15,7 @@
         android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/btnFrequency"
+            android:id="@+id/btnProductInfo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:cardBackgroundColor="#fff"
@@ -37,7 +38,7 @@
                     android:text="Nombre producto"
                     android:textColor="#000000"
                     android:textSize="16dp"
-                    app:layout_constraintStart_toEndOf="@+id/btnProfile"
+                    app:layout_constraintStart_toEndOf="@+id/btnProductImage"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -50,16 +51,16 @@
                     android:text="$00.00"
                     android:textColor="#C0C0C0"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/btnProfile" />
+                    app:layout_constraintStart_toEndOf="@+id/btnProductImage" />
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/btnProfile"
+                    android:id="@+id/btnProductImage"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    app:cardBackgroundColor="#EFEFEF"
+                    app:cardBackgroundColor="#121212"
                     app:cardCornerRadius="15dp"
                     app:cardElevation="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"

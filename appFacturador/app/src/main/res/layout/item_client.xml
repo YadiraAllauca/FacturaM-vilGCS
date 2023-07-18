@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardProduct"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
@@ -14,7 +15,7 @@
         android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/btnFrequency"
+            android:id="@+id/btnProductInfo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:cardBackgroundColor="#fff"
@@ -39,7 +40,7 @@
                     android:textColor="#000000"
                     android:textSize="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/btnProfile"
+                    app:layout_constraintStart_toEndOf="@+id/btnContainer"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -52,10 +53,10 @@
                     android:text="cédula"
                     android:textColor="#C0C0C0"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/btnProfile" />
+                    app:layout_constraintStart_toEndOf="@+id/btnContainer" />
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/btnProfile"
+                    android:id="@+id/btnContainer"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginStart="10dp"
@@ -74,7 +75,7 @@
                         android:layout_height="match_parent">>
 
                         <TextView
-                            android:id="@+id/textView7"
+                            android:id="@+id/txtInitials"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/roboto_bold"
@@ -86,7 +87,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
                 </androidx.cardview.widget.CardView>

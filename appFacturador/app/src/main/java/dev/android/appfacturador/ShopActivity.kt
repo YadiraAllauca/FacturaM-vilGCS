@@ -1,64 +1,59 @@
 package dev.android.appfacturador
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.Window
-import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import dev.android.appfacturador.ProductHolder.productList
+import dev.android.appfacturador.databinding.ActivityProductBinding
 import dev.android.appfacturador.databinding.ActivityShopBinding
-import dev.android.appfacturador.model.PRODUCTO
 
-class ShopActivity : AppCompatActivity() {
+class ShopActivity : AppCompatActivity()  {
     lateinit var binding: ActivityShopBinding
+    lateinit var bindingProductBinding: ActivityProductBinding
     private val adapter: ProductShopAdapter by lazy {
         ProductShopAdapter()
     }
     private lateinit var recyclerView: RecyclerView
     private var total: Float = 0f
-    val productList: MutableList<ProductHolder.ProductItem> = ProductHolder.productList.toMutableList()
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityShopBinding.inflate(layoutInflater)
+        bindingProductBinding = ActivityProductBinding.inflate(layoutInflater)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
+        initialize()
+        loadData()
+        actions()
+        darkMode()
+    }
+
+    private fun initialize() {
         recyclerView = binding.rvHistory
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
-
-        loadData()
-
-        binding.btnBack.setOnClickListener {
-            finish()
-        }
-
-        binding.btnFacturar.setOnClickListener {
-            productList.clear()
-            val intent = Intent(this, AddBillActivity::class.java).apply {}
-            startActivity(intent)
-        }
-
-        // Obtener email de usuario
-        val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
-        val email = sharedPreferences.getString("email", "")
-        Toast.makeText(this, "Valor del email: $email", Toast.LENGTH_SHORT).show()
     }
 
     private fun loadData() {
-        total = productList.sumByDouble { ((it.product?.precio ?: 0f) * it.quantity).toDouble() }.toFloat()
+        total = ProductHolder.productList.sumByDouble { ((it.product?.precio ?: 0f) * it.quantity).toDouble() }.toFloat()
 
-        adapter.updateListProducts(productList)
+        adapter.updateListProducts(ProductHolder.productList)
         recyclerView.adapter = adapter
         updateTotalShop()
 
         adapter.setOnClickListenerProductDelete = { product ->
-            productList.removeAll { it.product == product }
+            ProductHolder.productList.removeAll { it.product == product }
             updateTotalShop()
         }
 
@@ -71,17 +66,47 @@ class ShopActivity : AppCompatActivity() {
             ProductHolder.updateQuantity(position, quantity)
             updateTotalShop()
         }
+    }
+
+    fun actions(){
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
 
         binding.btnClear.setOnClickListener{
+            bindingProductBinding.imgFull.visibility = View.GONE
             ProductHolder.productList.clear()
-            productList.clear()
             updateTotalShop()
+        }
+
+        binding.btnBill.setOnClickListener {
+            val intent = Intent(this, AddBillActivity::class.java).apply {}
+            startActivity(intent)
+            finish()
         }
     }
 
     fun updateTotalShop(){
-        total = productList.sumByDouble { ((it.product?.precio ?: 0f) * it.quantity).toDouble() }.toFloat()
+        total = ProductHolder.productList.sumByDouble { ((it.product?.precio ?: 0f) * it.quantity).toDouble() }.toFloat()
         adapter.notifyDataSetChanged()
-        binding.txtTotalCarrito.text = "$" + String.format("%.2f", total)
+        binding.txtTotalShop.text = "$" + String.format("%.2f", total)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    @SuppressLint("ResourceAsColor", "Range")
+    fun darkMode () {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            binding.btnContainerTotal.setCardBackgroundColor(Color.parseColor("#121212"))
+            binding.btnContainerTotal.outlineSpotShadowColor = Color.parseColor("#ffffff")
+            binding.btnBill.setBackgroundResource(R.drawable.gradientdark)
+            binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnBack.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnClear.setColorFilter(Color.parseColor("#ffffff"))
+            binding.txtTotal.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtTotalShop.setTextColor(Color.parseColor("#ffffff"))
+        }
     }
 }

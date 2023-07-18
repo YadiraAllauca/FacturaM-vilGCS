@@ -1,8 +1,14 @@
 package dev.android.appfacturador
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -12,6 +18,9 @@ import android.util.Log
 import android.view.Window
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -39,6 +48,7 @@ class ClientActivity : AppCompatActivity() {
     private val db = instanceFirebase.getReference("Cliente")
     private val REQUEST_CODE_SPEECH_TO_TEXT1 = 1
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClientBinding.inflate(layoutInflater)
@@ -47,15 +57,17 @@ class ClientActivity : AppCompatActivity() {
         setContentView(binding.root)
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
-        getShop()
+        binding.btnAddClient.imageTintList = ColorStateList.valueOf(Color.parseColor("#ffffff"))
+
+        getUserData()
         events()
+        darkMode()
         recyclerView = binding.rvClients
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
-
     }
 
-    private fun getShop() {
+    private fun getUserData() {
         val user = FirebaseAuth.getInstance().currentUser
         val email = user?.email
 
@@ -70,6 +82,9 @@ class ClientActivity : AppCompatActivity() {
                             if (empleado != null) {
                                 shop = empleado.negocio
                                 loadData()
+                                if (empleado.tipo_empleado == "V") {
+                                    binding.btnAddClient.isVisible = false
+                                }
                             }
                         }
                     }
@@ -138,6 +153,7 @@ class ClientActivity : AppCompatActivity() {
                         client?.let { list.add(it) }
                     }
                 }
+                adapter.setCurrentUserEmailClient(email)
                 adapter.updateListClients(list)
                 recyclerView.adapter = adapter
             }
@@ -191,6 +207,28 @@ class ClientActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    @SuppressLint("ResourceAsColor", "ResourceType")
+    fun darkMode () {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
+            binding.edtSearchClient.setBackgroundResource(R.drawable.searchdark)
+            binding.edtSearchClient.setTextColor(Color.parseColor("#ffffff"))
+            binding.edtSearchClient.outlineSpotShadowColor = Color.parseColor("#ffffff")
+            binding.btnMicSearch.setColorFilter(Color.parseColor("#47484a"))
+            binding.btnAddClient.imageTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
+            binding.btnAddClient.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#47484a"))
+            binding.btnClose.setCardBackgroundColor(Color.parseColor("#47484a"))
+            binding.btnCloses.setColorFilter(Color.parseColor("#121212"))
+        }
+    }
+
+    override fun onBackPressed() {
     }
 
 }

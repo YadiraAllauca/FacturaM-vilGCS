@@ -38,7 +38,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/btnProfile1"
+        android:id="@+id/btnContainer"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginEnd="-5dp"
@@ -59,14 +59,14 @@
         android:id="@+id/btnCamera"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/btnProfile1"
-        app:layout_constraintEnd_toEndOf="@+id/btnProfile1"
-        app:layout_constraintStart_toStartOf="@+id/btnProfile1"
-        app:layout_constraintTop_toTopOf="@+id/btnProfile1"
+        app:layout_constraintBottom_toBottomOf="@+id/btnContainer"
+        app:layout_constraintEnd_toEndOf="@+id/btnContainer"
+        app:layout_constraintStart_toStartOf="@+id/btnContainer"
+        app:layout_constraintTop_toTopOf="@+id/btnContainer"
         app:srcCompat="@drawable/ic_baseline_camera_alt_24" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/btnProfile2"
+        android:id="@+id/btnInfo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -84,7 +84,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/txtProductNameShop"
+                android:id="@+id/txtInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -103,9 +103,9 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_marginEnd="20dp"
-                app:layout_constraintBottom_toBottomOf="@+id/txtProductNameShop"
+                app:layout_constraintBottom_toBottomOf="@+id/txtInfo"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/txtProductNameShop"
+                app:layout_constraintTop_toTopOf="@+id/txtInfo"
                 app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -113,24 +113,25 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/btnProfile3"
+        android:id="@+id/btnAddEmployees"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
+        app:cardBackgroundColor="#F6F8FD"
         app:cardCornerRadius="25dp"
         app:cardElevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnProfile2">
+        app:layout_constraintTop_toBottomOf="@+id/btnInfo">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView15"
+                android:id="@+id/txtAddEmployees"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -149,9 +150,9 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_marginEnd="20dp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView15"
+                app:layout_constraintBottom_toBottomOf="@+id/txtAddEmployees"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView15"
+                app:layout_constraintTop_toTopOf="@+id/txtAddEmployees"
                 app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -159,7 +160,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/btnProfile4"
+        android:id="@+id/btnExtraInfo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -169,105 +170,91 @@
         app:cardElevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnProfile3">
+        app:layout_constraintTop_toBottomOf="@+id/btnAddEmployees">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/btnAddSign"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/txtSign"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:fontFamily="@font/roboto_bold"
+                        android:text="Cargar firma electrónica"
+                        android:textColor="#000000"
+                        android:textSize="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
             <TextView
-                android:id="@+id/textView16"
+                android:id="@+id/txtAccounts"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:fontFamily="@font/roboto_bold"
-                android:text="Cargar firma electrónica"
-                android:textColor="#000000"
-                android:textSize="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
                 android:fontFamily="@font/roboto_bold"
                 android:text="Contabilidad"
                 android:textColor="#000000"
                 android:textSize="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView16" />
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/roboto_bold"
-                android:text="Tipo de ambiente"
-                android:textColor="#000000"
-                android:textSize="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                android:fontFamily="@font/roboto_bold"
-                android:text="Punto de emisión"
-                android:textColor="#000000"
-                android:textSize="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                app:layout_constraintTop_toBottomOf="@+id/btnAddSign" />
 
             <ImageView
                 android:id="@+id/btnSign"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_marginEnd="20dp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView16"
+                app:layout_constraintBottom_toBottomOf="@+id/btnAddSign"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView16"
+                app:layout_constraintTop_toTopOf="@+id/btnAddSign"
                 app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24" />
 
-            <ImageView
-                android:id="@+id/btnAccount"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView4"
+                app:layout_constraintBottom_toBottomOf="@+id/txtAccounts"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView4"
-                app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24" />
+                app:layout_constraintTop_toTopOf="@+id/txtAccounts" />
 
-            <ImageView
-                android:id="@+id/btnType"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+            <View
+                android:id="@+id/view10"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView5"
+                android:background="#D5D5D5"
+                app:layout_constraintBottom_toTopOf="@+id/txtAccounts"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView5"
-                app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24" />
-
-            <ImageView
-                android:id="@+id/btnEmission"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginEnd="20dp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView6"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textView6"
-                app:srcCompat="@drawable/ic_baseline_arrow_forward_ios_24" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnSign" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -291,8 +278,8 @@
 
             <ImageView
                 android:id="@+id/btnCloses"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginEnd="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -310,13 +297,13 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
-        android:background="@drawable/degradado"
+        android:background="@drawable/gradient"
         android:fontFamily="@font/roboto_bold"
         android:text="CERRAR SESIÓN"
         android:textAllCaps="false"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnProfile4" />
+        app:layout_constraintTop_toBottomOf="@+id/btnExtraInfo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

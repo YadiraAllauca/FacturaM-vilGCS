@@ -1,8 +1,12 @@
 package dev.android.appfacturador
 
 import android.R
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -12,6 +16,8 @@ import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -33,6 +39,7 @@ class AddEmployeeActivity : AppCompatActivity() {
     private lateinit var email: String
     private var oldEmailEdit: String = ""
     private lateinit var shop: String
+    private var isSeller = false
     private var id = ""
     private lateinit var spinnerDNI: Spinner
     private lateinit var spinnerType: Spinner
@@ -51,9 +58,9 @@ class AddEmployeeActivity : AppCompatActivity() {
         initialize()
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
-        getShop()
+        getUserData()
         events()
-
+        darkMode()
     }
 
     private fun initialize() {
@@ -69,7 +76,7 @@ class AddEmployeeActivity : AppCompatActivity() {
         bundle?.let {
             val employee = it.getSerializable(Constants.KEY_EMPLOYEE) as EMPLEADO
             id = employee.id
-            binding.textView8.text =
+            binding.txtInitials.text =
                 employee.primer_nombre.first().toString() + employee.apellido_paterno.first()
                     .toString()
             binding.edtNameEmployee.setText(employee.primer_nombre + " " + employee.segundo_nombre)
@@ -102,7 +109,7 @@ class AddEmployeeActivity : AppCompatActivity() {
         binding.edtNameEmployee.requestFocus()
     }
 
-    private fun getShop() {
+    private fun getUserData() {
         val user = FirebaseAuth.getInstance().currentUser
         val email = user?.email
 
@@ -117,6 +124,10 @@ class AddEmployeeActivity : AppCompatActivity() {
                             val empleado = childSnapshot.getValue(EMPLEADO::class.java)
                             if (empleado != null) {
                                 shop = empleado.negocio
+                                if (empleado.tipo_empleado == "V") {
+                                    isSeller = true
+                                    checkUser()
+                                }
                             }
                         }
                     }
@@ -378,5 +389,81 @@ class AddEmployeeActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkUser() {
+        if (isSeller) {
+            setView()
+        }
+    }
 
+    private fun setView() {
+        binding.edtNameEmployee.isEnabled = false
+        binding.edtLastNameEmployee.isEnabled = false
+        binding.spnDNI.isEnabled = false
+        binding.edtNumDNI.isEnabled = false
+        binding.edtEmailEmployee.isEnabled = false
+        binding.edtPasswordEmployee.isEnabled = false
+        binding.spnType.isEnabled = false
+        binding.btnMicEmployeeNames.isVisible = false
+        binding.btnMicEmployeeNames.isVisible = false
+        binding.btnMicEmployeeLastNames.isVisible = false
+        binding.btnMicIDNumber.isVisible = false
+        binding.btnMicEmail.isVisible = false
+        binding.btnMicPassword.isVisible = false
+        binding.btnAdd.isVisible = false
+
+    }
+
+    private fun showExitConfirmationDialog() {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setTitle("Advertencia")
+        alertDialogBuilder.setMessage("Todos los cambios se perderán. ¿Desea continuar?")
+        alertDialogBuilder.setPositiveButton("Salir") { dialogInterface: DialogInterface, _: Int ->
+            // Salir de la aplicación
+            finish()
+        }
+        alertDialogBuilder.setNegativeButton("Cancelar") { dialogInterface: DialogInterface, _: Int ->
+            // Cancelar la acción de salida
+            dialogInterface.dismiss()
+        }
+        val alertDialog = alertDialogBuilder.create()
+        if (!isSeller) {
+            alertDialog.show()
+        }
+    }
+
+    @SuppressLint("ResourceAsColor", "Range")
+    fun darkMode() {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            binding.btnContainer.setCardBackgroundColor(Color.parseColor("#47484a"))
+            binding.txtInitials.setTextColor(Color.parseColor("#121212"))
+            binding.btnBack.setColorFilter(Color.parseColor("#ffffff"))
+            binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtEmployeeName.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtEmployeeLastName.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtDNI.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtDNINumber.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtEmail.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtPassword.setTextColor(Color.parseColor("#ffffff"))
+            binding.txtType.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnMicEmployeeNames.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicEmployeeLastNames.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicIDNumber.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicEmail.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicPassword.setColorFilter(Color.parseColor("#ffffff"))
+            binding.edtNameEmployee.setBackgroundResource(dev.android.appfacturador.R.drawable.text_info_dark)
+            binding.edtLastNameEmployee.setBackgroundResource(dev.android.appfacturador.R.drawable.text_info_dark)
+            binding.edtNumDNI.setBackgroundResource(dev.android.appfacturador.R.drawable.text_info_dark)
+            binding.edtEmailEmployee.setBackgroundResource(dev.android.appfacturador.R.drawable.text_info_dark)
+            binding.edtPasswordEmployee.setBackgroundResource(dev.android.appfacturador.R.drawable.text_info_dark)
+            binding.btnAdd.setBackgroundResource(dev.android.appfacturador.R.drawable.gradientdark)
+            binding.btnAdd.setTextColor(Color.parseColor("#121212"))
+        }
+    }
+
+    override fun onBackPressed() {
+        showExitConfirmationDialog()
+    }
 }

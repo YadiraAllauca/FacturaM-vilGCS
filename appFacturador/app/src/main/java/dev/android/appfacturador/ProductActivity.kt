@@ -1,22 +1,34 @@
 package dev.android.appfacturador
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -39,30 +51,30 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.Executors
 
 class ProductActivity : AppCompatActivity() {
-    lateinit var binding: ActivityProductBinding
-    lateinit var email: String
-    lateinit var shop: String
-    private var list: MutableList<PRODUCTO> = ArrayList()
+    private lateinit var binding: ActivityProductBinding
+    private lateinit var email: String
+    private lateinit var shop: String
+    private var list: MutableList<PRODUCTO> = mutableListOf()
     private val adapter: ProductAdapter by lazy {
         ProductAdapter()
     }
     private lateinit var recyclerView: RecyclerView
     private val fb = Firebase.database
     private val dr = fb.getReference("Product")
-    lateinit var searchEditText: EditText
+    private lateinit var searchEditText: EditText
     lateinit var barcode: String
     private val REQUEST_CODE_SPEECH_TO_TEXT1 = 1
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProductBinding.inflate(layoutInflater)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
-        //activar swipe
-        swipeToAddShopCar()
+        searchEditText = binding.edtSearch
+        binding.btnAddProduct.imageTintList = ColorStateList.valueOf(Color.parseColor("#ffffff"))
 
         //usuario y negocio actual
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
@@ -71,8 +83,10 @@ class ProductActivity : AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
-        getShop()
-        searchEditText = binding.edtBuscador
+
+        getUserData()
+        setupViews()
+        darkMode()
 
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -80,10 +94,87 @@ class ProductActivity : AppCompatActivity() {
                 val searchTerm = s.toString().trim()
                 updateProductList(searchTerm)
             }
-
             override fun afterTextChanged(s: Editable?) {}
         })
 
+        setupActions()
+        swipeToAddShopCar()
+        shoppingCardActive()
+    }
+
+    private fun getUserData() {
+        val user = FirebaseAuth.getInstance().currentUser
+        val email = user?.email
+
+        val usuariosRef = FirebaseDatabase.getInstance().getReference("Empleado")
+
+        usuariosRef.orderByChild("correo_electronico").equalTo(email)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (childSnapshot in dataSnapshot.children) {
+                            val empleado = childSnapshot.getValue(EMPLEADO::class.java)
+                            if (empleado != null) {
+                                shop = empleado.negocio
+                                loadData()
+                                if (empleado.tipo_empleado == "V") {
+                                    binding.btnAddProduct.isVisible = false
+                                }
+                            }
+                        }
+                    }
+                }
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Toast.makeText(this@ProductActivity,"Error en la solicitud: " + databaseError.message,Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+    private fun setupViews() {
+        recyclerView = binding.rvProducts
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.setHasFixedSize(true)
+
+        adapter.setOnClickListenerProductDelete = { product ->
+            deleteProduct(product)
+            adapter.notifyDataSetChanged()
+        }
+
+        adapter.setOnClickListenerProductEdit = { product ->
+            val bundle = Bundle().apply {
+                putSerializable(Constants.KEY_PRODUCT, product)
+            }
+            val intent = Intent(applicationContext, AddProductActivity::class.java).putExtras(bundle)
+            startActivity(intent)
+        }
+
+        recyclerView.adapter = adapter
+    }
+
+    fun loadData() {
+        var listen = object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val productList: MutableList<PRODUCTO> = mutableListOf()
+                snapshot.children.forEach { child ->
+                    val negocio = child.child("negocio").value?.toString()
+                    if (negocio == shop) {
+                        val product: PRODUCTO? = child.getValue(PRODUCTO::class.java)
+                        product?.let { productList.add(it) }
+                    }
+                }
+                adapter.setCurrentUserEmailProduct(email)
+                list = productList
+                adapter.updateListProducts(list)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("TAG", "messages:onCancelled: ${error.message}")
+            }
+        }
+        dr.addValueEventListener(listen)
+    }
+
+    fun setupActions(){
         binding.btnCloses.setOnClickListener {
             val intent = Intent(this, MenuActivity::class.java).apply {
                 putExtra("option", "product")
@@ -105,92 +196,9 @@ class ProductActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        recyclerView = binding.rvProducts
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.setHasFixedSize(true)
-
         binding.btnMicSearch.setOnClickListener {
             SpeechToTextUtil.startSpeechToText(this@ProductActivity, REQUEST_CODE_SPEECH_TO_TEXT1)
         }
-        search()
-    }
-
-    private fun getShop() {
-        val user = FirebaseAuth.getInstance().currentUser
-        val email = user?.email
-
-        val database = FirebaseDatabase.getInstance()
-        val usuariosRef = database.getReference("Empleado")
-
-        usuariosRef.orderByChild("correo_electronico").equalTo(email)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        for (childSnapshot in dataSnapshot.children) {
-                            val empleado = childSnapshot.getValue(EMPLEADO::class.java)
-                            if (empleado != null) {
-                                shop = empleado.negocio
-                                loadData()
-                            }
-                        }
-                    }
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Toast.makeText(
-                        this@ProductActivity,
-                        "Error en la solicitud: " + databaseError.message,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            })
-    }
-
-    fun loadData() {
-        var listen = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                list.clear()
-                snapshot.children.forEach { child ->
-                    val negocio = child.child("negocio").value?.toString()
-                    if (negocio == shop) {
-                        val product: PRODUCTO? =
-                            child.key?.let {
-                                PRODUCTO(
-                                    child.key.toString(),
-                                    child.child("nombre").value.toString(),
-                                    child.child("precio").value.toString().toFloat(),
-                                    child.child("max_descuento").value.toString().toInt(),
-                                    child.child("id_categoria_impuesto").value.toString(),
-                                    child.child("codigo_barras").value.toString(),
-                                    child.child("imagen").value.toString(),
-                                    child.child("negocio").value.toString()
-                                )
-                            }
-                        product?.let { list.add(it) }
-                    }
-                }
-                adapter.updateListProducts(list)
-                recyclerView.adapter = adapter
-
-                adapter.setOnClickListenerProductDelete = {
-                    deleteProduct(it)
-                }
-
-                adapter.setOnClickListenerProductEdit = {
-                    val bundle = Bundle().apply {
-                        putSerializable(Constants.KEY_PRODUCT, it)
-                    }
-                    val intent =
-                        Intent(applicationContext, AddProductActivity::class.java).putExtras(bundle)
-                    startActivity(intent)
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("TAG", "messages:onCancelled: ${error.message}")
-            }
-        }
-        dr.addValueEventListener(listen)
     }
 
     fun updateProductList(searchTerm: String) {
@@ -204,11 +212,6 @@ class ProductActivity : AppCompatActivity() {
     }
 
     fun deleteProduct(producto: PRODUCTO) {
-        val retrofitBuilder = Retrofit.Builder()
-            .baseUrl("https://appfacturador-b516d-default-rtdb.firebaseio.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ProductDao::class.java)
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Eliminar registro")
         builder.setMessage("¿Desea continuar?")
@@ -216,16 +219,16 @@ class ProductActivity : AppCompatActivity() {
             dialog.dismiss()
         })
         builder.setPositiveButton("Aceptar", DialogInterface.OnClickListener { dialog, which ->
-            Executors.newSingleThreadExecutor().execute {
-                val retrofit = retrofitBuilder.deleteProduct(producto.id)
-                retrofit.enqueue(object : Callback<PRODUCTO> {
-                    override fun onResponse(call: Call<PRODUCTO>, response: Response<PRODUCTO>) {}
-                    override fun onFailure(call: Call<PRODUCTO>, t: Throwable) {}
-                })
-                runOnUiThread {
+            val database = FirebaseDatabase.getInstance()
+            val productoRef = database.getReference("Product/${producto.id}")
+
+            productoRef.removeValue()
+                .addOnSuccessListener {
                     Toast.makeText(this, "Registro eliminado", Toast.LENGTH_SHORT).show()
                 }
-            }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Error al eliminar el registro", Toast.LENGTH_SHORT).show()
+                }
         })
         builder.show()
     }
@@ -235,6 +238,34 @@ class ProductActivity : AppCompatActivity() {
         integrator.setDesiredBarcodeFormats(IntentIntegrator.EAN_13)
         integrator.setPrompt("Código de Barras")
         integrator.initiateScan()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null) {
+            if (result.contents == null) {
+                Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show()
+            } else {
+                barcode = result.contents
+                binding.edtSearch.setText(result.contents)
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE_SPEECH_TO_TEXT1 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        binding.edtSearch.setText(spokenText)
+                    }
+                }
+            }
+        } else {
+            Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun swipeToAddShopCar() {
@@ -254,66 +285,51 @@ class ProductActivity : AppCompatActivity() {
                 val position = viewHolder.adapterPosition
                 val product = adapter.products[position]
                 val quantity = 1
-                val discount = adapter.products[position].max_descuento.toInt()
+                val discount = adapter.products[position].max_descuento
                 val productItem = ProductHolder.ProductItem(product, quantity, discount)
                 val existingProduct =
                     ProductHolder.productList.find { it.product?.nombre == product.nombre }
                 if (existingProduct == null) {
                     ProductHolder.productList.add(productItem)
-                    var nom = product.nombre
-                    //adapter.notifyDataSetChanged()
-                    Snackbar.make(
-                        binding.root, "Producto $nom agregado al carrito", Snackbar.LENGTH_SHORT
-                    ).show()
                 }
                 adapter.notifyDataSetChanged()
+                binding.imgFull.visibility = View.VISIBLE
             }
-
         }).attachToRecyclerView(binding.rvProducts)
     }
 
-    private fun search() = with(binding) {
-        edtBuscador.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(
-                filterText: CharSequence?,
-                start: Int,
-                before: Int,
-                count: Int
-            ) {
-                if (filterText?.length!! > 0) {
-                    val filterList = list.filter { product ->
-                        val fullName =
-                            "${product.nombre}"
-                        fullName.uppercase().startsWith(filterText.toString().uppercase()) ||
-                                product.id.uppercase()
-                                    .startsWith(filterText.toString().uppercase())
-                    }
-                    adapter.updateListProducts(filterList)
-                } else {
-                    loadData()
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {}
-        })
+    private fun shoppingCardActive() {
+        binding.imgFull.visibility = if (ProductHolder.productList.isEmpty()) View.GONE else View.VISIBLE
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK) {
-            when (requestCode) {
-                REQUEST_CODE_SPEECH_TO_TEXT1 -> {
-                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                    if (!results.isNullOrEmpty()) {
-                        val spokenText = results[0]
-                        binding.edtBuscador.setText(spokenText)
-                    }
-                }
-            }
-        } else {
-            Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
+    override fun onRestart() {
+        super.onRestart()
+        shoppingCardActive()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    @SuppressLint("ResourceAsColor", "ResourceType")
+    fun darkMode () {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
+            binding.imgFull.setColorFilter(Color.parseColor("#47484a"))
+            binding.edtSearch.setBackgroundResource(R.drawable.searchdark)
+            binding.edtSearch.setTextColor(Color.parseColor("#ffffff"))
+            binding.edtSearch.outlineSpotShadowColor = Color.parseColor("#ffffff")
+            binding.btnShop.setColorFilter(Color.parseColor("#ffffff"))
+            binding.btnMicSearch.setColorFilter(Color.parseColor("#47484a"))
+            val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.scanner_white)
+            binding.btnScanner.setImageDrawable(drawable)
+            binding.btnAddProduct.imageTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
+            binding.btnAddProduct.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#47484a"))
+            binding.btnClose.setCardBackgroundColor(Color.parseColor("#47484a"))
+            binding.btnCloses.setColorFilter(Color.parseColor("#121212"))
         }
+    }
+
+    override fun onBackPressed() {
     }
 }

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardProduct"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
@@ -14,7 +15,7 @@
         android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/btnFrequency"
+            android:id="@+id/btnProductInfo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:cardBackgroundColor="#fff"
@@ -31,7 +32,8 @@
                     android:id="@+id/edtAmount"
                     android:layout_width="0dp"
                     android:layout_height="35dp"
-                    android:background="@drawable/texto_info"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/text_info"
                     android:drawablePadding="10dp"
                     android:fontFamily="@font/roboto_bold"
                     android:hint="1"
@@ -42,6 +44,7 @@
                     android:textSize="14sp"
                     app:backgroundTint="@null"
                     app:layout_constraintBottom_toBottomOf="@+id/txtUnitPrice"
+                    app:layout_constraintEnd_toStartOf="@+id/txtPassword4"
                     app:layout_constraintStart_toEndOf="@+id/txtPassword3"
                     app:layout_constraintTop_toTopOf="@+id/txtUnitPrice" />
 
@@ -49,8 +52,8 @@
                     android:id="@+id/edtDiscount"
                     android:layout_width="0dp"
                     android:layout_height="35dp"
-                    android:layout_marginEnd="75dp"
-                    android:background="@drawable/texto_info"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/text_info"
                     android:drawablePadding="10dp"
                     android:fontFamily="@font/roboto_bold"
                     android:hint="0"
@@ -62,6 +65,7 @@
                     app:backgroundTint="@null"
                     app:layout_constraintBottom_toBottomOf="@+id/txtUnitPrice"
                     app:layout_constraintEnd_toStartOf="@+id/txtTotal"
+                    app:layout_constraintStart_toEndOf="@+id/txtPassword4"
                     app:layout_constraintTop_toTopOf="@+id/txtUnitPrice" />
 
                 <TextView
@@ -77,11 +81,13 @@
 
                 <TextView
                     android:id="@+id/txtUnitPrice"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
                     android:fontFamily="@font/roboto_bold"
                     android:text="$00.00"
                     android:textColor="#C0C0C0"
+                    app:layout_constraintEnd_toStartOf="@+id/txtPassword3"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txtProductNameBill" />
 
@@ -89,32 +95,35 @@
                     android:id="@+id/txtPassword3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="75dp"
+                    android:layout_marginStart="100dp"
                     android:fontFamily="@font/roboto_bold"
                     android:text="x"
                     android:textColor="#C0C0C0"
-                    app:layout_constraintStart_toEndOf="@+id/txtUnitPrice"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txtProductNameBill" />
 
                 <TextView
                     android:id="@+id/txtPassword4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="200dp"
                     android:fontFamily="@font/roboto_bold"
                     android:text="-"
                     android:textColor="#C0C0C0"
-                    app:layout_constraintEnd_toStartOf="@+id/edtDiscount"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txtProductNameBill" />
 
                 <TextView
                     android:id="@+id/txtTotal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="20dp"
                     android:fontFamily="@font/roboto_bold"
+                    android:gravity="center|center_vertical"
                     android:text="$00.00"
                     android:textColor="#000000"
+                    app:layout_constraintBottom_toBottomOf="@+id/txtUnitPrice"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtProductNameBill" />
+                    app:layout_constraintTop_toTopOf="@+id/txtUnitPrice" />
 
                 <View
                     android:id="@+id/view3"

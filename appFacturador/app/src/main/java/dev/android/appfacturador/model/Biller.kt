@@ -86,6 +86,23 @@ data class EMPLEADO(
     constructor() : this("", "", "", "", "", "", "", "", "", "", "")
 }
 
+data class NEGOCIO(
+    @SerializedName("id")
+    var id: String,
+    @SerializedName("nombre")
+    val nombre: String,
+    @SerializedName("email")
+    val email: String,
+    @SerializedName("ruc")
+    val ruc: String,
+    @SerializedName("direccion")
+    var direccion: String,
+    @SerializedName("celular")
+    var celular: String
+) : Serializable {
+    constructor() : this("", "", "", "", "", "")
+}
+
 data class FACTURA(
     @SerializedName("id")
     var id: String,

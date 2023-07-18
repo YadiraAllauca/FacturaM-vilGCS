@@ -11,15 +11,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="30dp"
-        android:background="@drawable/degradado"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/gradient"
         android:fontFamily="@font/roboto_bold"
         android:text="AGREGAR ITEM"
         app:backgroundTint="@null"
+        app:layout_constraintBottom_toTopOf="@+id/txtProduct5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvProducts" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnGenerateBill"
@@ -28,9 +28,9 @@
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/boton"
-        android:stateListAnimator="@null"
+        android:background="@drawable/button"
         android:fontFamily="@font/roboto_bold"
+        android:stateListAnimator="@null"
         android:text="GENERAR FACTURA"
         android:textColor="#000000"
         app:backgroundTint="@null"
@@ -39,21 +39,20 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/txtClienteName"
-        android:layout_width="0dp"
+        android:id="@+id/txtClientName"
+        android:layout_width="wrap_content"
         android:layout_height="22dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="5dp"
         android:fontFamily="@font/roboto_bold"
         android:text="Nombres Apellidos"
         android:textColor="#000000"
         android:textSize="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtNumeroIdentificacion" />
+        app:layout_constraintTop_toBottomOf="@+id/edtID" />
 
     <TextView
-        android:id="@+id/txtClienteEmail"
+        android:id="@+id/txtClientEmail"
         android:layout_width="wrap_content"
         android:layout_height="22dp"
         android:layout_marginStart="30dp"
@@ -62,10 +61,10 @@
         android:textColor="#A8A8A8"
         android:textSize="14dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtClienteName" />
+        app:layout_constraintTop_toBottomOf="@+id/txtClientName" />
 
     <TextView
-        android:id="@+id/txtProduct4"
+        android:id="@+id/txtDetail"
         android:layout_width="0dp"
         android:layout_height="22dp"
         android:layout_marginStart="30dp"
@@ -76,69 +75,63 @@
         android:textColor="#A8A8A8"
         android:textSize="14dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view6" />
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <TextView
         android:id="@+id/txtProduct5"
         android:layout_width="0dp"
         android:layout_height="22dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="5dp"
         android:fontFamily="@font/roboto_bold"
         android:text="Subtotal"
         android:textColor="#A8A8A8"
         android:textSize="14dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnAddItem" />
+        app:layout_constraintBottom_toTopOf="@+id/txtProduct6"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/txtSubtotal"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="22dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="30dp"
         android:fontFamily="@font/roboto_bold"
         android:text="$00.00"
         android:textColor="#000000"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnAddItem" />
+        app:layout_constraintTop_toTopOf="@+id/txtProduct5" />
 
     <TextView
         android:id="@+id/txtTotalBill"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="22dp"
-        android:layout_marginEnd="30dp"
         android:fontFamily="@font/roboto_bold"
         android:text="$00.00"
         android:textColor="#577FF9"
         android:textSize="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/txtSubtotal"
         app:layout_constraintTop_toBottomOf="@+id/spinnerPay" />
 
     <TextView
         android:id="@+id/txtIva"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="22dp"
-        android:layout_marginEnd="30dp"
         android:fontFamily="@font/roboto_bold"
         android:text="0"
         android:textColor="#000000"
         android:textSize="14dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/txtSubtotal"
         app:layout_constraintTop_toBottomOf="@+id/txtSubtotal" />
 
     <TextView
         android:id="@+id/txtDiscount"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="22dp"
-        android:layout_marginEnd="30dp"
         android:fontFamily="@font/roboto_bold"
         android:text="0"
         android:textColor="#000000"
         android:textSize="14dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/txtSubtotal"
         app:layout_constraintTop_toBottomOf="@+id/txtIva" />
 
     <TextView
@@ -146,52 +139,50 @@
         android:layout_width="0dp"
         android:layout_height="22dp"
         android:layout_marginStart="30dp"
-        android:layout_marginEnd="5dp"
         android:fontFamily="@font/roboto_bold"
         android:text="IVA"
         android:textColor="#A8A8A8"
         android:textSize="14dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtProduct5" />
+        app:layout_constraintBottom_toTopOf="@+id/txtProduct7"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/txtProduct7"
         android:layout_width="0dp"
         android:layout_height="22dp"
         android:layout_marginStart="30dp"
-        android:layout_marginEnd="5dp"
         android:fontFamily="@font/roboto_bold"
         android:text="Descuento"
         android:textColor="#A8A8A8"
         android:textSize="14dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtProduct6" />
+        app:layout_constraintBottom_toTopOf="@+id/txtProduct8"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/txtProduct8"
         android:layout_width="0dp"
         android:layout_height="22dp"
         android:layout_marginStart="30dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
         android:fontFamily="@font/roboto_bold"
         android:text="Forma de pago"
         android:textColor="#A8A8A8"
         android:textSize="14dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtProduct7" />
+        app:layout_constraintBottom_toTopOf="@+id/txtProduct9"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/txtProduct9"
         android:layout_width="0dp"
         android:layout_height="22dp"
         android:layout_marginStart="30dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="20dp"
         android:fontFamily="@font/roboto_bold"
         android:text="Total"
         android:textColor="#000000"
         android:textSize="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerPay" />
+        app:layout_constraintBottom_toTopOf="@+id/btnGenerateBill"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/btnBack"
@@ -204,13 +195,13 @@
         app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
 
     <EditText
-        android:id="@+id/edtNumeroIdentificacion"
+        android:id="@+id/edtID"
         android:layout_width="0dp"
         android:layout_height="51dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
-        android:background="@drawable/texto"
+        android:background="@drawable/text"
         android:drawablePadding="10dp"
         android:fontFamily="@font/roboto_bold"
         android:hint="Número de identificación"
@@ -230,20 +221,20 @@
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginEnd="35dp"
-        app:layout_constraintBottom_toBottomOf="@+id/edtNumeroIdentificacion"
+        app:layout_constraintBottom_toBottomOf="@+id/edtID"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edtNumeroIdentificacion"
+        app:layout_constraintTop_toTopOf="@+id/edtID"
         app:srcCompat="@drawable/ic_baseline_add_circle_24" />
 
     <View
-        android:id="@+id/view6"
+        android:id="@+id/divider"
         android:layout_width="wrap_content"
         android:layout_height="5dp"
         android:layout_marginTop="10dp"
         android:background="#F1F1F1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtClienteEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/txtClientEmail" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvProducts"
@@ -252,12 +243,14 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="25dp"
+        android:layout_marginBottom="10dp"
         android:padding="0dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddItem"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtProduct4"
+        app:layout_constraintTop_toBottomOf="@+id/txtDetail"
         app:spanCount="1"
         tools:itemCount="5"
         tools:listitem="@layout/item_bill_products" />
@@ -266,7 +259,7 @@
         android:id="@+id/spinnerPay"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtDiscount" />
 </androidx.constraintlayout.widget.ConstraintLayout>

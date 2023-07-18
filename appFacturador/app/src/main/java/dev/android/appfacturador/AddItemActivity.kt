@@ -1,8 +1,13 @@
 package dev.android.appfacturador
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -10,15 +15,15 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Window
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.zxing.integration.android.IntentIntegrator
@@ -31,18 +36,20 @@ class AddItemActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddItemBinding
     lateinit var email: String
     lateinit var shop: String
-    private val fb = Firebase.database
-    private val dr = fb.getReference("Product")
+    private var list: MutableList<PRODUCTO> = mutableListOf()
     private val adapter: ProductItemBillAdapter by lazy {
         ProductItemBillAdapter()
     }
     private lateinit var recyclerView: RecyclerView
-    private var list: MutableList<PRODUCTO> = ArrayList()
+    private val fb = Firebase.database
+    private val dr = fb.getReference("Product")
     private var addedList: MutableList<PRODUCTO> = mutableListOf()
     lateinit var searchEditText: EditText
     lateinit var barcode: String
     private val REQUEST_CODE_SPEECH_TO_TEXT1 = 1
 
+    @RequiresApi(Build.VERSION_CODES.P)
+    @SuppressLint("ResourceAsColor", "ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddItemBinding.inflate(layoutInflater)
@@ -50,70 +57,37 @@ class AddItemActivity : AppCompatActivity() {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
-        //usuario y negocio actual
+        searchEditText = binding.edtSearch
+        binding.btnAddItems.imageTintList = ColorStateList.valueOf(Color.parseColor("#ffffff"))
+
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", "").toString()
-
-        //recycle view
-        recyclerView = binding.rvProducts
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.setHasFixedSize(true)
+        if (email.isEmpty()) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
 
         getShop()
+        setupViews()
 
-        searchEditText = binding.edtBuscador
         searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val searchTerm = s.toString().trim()
                 updateProductList(searchTerm)
             }
-
             override fun afterTextChanged(s: Editable?) {}
         })
-        binding.btnScanner.setOnClickListener {
-            initScanner()
-        }
 
-        binding.btnAddedProducts.background = getDrawable(R.drawable.degradado2)
-        binding.btnAddedProducts.setTextColor(Color.parseColor("#686868"))
-
-        binding.btnAllProducts.setOnClickListener {
-            binding.btnAddedProducts.background = getDrawable(R.drawable.degradado2)
-            binding.btnAddedProducts.setTextColor(Color.parseColor("#686868"))
-            binding.btnAllProducts.background = getDrawable(R.drawable.degradado)
-            binding.btnAllProducts.setTextColor(Color.parseColor("#ffffff"))
-            adapter.updateListProducts(list)
-        }
-
-        binding.btnAddedProducts.setOnClickListener {
-            binding.btnAddedProducts.background = getDrawable(R.drawable.degradado)
-            binding.btnAddedProducts.setTextColor(Color.parseColor("#ffffff"))
-            binding.btnAllProducts.background = getDrawable(R.drawable.degradado2)
-            binding.btnAllProducts.setTextColor(Color.parseColor("#686868"))
-
-            var pro = ProductHolder.productList.map { it.product }.toMutableList()
-            var filteredProducts = list.filter { pro.contains(it) }.toMutableList()
-            adapter.updateListProducts(filteredProducts)
-        }
-
-        binding.btnAddItems.setOnClickListener {
-            val intent = Intent(this, AddBillActivity::class.java).apply {}
-            startActivity(intent)
-        }
-
-        binding.btnMicSearch.setOnClickListener {
-            SpeechToTextUtil.startSpeechToText(this@AddItemActivity, REQUEST_CODE_SPEECH_TO_TEXT1)
-        }
-        search()
+        setupActions()
+        darkMode()
     }
 
     private fun getShop() {
         val user = FirebaseAuth.getInstance().currentUser
         val email = user?.email
 
-        val database = FirebaseDatabase.getInstance()
-        val usuariosRef = database.getReference("Empleado")
+        val usuariosRef = FirebaseDatabase.getInstance().getReference("Empleado")
 
         usuariosRef.orderByChild("correo_electronico").equalTo(email)
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -123,12 +97,11 @@ class AddItemActivity : AppCompatActivity() {
                             val empleado = childSnapshot.getValue(EMPLEADO::class.java)
                             if (empleado != null) {
                                 shop = empleado.negocio
-                                loadData()
                             }
                         }
+                        loadData()
                     }
                 }
-
                 override fun onCancelled(databaseError: DatabaseError) {
                     Toast.makeText(
                         this@AddItemActivity,
@@ -139,46 +112,83 @@ class AddItemActivity : AppCompatActivity() {
             })
     }
 
-    fun loadData() {
+    fun setupViews(){
+        recyclerView = binding.rvProducts
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.setHasFixedSize(true)
+
+        adapter.onCheckedChangeListener = { product, isChecked ->
+            if (isChecked) {
+                val productItem =
+                    ProductHolder.ProductItem(product, 1, product.max_descuento)
+                ProductHolder.productList.add(productItem)
+                addedList.add(product)
+            } else {
+                addedList.remove(product)
+                val position =
+                    ProductHolder.productList.indexOfFirst { it.product?.nombre == product.nombre }
+                if (position != -1) {
+                    ProductHolder.productList.removeAt(position)
+                }
+            }
+        }
+
+        recyclerView.adapter = adapter
+    }
+
+    fun setupActions(){
+        binding.btnScanner.setOnClickListener {
+            initScanner()
+        }
+
+        binding.btnAddedProducts.background = getDrawable(R.drawable.gradienttwo)
+        binding.btnAddedProducts.setTextColor(Color.parseColor("#686868"))
+
+        binding.btnAllProducts.setOnClickListener {
+            binding.btnAddedProducts.background = getDrawable(R.drawable.gradienttwo)
+            binding.btnAddedProducts.setTextColor(Color.parseColor("#686868"))
+            binding.btnAllProducts.background = getDrawable(R.drawable.gradient)
+            binding.btnAllProducts.setTextColor(Color.parseColor("#ffffff"))
+            adapter.updateListProducts(list)
+            buttonsDarkMode(binding.btnAllProducts, binding.btnAddedProducts)
+        }
+
+        binding.btnAddedProducts.setOnClickListener {
+            binding.btnAddedProducts.background = getDrawable(R.drawable.gradient)
+            binding.btnAddedProducts.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnAllProducts.background = getDrawable(R.drawable.gradienttwo)
+            binding.btnAllProducts.setTextColor(Color.parseColor("#686868"))
+
+            val selectedProducts = ProductHolder.productList.mapNotNull { it.product }
+            val filteredProducts = list.filter { selectedProducts.contains(it) }
+            adapter.updateListProducts(filteredProducts)
+            buttonsDarkMode(binding.btnAddedProducts, binding.btnAllProducts)
+        }
+
+        binding.btnAddItems.setOnClickListener {
+            val intent = Intent(this, AddBillActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        binding.btnMicSearch.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this@AddItemActivity, REQUEST_CODE_SPEECH_TO_TEXT1)
+        }
+    }
+
+    private fun loadData() {
         var listen = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                list.clear()
+                val productList: MutableList<PRODUCTO> = mutableListOf()
                 snapshot.children.forEach { child ->
                     val negocio = child.child("negocio").value?.toString()
                     if (negocio == shop) {
-                        val product: PRODUCTO? =
-                            child.key?.let {
-                                PRODUCTO(
-                                    child.key.toString(),
-                                    child.child("nombre").value.toString(),
-                                    child.child("precio").value.toString().toFloat(),
-                                    child.child("max_descuento").value.toString().toInt(),
-                                    child.child("id_categoria_impuesto").value.toString(),
-                                    child.child("codigo_barras").value.toString(),
-                                    child.child("imagen").value.toString(),
-                                    child.child("negocio").value.toString()
-                                )
-                            }
-                        product?.let { list.add(it) }
+                        val product: PRODUCTO? = child.getValue(PRODUCTO::class.java)
+                        product?.let { productList.add(it) }
                     }
                 }
+                list = productList
                 adapter.updateListProducts(list)
-                recyclerView.adapter = adapter
-
-                adapter.onCheckedChangeListener = { product, isChecked ->
-                    if (isChecked) {
-                        val productItem =
-                            ProductHolder.ProductItem(product, 1, product.max_descuento)
-                        ProductHolder.productList.add(productItem)
-                        addedList.add(product)
-                    } else {
-                        addedList.remove(product)
-                        val position =
-                            ProductHolder.productList.indexOfFirst { it.product?.nombre == product.nombre }
-                        ProductHolder.productList.removeAt(position)
-                    }
-                    print(addedList.size)
-                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -188,12 +198,10 @@ class AddItemActivity : AppCompatActivity() {
         dr.addValueEventListener(listen)
     }
 
-    fun updateProductList(searchTerm: String) {
+    private fun updateProductList(searchTerm: String) {
         val filteredList = list.filter { product ->
-            product.nombre.contains(
-                searchTerm,
-                ignoreCase = true
-            ) || product.codigo_barras.contains(searchTerm, ignoreCase = true)
+            product.nombre.contains(searchTerm, ignoreCase = true)
+                    || product.codigo_barras.contains(searchTerm, ignoreCase = true)
         }
         adapter.updateListProducts(filteredList)
     }
@@ -212,7 +220,7 @@ class AddItemActivity : AppCompatActivity() {
                 Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show()
             } else {
                 barcode = result.contents
-                binding.edtBuscador.setText(result.contents)
+                binding.edtSearch.setText(result.contents)
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
@@ -224,7 +232,7 @@ class AddItemActivity : AppCompatActivity() {
                     val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (!results.isNullOrEmpty()) {
                         val spokenText = results[0]
-                        binding.edtBuscador.setText(spokenText)
+                        binding.edtSearch.setText(spokenText)
                     }
                 }
             }
@@ -233,31 +241,42 @@ class AddItemActivity : AppCompatActivity() {
         }
     }
 
-    private fun search() = with(binding) {
-        edtBuscador.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+    @RequiresApi(Build.VERSION_CODES.P)
+    @SuppressLint("ResourceAsColor", "ResourceType")
+    fun darkMode () {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            // El modo actual es dark
+            binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnBack.setColorFilter(Color.parseColor("#ffffff"))
+            binding.edtSearch.setBackgroundResource(R.drawable.searchdark)
+            binding.edtSearch.setTextColor(Color.parseColor("#ffffff"))
+            binding.edtSearch.outlineSpotShadowColor = Color.parseColor("#ffffff")
+            binding.btnMicSearch.setColorFilter(Color.parseColor("#47484a"))
+            val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.scanner_white)
+            binding.btnScanner.setImageDrawable(drawable)
+            binding.btnAddItems.imageTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
+            binding.btnAddItems.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#47484a"))
+            binding.btnAllProducts.setTextColor(Color.parseColor("#121212"))
+            binding.btnAllProducts.setBackgroundResource(R.drawable.gradientdarkwhite)
+            binding.btnAddedProducts.setTextColor(Color.parseColor("#ffffff"))
+            binding.btnAddedProducts.setBackgroundResource(R.drawable.gradientdark)
+            binding.divider.setBackgroundColor(Color.parseColor("#242424"))
+        }
+    }
 
-            override fun onTextChanged(
-                filterText: CharSequence?,
-                start: Int,
-                before: Int,
-                count: Int
-            ) {
-                if (filterText?.length!! > 0) {
-                    val filterList = list.filter { product ->
-                        val fullName =
-                            "${product.nombre}"
-                        fullName.uppercase().startsWith(filterText.toString().uppercase()) ||
-                                product.id.uppercase()
-                                    .startsWith(filterText.toString().uppercase())
-                    }
-                    adapter.updateListProducts(filterList)
-                } else {
-                    loadData()
-                }
-            }
+    fun buttonsDarkMode (buttonClicked: Button, buttonNotClicked: Button){
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        // Comprueba el modo actual
+        if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+            buttonNotClicked.background = getDrawable(R.drawable.gradientdark)
+            buttonNotClicked.setTextColor(Color.parseColor("#ffffff"))
+            buttonClicked.background = getDrawable(R.drawable.gradientdarkwhite)
+            buttonClicked.setTextColor(Color.parseColor("#121212"))
+        }
+    }
 
-            override fun afterTextChanged(s: Editable?) {}
-        })
+    override fun onBackPressed() {
     }
 }
