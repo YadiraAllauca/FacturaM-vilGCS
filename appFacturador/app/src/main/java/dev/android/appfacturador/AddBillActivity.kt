@@ -32,17 +32,6 @@ import dev.android.appfacturador.model.FACTURA
 import dev.android.appfacturador.utils.Constants
 import java.text.SimpleDateFormat
 import java.util.*
-<<<<<<< HEAD
-import kotlin.properties.Delegates
-import java.io.File
-import java.net.HttpURLConnection
-import java.net.URL
-import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.transform.TransformerFactory
-import javax.xml.transform.dom.DOMSource
-import javax.xml.transform.stream.StreamResult
-=======
->>>>>>> 9650fdbeb3cc63b3926523a9deb08586881df80d
 
 class AddBillActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddBillBinding
@@ -116,14 +105,10 @@ class AddBillActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-<<<<<<< HEAD
-        binding.btnBack.setOnClickListener { finish() }
-=======
         binding.btnBack.setOnClickListener {
             val intent = Intent(this, BillActivity::class.java)
             startActivity(intent)
         }
->>>>>>> 9650fdbeb3cc63b3926523a9deb08586881df80d
 
         binding.btnAddItem.setOnClickListener {
             val intent = Intent(this, AddItemActivity::class.java)
@@ -133,33 +118,8 @@ class AddBillActivity : AppCompatActivity() {
 
         binding.btnGenerateBill.setOnClickListener {
             getShopCounter(shop)
-<<<<<<< HEAD
-            val id = ""
-            val numero_factura = contadorNegocio.toString()
-            val estado = "enviado"
-            val fecha = fechaActual
-            val cliente = clienteEncontrado
-            val empleado = empleadoEncontrado
-            val forma_pago = spinner.selectedItem.toString()
-            val subtotal = calculateSubtotal()
-            val descuento = calculateTotalDiscount()
-            val iva = calculateTotalIVA()
-            val total = calculateTotalBill()
-            val items = ProductHolder.productList
-            val negocio = shop
-            if (cliente == null || empleado == null || items == null || negocio.isEmpty()) {
-                Toast.makeText(this, "Campos vacíos", Toast.LENGTH_SHORT).show()
-            } else {
-                var billData = FACTURA(
-                    id, numero_factura, estado,
-                    fecha, cliente, empleado,
-                    forma_pago, subtotal, descuento, iva, total,
-                    items, negocio
-                )
-=======
             val billData = createBillData()
             if (billData != null) {
->>>>>>> 9650fdbeb3cc63b3926523a9deb08586881df80d
                 addBill(billData)
             } else {
                 Toast.makeText(this, "Campos vacíos", Toast.LENGTH_SHORT).show()
@@ -202,11 +162,7 @@ class AddBillActivity : AppCompatActivity() {
             })
     }
 
-<<<<<<< HEAD
-    fun loadData() {
-=======
     private fun loadData() {
->>>>>>> 9650fdbeb3cc63b3926523a9deb08586881df80d
         adapter.updateListProducts(productList)
         updateValues()
 
@@ -221,11 +177,7 @@ class AddBillActivity : AppCompatActivity() {
         }
     }
 
-<<<<<<< HEAD
-    fun getClienteData(searchCliente: String) {
-=======
     private fun getClienteData(searchCliente: String) {
->>>>>>> 9650fdbeb3cc63b3926523a9deb08586881df80d
         val database = FirebaseDatabase.getInstance()
         val clientesRef = database.getReference("Cliente")
 
@@ -237,14 +189,6 @@ class AddBillActivity : AppCompatActivity() {
                             val cliente = childSnapshot.getValue(CLIENTE::class.java)
                             if (cliente != null) {
                                 clienteEncontrado = cliente
-<<<<<<< HEAD
-                                binding.edtNumeroIdentificacion.setTextColor(Color.BLACK)
-                                binding.txtClienteName.text =
-                                    cliente.primer_nombre + "" + cliente.apellido_paterno
-                                binding.txtClienteName.setTextColor(Color.BLACK)
-                                binding.txtClienteEmail.text = cliente.correo_electronico
-                                binding.txtClienteEmail.setTextColor(Color.BLACK)
-=======
                                 binding.edtID.setTextColor(Color.BLACK)
                                 binding.txtClientName.text =
                                     cliente.primer_nombre + " " + cliente.apellido_paterno
@@ -252,7 +196,6 @@ class AddBillActivity : AppCompatActivity() {
                                 binding.txtClientEmail.text = cliente.correo_electronico
                                 binding.txtClientEmail.setTextColor(Color.BLACK)
                                 darkMode()
->>>>>>> 9650fdbeb3cc63b3926523a9deb08586881df80d
                             }
                         }
                     } else {
@@ -302,36 +245,6 @@ class AddBillActivity : AppCompatActivity() {
     }
 
     private fun addBill(bill: FACTURA) {
-<<<<<<< HEAD
-        val retrofitBuilder = Retrofit.Builder()
-            .baseUrl("https://appfacturador-b516d-default-rtdb.firebaseio.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(BillDao::class.java)
-        val retrofit = retrofitBuilder.addBill(bill)
-        retrofit.enqueue(
-            object : Callback<FACTURA> {
-                override fun onFailure(call: Call<FACTURA>, t: Throwable) {
-                    Log.d("Agregar", "Error al agregar la factura")
-                }
-
-                override fun onResponse(call: Call<FACTURA>, response: Response<FACTURA>) {
-                    if (response.isSuccessful) {
-                        ProductHolder.productList.clear()
-                        clienteEncontrado = null
-                        updateShopCounter(contadorNegocio)
-                        Log.d("Agregar", "Factura agregada con éxito")
-                    } else {
-                        Log.d("Agregar", "Error al agregar la factura")
-                    }
-                }
-            }
-        )
-    }
-
-    private fun updateShopCounter(counter: Int) {
-=======
->>>>>>> 9650fdbeb3cc63b3926523a9deb08586881df80d
         val database = FirebaseDatabase.getInstance()
         val billsRef = database.getReference("Factura")
 
@@ -341,46 +254,6 @@ class AddBillActivity : AppCompatActivity() {
 
         newBillRef.setValue(bill)
             .addOnSuccessListener {
-<<<<<<< HEAD
-                Log.d("Actualizar contador", "Contador del negocio actualizado con éxito")
-            }
-            .addOnFailureListener { error ->
-                Log.d(
-                    "Actualizar contador",
-                    "Error al actualizar el contador del negocio: ${error.message}"
-                )
-            }
-    }
-
-    fun getShopCounter(shopId: String) {
-        val database = FirebaseDatabase.getInstance()
-        val negocioRef = database.getReference("Negocios")
-
-        negocioRef.child(shopId).child("contador")
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val contador = dataSnapshot.getValue(Long::class.java)?.toInt()
-                    if (contador != null) {
-                        contadorNegocio = contador + 1
-                    }
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Toast.makeText(
-                        this@AddBillActivity,
-                        "Error en la solicitud: " + databaseError.message,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            })
-    }
-
-    fun updateValues() {
-        binding.txtDiscount.text = "$" + String.format("%.2f", calculateTotalDiscount())
-        binding.txtSubtotal.text = "$" + String.format("%.2f", calculateSubtotal())
-        binding.txtIva.text = "$" + String.format("%.2f", calculateTotalIVA())
-        binding.txtTotalBill.text = "$" + String.format("%.2f", calculateTotalBill())
-=======
                 ProductHolder.productList.clear()
                 clienteEncontrado = null
                 updateShopCounter()
@@ -422,7 +295,6 @@ class AddBillActivity : AppCompatActivity() {
                     ).show()
                 }
             })
->>>>>>> 9650fdbeb3cc63b3926523a9deb08586881df80d
     }
 
     private fun updateShopCounter() {
@@ -475,15 +347,9 @@ class AddBillActivity : AppCompatActivity() {
     private fun calculateTotalDiscount(): Float {
         var totalDiscount = 0f
         for (product in ProductHolder.productList) {
-<<<<<<< HEAD
-            val discunt =
-                ((product.product?.precio ?: 0f) * product.discount / 100) * product.quantity
-            totalDiscount += discunt
-=======
             val discount =
                 ((product.product?.precio ?: 0f) * product.discount / 100) * product.quantity
             totalDiscount += discount
->>>>>>> 9650fdbeb3cc63b3926523a9deb08586881df80d
         }
         return totalDiscount
     }
@@ -499,13 +365,6 @@ class AddBillActivity : AppCompatActivity() {
         return totalIVA
     }
 
-<<<<<<< HEAD
-    fun calculateTotalBill(): Float {
-        return calculateSubtotal() + calculateTotalIVA() - calculateTotalDiscount()
-    }
-
-}
-=======
     private fun calculateTotalBill(): Float {
         return calculateSubtotal() + calculateTotalIVA() - calculateTotalDiscount()
     }
@@ -554,4 +413,3 @@ class AddBillActivity : AppCompatActivity() {
         showExitConfirmationDialog()
     }
 }
->>>>>>> 9650fdbeb3cc63b3926523a9deb08586881df80d
