@@ -36,7 +36,9 @@ data class CLIENTE(
     val direccion: String,
     @SerializedName("negocio")
     val negocio: String
-) : Serializable{constructor() : this("", "", "", "", "", "", "", "", "", "", "")}
+) : Serializable {
+    constructor() : this("", "", "", "", "", "", "", "", "", "", "")
+}
 
 data class PRODUCTO(
     @SerializedName("id")
@@ -56,7 +58,7 @@ data class PRODUCTO(
     @SerializedName("negocio")
     val negocio: String
 ) : Serializable {
-    constructor() : this("","",0f,0,"","","","")
+    constructor() : this("", "", 0f, 0, "", "", "", "")
 }
 
 data class EMPLEADO(
@@ -131,5 +133,5 @@ data class FACTURA(
     @SerializedName("negocio")
     var negocio: String
 ) : Serializable {
-    constructor() : this("","","","",null,null,"",0f,0f,0f,0f,null, "")
+    constructor() : this("", "", "", "", null, null, "", 0f, 0f, 0f, 0f, null, "")
 }

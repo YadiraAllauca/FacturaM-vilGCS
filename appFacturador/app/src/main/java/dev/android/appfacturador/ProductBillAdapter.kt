@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
-import dev.android.appfacturador.ProductHolder.productList
 import dev.android.appfacturador.databinding.ItemBillProductsBinding
 
 class ProductBillAdapter(var products: List<ProductHolder.ProductItem> = emptyList()) :
@@ -24,7 +23,8 @@ class ProductBillAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
             val discount = productItem.discount
 
             val resources = root.resources
-            val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            val currentNightMode =
+                resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
             // Comprueba el modo actual
             if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
                 // El modo actual es dark
@@ -46,7 +46,7 @@ class ProductBillAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
             binding.edtAmount.setText(quantity.toString())
             binding.edtDiscount.setText(String.format("%d", discount))
             if (product != null) {
-                binding.txtTotal.text = String.format("%.2f", product.precio*quantity)
+                binding.txtTotal.text = String.format("%.2f", product.precio * quantity)
             }
 
             binding.edtDiscount.addTextChangedListener {
@@ -57,9 +57,10 @@ class ProductBillAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
             }
             binding.edtAmount.addTextChangedListener {
                 val updatedQuantity = it.toString().toIntOrNull()
-                if(updatedQuantity!=null) {
+                if (updatedQuantity != null) {
                     if (product != null) {
-                        binding.txtTotal.text = String.format("%.2f", product.precio*updatedQuantity)
+                        binding.txtTotal.text =
+                            String.format("%.2f", product.precio * updatedQuantity)
                     }
                     addTextChangedListenerAmount(position, updatedQuantity)
                 }
@@ -71,7 +72,8 @@ class ProductBillAdapter(var products: List<ProductHolder.ProductItem> = emptyLi
         parent: ViewGroup,
         viewType: Int
     ): ProductBillAdapter.ProductBillAdapterViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_bill_products, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_bill_products, parent, false)
         return ProductBillAdapterViewHolder(view)
     }
 

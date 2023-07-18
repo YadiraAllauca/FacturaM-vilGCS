@@ -1,23 +1,18 @@
 package dev.android.appfacturador
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Gravity
-import android.view.View
 import android.view.Window
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -29,14 +24,13 @@ import dev.android.appfacturador.model.EMPLEADO
 
 class MenuActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMenuBinding
-    private var isSeller  = false
+    private var isSeller = false
     private val instanceFirebase = Firebase.database
 
     @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMenuBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         checkTypeEmployee()
@@ -86,9 +80,9 @@ class MenuActivity : AppCompatActivity() {
         }
         binding.btnProfiles.setOnClickListener {
             val intent: Intent
-            if(isSeller){
+            if (isSeller) {
                 intent = Intent(this, ProfileEmployeeActivity::class.java)
-            }else {
+            } else {
                 intent = Intent(this, ProfileActivity::class.java)
             }
             startActivity(intent)
@@ -104,7 +98,7 @@ class MenuActivity : AppCompatActivity() {
     }
 
     @SuppressLint("ResourceAsColor", "Range")
-    fun darkMode () {
+    fun darkMode() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {

@@ -49,7 +49,6 @@ class AddClientActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddClientBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         initialize()
@@ -166,15 +165,14 @@ class AddClientActivity : AppCompatActivity() {
                         .show()
                 }
 
-                /*val intent = Intent(baseContext, ClientActivity::class.java)
-                startActivity(intent)*/
                 finish()
             }
         }
         eventsMicro()
         binding.btnBack.setOnClickListener { finish() }
     }
-    private fun eventsMicro(){
+
+    private fun eventsMicro() {
         binding.btnMicClientNames.setOnClickListener {
             SpeechToTextUtil.startSpeechToText(this, REQUEST_CODE_SPEECH_TO_TEXT1)
         }
@@ -202,16 +200,15 @@ class AddClientActivity : AppCompatActivity() {
             .build()
             .create(ClientDao::class.java)
         val retrofit = retrofitBuilder.addClient(cliente)
+
         retrofit.enqueue(
             object : Callback<CLIENTE> {
                 override fun onFailure(call: Call<CLIENTE>, t: Throwable) {
                     Log.d("Agregar", "Error al agregar cliente")
-
                 }
 
                 override fun onResponse(call: Call<CLIENTE>, response: Response<CLIENTE>) {
                     Log.d("Agregar", "Cliente agregado con éxito")
-
                 }
             }
         )
@@ -237,8 +234,10 @@ class AddClientActivity : AppCompatActivity() {
             }
         )
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         if (resultCode == RESULT_OK) {
             when (requestCode) {
                 REQUEST_CODE_SPEECH_TO_TEXT1 -> {
@@ -248,6 +247,7 @@ class AddClientActivity : AppCompatActivity() {
                         binding.edtNameClient.setText(spokenText)
                     }
                 }
+
                 REQUEST_CODE_SPEECH_TO_TEXT2 -> {
                     val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (!results.isNullOrEmpty()) {
@@ -255,6 +255,7 @@ class AddClientActivity : AppCompatActivity() {
                         binding.edtLastNameClient.setText(spokenText)
                     }
                 }
+
                 REQUEST_CODE_SPEECH_TO_TEXT3 -> {
                     val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (!results.isNullOrEmpty()) {
@@ -263,6 +264,7 @@ class AddClientActivity : AppCompatActivity() {
                         binding.edtNumDNI.setText(filteredText)
                     }
                 }
+
                 REQUEST_CODE_SPEECH_TO_TEXT4 -> {
                     val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (!results.isNullOrEmpty()) {
@@ -271,6 +273,7 @@ class AddClientActivity : AppCompatActivity() {
                         binding.edtEmailClient.setText(filteredText)
                     }
                 }
+
                 REQUEST_CODE_SPEECH_TO_TEXT5 -> {
                     val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (!results.isNullOrEmpty()) {
@@ -278,6 +281,7 @@ class AddClientActivity : AppCompatActivity() {
                         binding.edtPhoneClient.setText(spokenText)
                     }
                 }
+
                 REQUEST_CODE_SPEECH_TO_TEXT6 -> {
                     val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (!results.isNullOrEmpty()) {
@@ -292,7 +296,7 @@ class AddClientActivity : AppCompatActivity() {
     }
 
     @SuppressLint("ResourceAsColor", "Range")
-    fun darkMode () {
+    fun darkMode() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {

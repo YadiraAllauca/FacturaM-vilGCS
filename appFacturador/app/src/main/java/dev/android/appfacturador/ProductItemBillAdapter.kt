@@ -11,25 +11,25 @@ import android.widget.CheckBox
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.firebase.firestore.FirebaseFirestore
-import com.squareup.picasso.Picasso
 import dev.android.appfacturador.databinding.ItemAddProductBillBinding
-import dev.android.appfacturador.databinding.ItemProductBinding
 import dev.android.appfacturador.model.PRODUCTO
 
 class ProductItemBillAdapter(var products: List<PRODUCTO> = emptyList()) :
     RecyclerView.Adapter<ProductItemBillAdapter.ProductItemBillAdapterViewHolder>() {
     lateinit var onCheckedChangeListener: (product: PRODUCTO, isChecked: Boolean) -> Unit
 
-    inner class ProductItemBillAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ProductItemBillAdapterViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
         private var binding: ItemAddProductBillBinding = ItemAddProductBillBinding.bind(itemView)
+
         @RequiresApi(Build.VERSION_CODES.P)
         fun bind(product: PRODUCTO) = with(binding) {
             binding.txtProductName.text = product.nombre
             binding.txtPrice.text = "$" + product.precio.toString()
 
             val resources = root.resources
-            val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            val currentNightMode =
+                resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
             // Comprueba el modo actual
             if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
                 // El modo actual es dark
@@ -49,7 +49,8 @@ class ProductItemBillAdapter(var products: List<PRODUCTO> = emptyList()) :
                     .into(imgProduct)
             }
 
-            val isProductSelected = ProductHolder.productList.any { it.product?.nombre == product.nombre }
+            val isProductSelected =
+                ProductHolder.productList.any { it.product?.nombre == product.nombre }
             binding.cbItemBill.isChecked = isProductSelected
 
             binding.cbItemBill.setOnClickListener { view ->
@@ -63,7 +64,8 @@ class ProductItemBillAdapter(var products: List<PRODUCTO> = emptyList()) :
         parent: ViewGroup,
         viewType: Int
     ): ProductItemBillAdapter.ProductItemBillAdapterViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_add_product_bill, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_add_product_bill, parent, false)
         return ProductItemBillAdapterViewHolder(view)
     }
 

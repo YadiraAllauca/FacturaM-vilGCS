@@ -52,7 +52,6 @@ class AddEmployeeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddEmployeeBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         initialize()
@@ -89,11 +88,13 @@ class AddEmployeeActivity : AppCompatActivity() {
             val positionDNI = Constants.TYPE_DNI.indexOf(employeeTypeDNI)
             spinnerDNI.setSelection(positionDNI)
             var employeeType = ""
+
             if (employee.tipo_empleado.equals("V")) {
                 employeeType = "Vendedor"
             } else {
                 employeeType = "Administrador"
             }
+
             val positionType = Constants.TYPE_DNI.indexOf(employeeType)
             spinnerType.setSelection(positionType)
             binding.btnAdd.text = "ACTUALIZAR"
@@ -147,9 +148,11 @@ class AddEmployeeActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener { finish() }
         binding.btnAdd.setOnClickListener {
             var typeEmployee = "V"
+
             if (spinnerType.selectedItem.toString().equals("Administrador")) {
                 typeEmployee = "A"
             }
+
             val typeDNI = spinnerDNI.selectedItem.toString()
             val numberDNI = binding.edtNumDNI.text.toString()
             val fullName = (binding.edtNameEmployee.text.toString()).split(" ")
@@ -160,6 +163,7 @@ class AddEmployeeActivity : AppCompatActivity() {
             val secondLastName = fullLastName[1].toLowerCase().capitalize()
             val email = binding.edtEmailEmployee.text.toString()
             val password = binding.edtPasswordEmployee.text.toString()
+
             if (fullName.isEmpty() || fullLastName.isEmpty() || numberDNI.isEmpty() ||
                 email.isEmpty() || password.isEmpty()
             ) {
@@ -184,8 +188,10 @@ class AddEmployeeActivity : AppCompatActivity() {
                         typeDNI, typeEmployee,
                         shop
                     )
+
                 if (employeeData.id.isEmpty()) {
                     addEmployee(employeeData) { employee ->
+
                         if (employee) {
                             Toast.makeText(
                                 this,
@@ -204,6 +210,7 @@ class AddEmployeeActivity : AppCompatActivity() {
                     }
                 } else {
                     updateEmployee(employeeData) { employee ->
+
                         if (employee) {
                             setResult(RESULT_OK)
                             Toast.makeText(this, "Actualizando datos...", Toast.LENGTH_SHORT).show()
@@ -249,6 +256,7 @@ class AddEmployeeActivity : AppCompatActivity() {
             val auth = FirebaseAuth.getInstance()
             auth.fetchSignInMethodsForEmail(empleado.correo_electronico)
                 .addOnCompleteListener { task ->
+
                     if (task.isSuccessful) {
                         val signInMethods = task.result?.signInMethods
                         val validated = signInMethods == null || signInMethods.isEmpty()
@@ -268,6 +276,7 @@ class AddEmployeeActivity : AppCompatActivity() {
         val auth = FirebaseAuth.getInstance()
         auth.createUserWithEmailAndPassword(empleado.correo_electronico, empleado.clave)
             .addOnCompleteListener { task ->
+
                 if (task.isSuccessful) {
                     Log.d("Agregar", "Usuario agregado con éxito")
                 } else {
@@ -279,6 +288,7 @@ class AddEmployeeActivity : AppCompatActivity() {
 
     private fun addEmployee(empleado: EMPLEADO, callback: (Boolean) -> Unit) {
         validateEmail(empleado) { validated ->
+
             if (validated) {
                 val retrofitBuilder = Retrofit.Builder()
                     .baseUrl("https://appfacturador-b516d-default-rtdb.firebaseio.com/")
@@ -311,6 +321,7 @@ class AddEmployeeActivity : AppCompatActivity() {
 
     private fun updateEmployee(empleado: EMPLEADO, callback: (Boolean) -> Unit) {
         validateEmail(empleado) { validated ->
+
             if (validated) {
                 val retrofitBuilder = Retrofit.Builder()
                     .baseUrl("https://appfacturador-b516d-default-rtdb.firebaseio.com/")
@@ -347,36 +358,45 @@ class AddEmployeeActivity : AppCompatActivity() {
             when (requestCode) {
                 REQUEST_CODE_SPEECH_TO_TEXT1 -> {
                     val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+
                     if (!results.isNullOrEmpty()) {
                         val spokenText = results[0]
                         binding.edtNameEmployee.setText(spokenText)
                     }
                 }
+
                 REQUEST_CODE_SPEECH_TO_TEXT2 -> {
                     val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+
                     if (!results.isNullOrEmpty()) {
                         val spokenText = results[0]
                         binding.edtLastNameEmployee.setText(spokenText)
                     }
                 }
+
                 REQUEST_CODE_SPEECH_TO_TEXT3 -> {
                     val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+
                     if (!results.isNullOrEmpty()) {
                         val spokenText = results[0]
                         val filteredText = spokenText.replace("\\s".toRegex(), "")
                         binding.edtNumDNI.setText(filteredText)
                     }
                 }
+
                 REQUEST_CODE_SPEECH_TO_TEXT4 -> {
                     val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+
                     if (!results.isNullOrEmpty()) {
                         val spokenText = results[0]
                         val filteredText = spokenText.replace("\\s".toRegex(), "")
                         binding.edtEmailEmployee.setText(filteredText)
                     }
                 }
+
                 REQUEST_CODE_SPEECH_TO_TEXT5 -> {
                     val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+
                     if (!results.isNullOrEmpty()) {
                         val spokenText = results[0]
                         val filteredText = spokenText.replace("\\s".toRegex(), "")
@@ -426,6 +446,7 @@ class AddEmployeeActivity : AppCompatActivity() {
             dialogInterface.dismiss()
         }
         val alertDialog = alertDialogBuilder.create()
+
         if (!isSeller) {
             alertDialog.show()
         }

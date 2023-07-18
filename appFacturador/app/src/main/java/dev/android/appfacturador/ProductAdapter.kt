@@ -1,20 +1,15 @@
 package dev.android.appfacturador
 
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -31,6 +26,7 @@ class ProductAdapter(var products: List<PRODUCTO> = emptyList()) :
 
     inner class ProductAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var binding: ItemProductBinding = ItemProductBinding.bind(itemView)
+
         @RequiresApi(Build.VERSION_CODES.P)
         fun bind(product: PRODUCTO) = with(binding) {
             txtProduct.text = product.nombre
@@ -47,7 +43,8 @@ class ProductAdapter(var products: List<PRODUCTO> = emptyList()) :
             }
 
             val resources = root.resources
-            val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            val currentNightMode =
+                resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
             // Comprueba el modo actual
             if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
                 // El modo actual es dark
@@ -114,6 +111,7 @@ class ProductAdapter(var products: List<PRODUCTO> = emptyList()) :
         this.products = products
         notifyDataSetChanged()
     }
+
     fun setCurrentUserEmailProduct(email: String) {
         this.currentUserEmail = email
         notifyDataSetChanged()

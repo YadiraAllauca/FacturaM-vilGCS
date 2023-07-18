@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProfileEmployeeActivity">
+
     <androidx.cardview.widget.CardView
         android:id="@+id/btnProfile"
         android:layout_width="120dp"
@@ -114,6 +115,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
+
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="0dp"

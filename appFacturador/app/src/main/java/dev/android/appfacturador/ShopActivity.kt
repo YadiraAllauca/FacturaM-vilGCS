@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dev.android.appfacturador.databinding.ActivityProductBinding
 import dev.android.appfacturador.databinding.ActivityShopBinding
 
-class ShopActivity : AppCompatActivity()  {
+class ShopActivity : AppCompatActivity() {
     lateinit var binding: ActivityShopBinding
     lateinit var bindingProductBinding: ActivityProductBinding
     private val adapter: ProductShopAdapter by lazy {
@@ -29,7 +29,6 @@ class ShopActivity : AppCompatActivity()  {
         super.onCreate(savedInstanceState)
         binding = ActivityShopBinding.inflate(layoutInflater)
         bindingProductBinding = ActivityProductBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
@@ -46,7 +45,9 @@ class ShopActivity : AppCompatActivity()  {
     }
 
     private fun loadData() {
-        total = ProductHolder.productList.sumByDouble { ((it.product?.precio ?: 0f) * it.quantity).toDouble() }.toFloat()
+        total = ProductHolder.productList.sumByDouble {
+            ((it.product?.precio ?: 0f) * it.quantity).toDouble()
+        }.toFloat()
 
         adapter.updateListProducts(ProductHolder.productList)
         recyclerView.adapter = adapter
@@ -68,12 +69,12 @@ class ShopActivity : AppCompatActivity()  {
         }
     }
 
-    fun actions(){
+    fun actions() {
         binding.btnBack.setOnClickListener {
             finish()
         }
 
-        binding.btnClear.setOnClickListener{
+        binding.btnClear.setOnClickListener {
             bindingProductBinding.imgFull.visibility = View.GONE
             ProductHolder.productList.clear()
             updateTotalShop()
@@ -86,15 +87,17 @@ class ShopActivity : AppCompatActivity()  {
         }
     }
 
-    fun updateTotalShop(){
-        total = ProductHolder.productList.sumByDouble { ((it.product?.precio ?: 0f) * it.quantity).toDouble() }.toFloat()
+    fun updateTotalShop() {
+        total = ProductHolder.productList.sumByDouble {
+            ((it.product?.precio ?: 0f) * it.quantity).toDouble()
+        }.toFloat()
         adapter.notifyDataSetChanged()
         binding.txtTotalShop.text = "$" + String.format("%.2f", total)
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
     @SuppressLint("ResourceAsColor", "Range")
-    fun darkMode () {
+    fun darkMode() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {

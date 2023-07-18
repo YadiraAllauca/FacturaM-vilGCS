@@ -24,7 +24,6 @@ class BillDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBillDetailBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
@@ -39,21 +38,22 @@ class BillDetailActivity : AppCompatActivity() {
         darkMode()
     }
 
-    fun initialize(){
+    fun initialize() {
         val bundle = intent.extras
-        bundle?.let{
+        bundle?.let {
             val bill = bundle.getSerializable(Constants.KEY_BILL) as FACTURA
             binding.edtID.setText(bill.cliente?.numero_dni.toString())
-            binding.txtClientName.text = bill.cliente?.primer_nombre + " " + bill.cliente?.apellido_paterno
+            binding.txtClientName.text =
+                bill.cliente?.primer_nombre + " " + bill.cliente?.apellido_paterno
             binding.txtClientEmail.text = bill.cliente?.correo_electronico
             productList = bill.items!!
-            binding.txtSubtotal.text = "$"+String.format("%.2f", bill.subtotal)
-            binding.txtIva.text = "$"+String.format("%.2f", bill.iva)
-            binding.txtDiscount.text = "$"+String.format("%.2f", bill.descuento)
+            binding.txtSubtotal.text = "$" + String.format("%.2f", bill.subtotal)
+            binding.txtIva.text = "$" + String.format("%.2f", bill.iva)
+            binding.txtDiscount.text = "$" + String.format("%.2f", bill.descuento)
             binding.spinnerPay.text = bill.forma_pago
-            binding.txtTotalBill.text = "$"+String.format("%.2f", bill.total)
+            binding.txtTotalBill.text = "$" + String.format("%.2f", bill.total)
 
-            if (bill.estado.equals("-1")){
+            if (bill.estado.equals("-1")) {
                 binding.btnCancelBill.isEnabled = false
                 binding.btnCancelBill.text = "FACTURA ANULADA"
             }
@@ -61,7 +61,7 @@ class BillDetailActivity : AppCompatActivity() {
         }
     }
 
-    fun loadData(){
+    fun loadData() {
         recyclerView = binding.rvProducts
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
@@ -73,7 +73,7 @@ class BillDetailActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    fun setupActions(){
+    fun setupActions() {
         val bundle = intent.extras
 
         binding.btnBack.setOnClickListener {
@@ -93,7 +93,7 @@ class BillDetailActivity : AppCompatActivity() {
     }
 
     @SuppressLint("ResourceAsColor", "Range")
-    fun darkMode () {
+    fun darkMode() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {

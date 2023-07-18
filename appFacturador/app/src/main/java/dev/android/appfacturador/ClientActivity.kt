@@ -1,13 +1,11 @@
 package dev.android.appfacturador
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,10 +14,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Window
-import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -52,7 +48,6 @@ class ClientActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClientBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
@@ -192,6 +187,7 @@ class ClientActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
@@ -211,7 +207,7 @@ class ClientActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.P)
     @SuppressLint("ResourceAsColor", "ResourceType")
-    fun darkMode () {
+    fun darkMode() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
@@ -222,7 +218,8 @@ class ClientActivity : AppCompatActivity() {
             binding.edtSearchClient.outlineSpotShadowColor = Color.parseColor("#ffffff")
             binding.btnMicSearch.setColorFilter(Color.parseColor("#47484a"))
             binding.btnAddClient.imageTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
-            binding.btnAddClient.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#47484a"))
+            binding.btnAddClient.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#47484a"))
             binding.btnClose.setCardBackgroundColor(Color.parseColor("#47484a"))
             binding.btnCloses.setColorFilter(Color.parseColor("#121212"))
         }

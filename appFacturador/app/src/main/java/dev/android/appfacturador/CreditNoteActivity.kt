@@ -6,19 +6,11 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextUtils.substring
 import android.text.TextWatcher
 import android.view.Window
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
-import androidx.databinding.adapters.TextViewBindingAdapter.setText
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import dev.android.appfacturador.ProductHolder.productList
-import dev.android.appfacturador.databinding.ActivityBillDetailBinding
 import dev.android.appfacturador.databinding.ActivityCreditNoteBinding
 import dev.android.appfacturador.model.FACTURA
 import dev.android.appfacturador.utils.Constants
@@ -33,7 +25,6 @@ class CreditNoteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreditNoteBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
@@ -45,20 +36,20 @@ class CreditNoteActivity : AppCompatActivity() {
         darkMode()
     }
 
-    fun initialize(){
+    fun initialize() {
         val bundle = intent.extras
-        bundle?.let{
+        bundle?.let {
             val bill = bundle.getSerializable(Constants.KEY_BILL) as FACTURA
             binding.edtBill.setText(bill.numero_factura)
             binding.edtClient.setText(bill.cliente?.numero_dni.toString())
-            binding.edtPrice2.setText("$"+String.format("%.2f", bill.total))
+            binding.edtPrice2.setText("$" + String.format("%.2f", bill.total))
             binding.txtSubtotal.text = binding.edtPrice2.text
             binding.txtTotalBill.text = binding.edtPrice2.text
             price = bill.total
         }
     }
 
-    fun setupActions(){
+    fun setupActions() {
         val dollarSign = "$"
         creditNotePriceEditText = binding.edtPrice2
         creditNotePriceEditText.addTextChangedListener(object : TextWatcher {
@@ -74,6 +65,7 @@ class CreditNoteActivity : AppCompatActivity() {
                     }
                 }
             }
+
             override fun afterTextChanged(s: Editable?) {
                 if (s.isNullOrEmpty()) {
                     binding.edtPrice2.setText(dollarSign)
@@ -113,7 +105,7 @@ class CreditNoteActivity : AppCompatActivity() {
     }
 
     @SuppressLint("ResourceAsColor", "Range")
-    fun darkMode () {
+    fun darkMode() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {

@@ -15,7 +15,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Window
-import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -24,16 +23,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import dev.android.appfacturador.database.EmployeeDao
-import dev.android.appfacturador.database.ProductDao
 import dev.android.appfacturador.databinding.ActivityEmployeeBinding
-import dev.android.appfacturador.model.CLIENTE
 import dev.android.appfacturador.model.EMPLEADO
-import dev.android.appfacturador.model.PRODUCTO
 import dev.android.appfacturador.utils.Constants
 import dev.android.appfacturador.utils.SpeechToTextUtil
 import retrofit2.Call
@@ -60,7 +55,6 @@ class EmployeeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEmployeeBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         val sharedPreferences = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
@@ -244,7 +238,7 @@ class EmployeeActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.P)
     @SuppressLint("ResourceAsColor", "ResourceType")
-    fun darkMode () {
+    fun darkMode() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         // Comprueba el modo actual
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
@@ -255,8 +249,10 @@ class EmployeeActivity : AppCompatActivity() {
             binding.edtSearchEmployee.setTextColor(Color.parseColor("#ffffff"))
             binding.edtSearchEmployee.outlineSpotShadowColor = Color.parseColor("#ffffff")
             binding.btnMicSearch.setColorFilter(Color.parseColor("#47484a"))
-            binding.btnAddEmployee.imageTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
-            binding.btnAddEmployee.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#47484a"))
+            binding.btnAddEmployee.imageTintList =
+                ColorStateList.valueOf(Color.parseColor("#121212"))
+            binding.btnAddEmployee.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#47484a"))
         }
     }
 

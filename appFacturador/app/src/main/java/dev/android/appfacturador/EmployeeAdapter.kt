@@ -15,8 +15,10 @@ class EmployeeAdapter(var employees: List<EMPLEADO> = emptyList()) :
     RecyclerView.Adapter<EmployeeAdapter.EmployeeAdapterViewHolder>() {
     lateinit var setOnClickEmployee: (EMPLEADO) -> Unit
     lateinit var setOnClickListenerEmployeeDelete: (EMPLEADO) -> Unit
+
     inner class EmployeeAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var binding: ItemEmployeeBinding = ItemEmployeeBinding.bind(itemView)
+
         @RequiresApi(Build.VERSION_CODES.P)
         fun bind(employee: EMPLEADO) = with(binding) {
             binding.txtInitials.text =
@@ -29,7 +31,8 @@ class EmployeeAdapter(var employees: List<EMPLEADO> = emptyList()) :
             binding.txtIDEmployee.text = employee.numero_dni
 
             val resources = root.resources
-            val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            val currentNightMode =
+                resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
             // Comprueba el modo actual
             if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
                 // El modo actual es dark
@@ -57,6 +60,7 @@ class EmployeeAdapter(var employees: List<EMPLEADO> = emptyList()) :
         return EmployeeAdapterViewHolder(view)
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: EmployeeAdapterViewHolder, position: Int) {
         val membership: EMPLEADO = employees[position]
         holder.bind(membership)
