@@ -71,14 +71,8 @@ class AddBillActivity : AppCompatActivity() {
         darkMode()
     }
 
-    override fun onResume() {
-        super.onResume()
-        loadData()
-    }
-
     override fun onStart() {
         super.onStart()
-        adapter.notifyDataSetChanged()
         loadData()
     }
 
@@ -340,7 +334,6 @@ class AddBillActivity : AppCompatActivity() {
         binding.txtSubtotal.text = "$" + String.format("%.2f", calculateSubtotal())
         binding.txtIva.text = "$" + String.format("%.2f", calculateTotalIVA())
         binding.txtTotalBill.text = "$" + String.format("%.2f", calculateTotalBill())
-        adapter.notifyDataSetChanged()
     }
 
     private fun calculateSubtotal(): Float {
