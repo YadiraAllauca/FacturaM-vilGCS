@@ -1,10 +1,12 @@
 package dev.android.appfacturador
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Window
@@ -14,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase
 import dev.android.appfacturador.databinding.ActivityCreditNoteBinding
 import dev.android.appfacturador.model.FACTURA
 import dev.android.appfacturador.utils.Constants
+import dev.android.appfacturador.utils.SpeechToTextUtil
 
 class CreditNoteActivity : AppCompatActivity() {
     lateinit var binding: ActivityCreditNoteBinding
@@ -21,6 +24,7 @@ class CreditNoteActivity : AppCompatActivity() {
     lateinit var shop: String
     lateinit var creditNotePriceEditText: EditText
     var price: Float = 0f
+    private val REQUEST_CODE_SPEECH_TO_TEXT1 = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +38,7 @@ class CreditNoteActivity : AppCompatActivity() {
         initialize()
         setupActions()
         darkMode()
+        eventMicro()
     }
 
     fun initialize() {
@@ -124,7 +129,6 @@ class CreditNoteActivity : AppCompatActivity() {
             binding.edtPrice2.setBackgroundResource(R.drawable.text_info_dark)
             binding.edtReason.setTextColor(Color.parseColor("#ffffff"))
             binding.edtReason.setBackgroundResource(R.drawable.text_info_dark)
-            binding.btnMicPrice.setColorFilter(Color.parseColor("#ffffff"))
             binding.btnMicReason.setColorFilter(Color.parseColor("#ffffff"))
             binding.txtSubtotal.setTextColor(Color.parseColor("#ffffff"))
             binding.txtIva.setTextColor(Color.parseColor("#ffffff"))
@@ -132,6 +136,31 @@ class CreditNoteActivity : AppCompatActivity() {
             binding.txtTotalBill.setTextColor(Color.parseColor("#ffffff"))
             binding.btnCreditNote.setBackgroundResource(R.drawable.textdark)
             binding.btnCreditNote.setTextColor(Color.parseColor("#ffffff"))
+        }
+    }
+
+    fun eventMicro() {
+        binding.btnMicReason.setOnClickListener {
+            SpeechToTextUtil.startSpeechToText(this, REQUEST_CODE_SPEECH_TO_TEXT1)
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE_SPEECH_TO_TEXT1 -> {
+                    val results = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    if (!results.isNullOrEmpty()) {
+                        val spokenText = results[0]
+                        binding.edtReason.setText(spokenText)
+                    }
+                }
+            }
+        } else {
+            Toast.makeText(this, "Error en el reconocimiento de voz.", Toast.LENGTH_SHORT).show()
         }
     }
 }
