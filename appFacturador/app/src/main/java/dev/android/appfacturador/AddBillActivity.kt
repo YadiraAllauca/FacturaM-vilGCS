@@ -36,14 +36,11 @@ class AddBillActivity : AppCompatActivity() {
     lateinit var binding: ActivityAddBillBinding
     lateinit var email: String
     lateinit var shop: String
-
     private val adapter: ProductBillAdapter by lazy {
         ProductBillAdapter()
     }
 
     private lateinit var recyclerView: RecyclerView
-    val productList: MutableList<ProductHolder.ProductItem> =
-        ProductHolder.productList.toMutableList()
     lateinit var searchClienteEditText: EditText
     private var clienteEncontrado: CLIENTE? = null
     private var empleadoEncontrado: EMPLEADO? = null
@@ -74,12 +71,23 @@ class AddBillActivity : AppCompatActivity() {
         darkMode()
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadData()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        adapter.notifyDataSetChanged()
+        loadData()
+    }
+
     private fun initViews() {
         recyclerView = binding.rvProducts
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
 
-        adapter.updateListProducts(productList)
+        adapter.updateListProducts(ProductHolder.productList)
         recyclerView.adapter = adapter
 
         spinner = binding.spinnerPay
@@ -113,7 +121,6 @@ class AddBillActivity : AppCompatActivity() {
         binding.btnAddItem.setOnClickListener {
             val intent = Intent(this, AddItemActivity::class.java)
             startActivity(intent)
-            finish()
         }
 
         binding.btnGenerateBill.setOnClickListener {
@@ -163,7 +170,7 @@ class AddBillActivity : AppCompatActivity() {
     }
 
     private fun loadData() {
-        adapter.updateListProducts(productList)
+        adapter.updateListProducts(ProductHolder.productList)
         updateValues()
 
         adapter.addTextChangedListenerAmount = { position, quantity ->
@@ -333,6 +340,7 @@ class AddBillActivity : AppCompatActivity() {
         binding.txtSubtotal.text = "$" + String.format("%.2f", calculateSubtotal())
         binding.txtIva.text = "$" + String.format("%.2f", calculateTotalIVA())
         binding.txtTotalBill.text = "$" + String.format("%.2f", calculateTotalBill())
+        adapter.notifyDataSetChanged()
     }
 
     private fun calculateSubtotal(): Float {

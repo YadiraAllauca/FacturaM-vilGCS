@@ -168,9 +168,8 @@ class AddItemActivity : AppCompatActivity() {
         }
 
         binding.btnAddItems.setOnClickListener {
-            val intent = Intent(this, AddBillActivity::class.java)
-            startActivity(intent)
             finish()
+
         }
 
         binding.btnMicSearch.setOnClickListener {
