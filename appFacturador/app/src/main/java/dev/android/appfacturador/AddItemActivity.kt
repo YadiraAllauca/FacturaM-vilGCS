@@ -251,7 +251,6 @@ class AddItemActivity : AppCompatActivity() {
         if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
             // El modo actual es dark
             binding.txtTitle.setTextColor(Color.parseColor("#ffffff"))
-            binding.btnBack.setColorFilter(Color.parseColor("#ffffff"))
             binding.edtSearch.setBackgroundResource(R.drawable.searchdark)
             binding.edtSearch.setTextColor(Color.parseColor("#ffffff"))
             binding.edtSearch.outlineSpotShadowColor = Color.parseColor("#ffffff")

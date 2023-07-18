@@ -246,7 +246,7 @@ class BillActivity : AppCompatActivity() {
             }
         }
 
-        if (filteredList.isEmpty()) {
+        if (filteredList.isEmpty() && binding.edtSearch.text.isNotEmpty()) {
             binding.txtResult.visibility = View.VISIBLE
             binding.txtResult.text = message
         }
