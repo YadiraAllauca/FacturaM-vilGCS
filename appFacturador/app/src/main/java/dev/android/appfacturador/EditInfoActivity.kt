@@ -77,26 +77,6 @@ class EditInfoActivity : AppCompatActivity() {
         }
     }
 
-    private fun showExitConfirmationDialog() {
-        val alertDialogBuilder = AlertDialog.Builder(this)
-        alertDialogBuilder.setTitle("Advertencia")
-        alertDialogBuilder.setMessage("Todos los cambios se perderán. ¿Desea continuar?")
-        alertDialogBuilder.setPositiveButton("Salir") { dialogInterface: DialogInterface, _: Int ->
-            // Salir de la aplicación
-            finish()
-        }
-        alertDialogBuilder.setNegativeButton("Cancelar") { dialogInterface: DialogInterface, _: Int ->
-            // Cancelar la acción de salida
-            dialogInterface.dismiss()
-        }
-        val alertDialog = alertDialogBuilder.create()
-        alertDialog.show()
-    }
-
-    override fun onBackPressed() {
-        showExitConfirmationDialog()
-    }
-
     private fun getShop() {
         val user = FirebaseAuth.getInstance().currentUser
         val email = user?.email
