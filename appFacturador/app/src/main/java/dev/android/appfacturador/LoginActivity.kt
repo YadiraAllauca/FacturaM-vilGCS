@@ -163,4 +163,9 @@ class LoginActivity : AppCompatActivity() {
             binding.btnNext.setTextColor(Color.parseColor("#121212"))
         }
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
+    }
 }
