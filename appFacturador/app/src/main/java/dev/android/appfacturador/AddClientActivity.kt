@@ -128,11 +128,23 @@ class AddClientActivity : AppCompatActivity() {
             val typeDNI = spinner.selectedItem.toString()
             val numberDNI = binding.edtNumDNI.text.toString()
             val fullName = (binding.edtNameClient.text.toString()).split(" ")
-            val firstName = fullName[0].toLowerCase().capitalize()
-            val secondName = fullName[1].toLowerCase().capitalize()
+            var firstName = ""
+            var secondName = ""
+            if (fullName.size == 2) {
+                firstName = fullName[0].toLowerCase().capitalize()
+                secondName = fullName[1].toLowerCase().capitalize()
+            } else {
+                Toast.makeText(this, "Ingrese nombre completo", Toast.LENGTH_SHORT).show()
+            }
             val fullLastName = (binding.edtLastNameClient.text.toString()).split(" ")
-            val firstLastName = fullLastName[0].toLowerCase().capitalize()
-            val secondLastName = fullLastName[1].toLowerCase().capitalize()
+            var firstLastName = ""
+            var secondLastName = ""
+            if (fullLastName.size == 2) {
+                firstLastName = fullLastName[0].toLowerCase().capitalize()
+                secondLastName = fullLastName[1].toLowerCase().capitalize()
+            } else {
+                Toast.makeText(this, "Ingrese nombre completo", Toast.LENGTH_SHORT).show()
+            }
             val email = binding.edtEmailClient.text.toString()
             val phone = binding.edtPhoneClient.text.toString()
             val address = binding.edtAddressClient.text.toString()
@@ -161,12 +173,17 @@ class AddClientActivity : AppCompatActivity() {
                         .show()
                 } else {
                     updateClient(clientData)
-                    Toast.makeText(this, "¡Datos actualizados exitosamente!", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        this,
+                        "¡Datos actualizados exitosamente!",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
 
                 finish()
             }
+
         }
         eventsMicro()
         binding.btnBack.setOnClickListener { finish() }

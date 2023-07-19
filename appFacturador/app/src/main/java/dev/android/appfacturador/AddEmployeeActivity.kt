@@ -156,11 +156,23 @@ class AddEmployeeActivity : AppCompatActivity() {
             val typeDNI = spinnerDNI.selectedItem.toString()
             val numberDNI = binding.edtNumDNI.text.toString()
             val fullName = (binding.edtNameEmployee.text.toString()).split(" ")
-            val firstName = fullName[0].toLowerCase().capitalize()
-            val secondName = fullName[1].toLowerCase().capitalize()
+            var firstName = ""
+            var secondName = ""
+            if (fullName.size == 2) {
+                firstName = fullName[0].toLowerCase().capitalize()
+                secondName = fullName[1].toLowerCase().capitalize()
+            } else {
+                Toast.makeText(this, "Ingrese nombre completo", Toast.LENGTH_SHORT).show()
+            }
             val fullLastName = (binding.edtLastNameEmployee.text.toString()).split(" ")
-            val firstLastName = fullLastName[0].toLowerCase().capitalize()
-            val secondLastName = fullLastName[1].toLowerCase().capitalize()
+            var firstLastName = ""
+            var secondLastName = ""
+            if (fullLastName.size == 2) {
+                firstLastName = fullLastName[0].toLowerCase().capitalize()
+                secondLastName = fullLastName[1].toLowerCase().capitalize()
+            } else {
+                Toast.makeText(this, "Ingrese nombre completo", Toast.LENGTH_SHORT).show()
+            }
             val email = binding.edtEmailEmployee.text.toString()
             val password = binding.edtPasswordEmployee.text.toString()
 
